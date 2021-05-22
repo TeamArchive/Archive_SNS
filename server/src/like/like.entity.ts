@@ -13,9 +13,7 @@ import { Comment } from './Comment';
 import { Post } from './Post';
 
 // @TODO : Import Module
-
 // @TODO : Account -> User
-
 // @TODO : Like 통합
 
 abstract class Like {
