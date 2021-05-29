@@ -15,6 +15,8 @@ import {
 
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
+import { PostImage } from "src/image/image.entity";
+import { Account } from "src/account/account.entity";
 
 // @TODO : Import Module
 

@@ -15,10 +15,8 @@ import {
 	TableInheritance
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-
-// @TODO : Import Module
-
-// @TODO : Account -> User
+import { Account } from "../account/account.entity"
+import { Post } from "../post/post.entity"
 
 /**
  * Entity which is for saving Image

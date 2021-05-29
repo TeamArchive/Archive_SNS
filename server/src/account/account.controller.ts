@@ -1,7 +1,7 @@
 import { 
     Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UnauthorizedException
 } from '@nestjs/common';
-import { ImageDTO } from '../Models/DTOs/ImageDTO';
+import { ImageDTO } from '../image/image.dto';
 import { ProfileImageMulter } from "../Middleware/Multer";
 import { AuthService } from 'src/middleware/auth.service';
 import { AccountService } from './account.service';
@@ -103,8 +103,8 @@ export class AccountController {
         const user_pk = res.locals.jwt_payload.pk;
 
         const DeleteProfile_Result = await this.AccountService.DeleteAccount(
-          user_pk,
-          body.password
+            user_pk,
+            body.password
         );
 
         if(!DeleteProfile_Result){ throw new UnauthorizedException() }
