@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { AccountModule } from './account/account.module';
 import { ChatModule } from './chat/chat.module';
 import { CommentModule } from './comment/comment.module';
 import { FriendModule } from './friend/friend.module';
@@ -24,7 +24,7 @@ import { LikeModule } from './like/like.module';
       entities: [],
       synchronize: true,
     }),
-    UserModule,
+    AccountModule,
     ChatModule,
     CommentModule,
     FriendModule,

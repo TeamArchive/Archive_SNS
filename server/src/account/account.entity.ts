@@ -1,5 +1,4 @@
 // @TODO : Modify
-
 import {
 	Entity,
 	PrimaryGeneratedColumn,
@@ -19,11 +18,15 @@ import { IsNotEmpty } from "class-validator";
  * Account Entity
  */
 
-@Entity({ name: "user" })
-export class User {
+@Entity({ name: "account" })
+export class Account {
 	
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
+
+	@IsNotEmpty()
+	@Column({ name: "name", length: 64 })
+	name: string;
 
 	@IsNotEmpty()
 	@Column({ name: "email", length: 64 })
@@ -32,10 +35,6 @@ export class User {
 	@IsNotEmpty()
 	@Column({ name: "password" })
 	password: string;
-
-	@IsNotEmpty()
-	@Column({ name: "name", length: 64 })
-	name: string;
 
 	@Column({ name: "profile_image", length: 36, nullable: true })
 	profile_image_pk: string;
