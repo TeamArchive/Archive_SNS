@@ -8,9 +8,9 @@ import {
 	CreateDateColumn,
 	ManyToOne
 } from 'typeorm';
-import { Account } from './Account';
-import { Comment } from './Comment';
-import { Post } from './Post';
+import { Account } from '../account/account.entity';
+import { Comment } from '../comment/comment.entity';
+import { Post } from '../post/post.entity';
 
 // @TODO : Import Module
 // @TODO : Account -> User

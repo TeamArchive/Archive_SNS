@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
 import { ProfileImageMulter } from "../Middleware/Multer";
-import { AuthService } from 'src/middleware/auth.service';
+import { AuthService } from 'src/auth/auth.service';
 import { AccountService } from './account.service';
 import { AccountDTO } from './account.dto';
 import { AccessTokenGenerator, RefreshTokenGenerator } from 'src/middleware/jwt.auth';

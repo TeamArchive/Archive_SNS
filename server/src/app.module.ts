@@ -11,6 +11,7 @@ import { PostModule } from './post/post.module';
 import { ImageModule } from './image/image.module';
 import { GroupModule } from './group/group.module';
 import { LikeModule } from './like/like.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { LikeModule } from './like/like.module';
     ImageModule,
     GroupModule,
     LikeModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

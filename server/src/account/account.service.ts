@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ImageDTO } from "src/image/image.dto";
 import { AccountDTO } from "./account.dto";
 import { Account } from "./account.entity";
 import { AccountRepo } from "./account.repo";
@@ -9,7 +10,7 @@ export class AccountService {
 	
 	constructor(
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
-		@InjectRepository(Image) private profile_img_repo: ProfileImageRepo
+		// @InjectRepository(Image) private profile_img_repo: ProfileImageRepo
 	) { }
 
 	/**
@@ -26,7 +27,7 @@ export class AccountService {
 		const account_ent = account_dto.toEntity();
 
 		if(image_dto) {
-			const profile_img_ent = image_dto.toEntity() as ProfileImage;
+			const profile_img_ent = image_dto.toEntity();
 
 			account_ent.profile_image_pk = 
 				(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
@@ -55,7 +56,7 @@ export class AccountService {
 			account_dto.updateEntity(target);
 			
 			if(image_dto) {
-				const profile_img_ent = image_dto.toEntity() as ProfileImage;
+				const profile_img_ent = image_dto.toEntity();
 
 				target.entity.profile_image_pk = 
 					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;

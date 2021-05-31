@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "@nestjs/common";
+import { Request, Response } from "@nestjs/common";
 import jwt from "jsonwebtoken";
 import { env } from "../env";
 import { Account } from "../account/account.entity";

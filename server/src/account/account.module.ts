@@ -7,6 +7,7 @@ import { AccountService } from './account.service'
 
 @Module({
     imports: [TypeOrmModule.forFeature([Account])],
+    exports: [AccountService],
     controllers: [AccountController],
     providers: [AccountService]
 })

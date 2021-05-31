@@ -14,39 +14,26 @@ export class AuthService {
 		@InjectRepository(Account) private AccountRepo: AccountRepo
 	) { }
 
-	/**
-	 * Verify that the data passed to DTO and the data which exist in 
-	 * the Database are correct
-	 * 
-	 * @param account_dto : Login Account DTO
-	 * 
-	 * @returns Account Data ( fail : undefined ) 
-	 */
+	//Validate: 확인
 	public async ValidateAccount(
-		account_dto: AccountDTO 
+		email: string,
+		password: string
 	): Promise<Account> 
 	{
 		const account = await this.AccountRepo.findOne({
-			where: { email: account_dto.email }
+			where: { email }
 		});
 
 		if ( account ) {
 			const is_pw_match = 
-				await account.check_password (account_dto.password);
+				await account.check_password(password);
 
 			if (is_pw_match) 
 				return account;
 		}
-
-		return undefined;
+		return null;
 	}
 
-	/**
-	 * Check that Refresh Token is Verify Token
-	 * 
-	 * @param account_pk : Account's PK
-	 * @param refresh_token : Account's Refresh Token
-	 */
 	public async ValidateRefreshToken (
 		account_pk : string,
 		refresh_token : string
