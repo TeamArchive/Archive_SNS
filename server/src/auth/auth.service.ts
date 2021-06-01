@@ -1,6 +1,7 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { getConnection } from "typeorm";
 import { Injectable } from "@nestjs/common";
+import { JwtService } from '@nestjs/jwt'
 
 import { AccountRepo } from "src/account/account.repo";
 import { AccountDTO } from "src/account/account.dto";
@@ -11,22 +12,32 @@ import { Account } from "src/account/account.entity";
 export class AuthService {
 
 	constructor(
-		@InjectRepository(Account) private AccountRepo: AccountRepo
+		@InjectRepository(Account) private AccountRepo: AccountRepo,
+		private JwtService: JwtService
 	) { }
 
-	//Validate: 확인
+	async AccessTokenGenerator( Account_DTO: AccountDTO ) {
+		const payload = {
+			email: Account_DTO.email, 
+			name: Account_DTO.name,
+		};
+
+		return {
+			access_token: this.JwtService.sign(payload)
+		};
+	}
+
 	public async ValidateAccount(
-		email: string,
-		password: string
+		AccountDTO: AccountDTO 
 	): Promise<Account> 
 	{
 		const account = await this.AccountRepo.findOne({
-			where: { email }
+			where: { email: AccountDTO.email }
 		});
 
 		if ( account ) {
 			const is_pw_match = 
-				await account.check_password(password);
+				await account.check_password (AccountDTO.password);
 
 			if (is_pw_match) 
 				return account;
@@ -54,6 +65,7 @@ export class AuthService {
 		refresh_token : string
 	) {
 		account.refresh_token = refresh_token;
+		
 		return await this.AccountRepo.save(account);
 	}
 

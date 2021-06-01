@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ImageDTO } from "src/image/image.dto";
+import { ProfileImageRepo } from "src/image/image.repo";
 import { AccountDTO } from "./account.dto";
 import { Account } from "./account.entity";
 import { AccountRepo } from "./account.repo";
@@ -10,15 +11,9 @@ export class AccountService {
 	
 	constructor(
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
-		// @InjectRepository(Image) private profile_img_repo: ProfileImageRepo
+		@InjectRepository(Image) private profile_img_repo: ProfileImageRepo
 	) { }
 
-	/**
-	 * Service which creating Account
-	 * 
-	 * @param account_dto : Create Account DTO
-	 * @param image_dto : Create Image DTO or NULL
-	 */
 	public async CreateAccount(
 		account_dto: AccountDTO,
 		image_dto: ImageDTO | null
@@ -26,22 +21,16 @@ export class AccountService {
 	{
 		const account_ent = account_dto.toEntity();
 
-		if(image_dto) {
-			const profile_img_ent = image_dto.toEntity();
+		// if(image_dto) {
+		// 	const profile_img_ent = image_dto.toEntity();
 
-			account_ent.profile_image_pk = 
-				(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
-		}
+		// 	account_ent.profile_image_pk = 
+		// 		(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
+		// }
 
 		return await this.AccountRepo.save(account_ent);
 	}
 
-	/**
-	 * Update Account Data ( User Infomation )
-	 * 
-	 * @param account_pk : Account's PK
-	 * @param account_dto : UpdateAccountDTO which is include updated aㅏccount data
-	 */
 	public async UpdateAccount(
 		account_pk: string,
 		account_dto: AccountDTO,
@@ -55,12 +44,12 @@ export class AccountService {
 		if (target.entity?.pk === account_pk) {
 			account_dto.updateEntity(target);
 			
-			if(image_dto) {
-				const profile_img_ent = image_dto.toEntity();
+			// if(image_dto) {
+			// 	const profile_img_ent = image_dto.toEntity();
 
-				target.entity.profile_image_pk = 
-					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
-			}
+			// 	target.entity.profile_image_pk = 
+			// 		(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
+			// }
 
 			return await this.AccountRepo.save(target.entity);
 		}
@@ -68,11 +57,6 @@ export class AccountService {
 		return null;
 	}
 
-	/**
-	 * GetAccountbyPK
-	 * 
-	 * @param account_pk : Account's PK
-	 */
 	public async GetAccountByPK(
 		account_pk: string
 	)
@@ -84,12 +68,6 @@ export class AccountService {
 			where: { pk: account_pk },
 		});
 	}
-
-	/**
-	 * GetAccountbyName
-	 * 
-	 * @param target_name : search keyword
-	 */
 
 	public async GetAccountByName(
 		target_name: string
@@ -107,11 +85,6 @@ export class AccountService {
 		};
 	}
 
-	/**
-	 * Delete Account which has same PK
-	 * 
-	 * @param account_pk : Account's PK
-	 */
 	public async DeleteAccount(
 		account_pk: string,
 		password: string,

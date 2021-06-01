@@ -11,12 +11,8 @@ import {
 	JoinTable
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-
-// @TODO : Import Module
-
-/**
- * Account Entity
- */
+import { GroupParticipant } from "src/group/group.entity";
+import { Image } from '../image/image.entity'
 
 @Entity({ name: "account" })
 export class Account {

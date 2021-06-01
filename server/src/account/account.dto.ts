@@ -1,7 +1,7 @@
 import { 
     IsNotEmpty, Length, IsEmail, IsString, IsOptional 
 } from "class-validator";
-// import { Image } from "../Entities/Image";
+import { Image } from "../image/image.entity";
 import sanitizeHtml from 'sanitize-html';
 import { Account } from "./account.entity";
 
