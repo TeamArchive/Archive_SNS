@@ -1,103 +1,105 @@
-// @TODO : Modify
+// // @TODO : Modify
+// import {
+// 	Column,
+// 	Entity, 
+// 	ManyToMany, 
+// 	OneToMany,
+// 	PrimaryGeneratedColumn,
+// 	TableInheritance,
+// 	JoinTable,
+// 	JoinColumn,
+// 	ChildEntity,
+// 	ManyToOne,
+// 	OneToOne
+// } from "typeorm";
+// import { IsNotEmpty } from "class-validator";
+// import { Post } from "src/post/post.entity";
+// import { ChatMsg } from "src/chat/chat.entity";
+// import { Account } from "src/account/account.entity";
 
-import {
-	Column,
-	Entity, 
-	ManyToMany, 
-	OneToMany,
-	PrimaryGeneratedColumn,
-	TableInheritance,
-	JoinTable,
-	JoinColumn,
-	ChildEntity,
-	ManyToOne,
-	OneToOne
-} from "typeorm";
-import { IsNotEmpty } from "class-validator";
+// // @TODO : Import Module
 
-// @TODO : Import Module
+// // @TODO : Account -> User
 
-// @TODO : Account -> User
+// // @TODO : Gropu Entity 통합
 
-// @TODO : Gropu Entity 통합
+// @Entity({ name : "group" })
+// @TableInheritance({ column: { type: "varchar", name: "type" } })
+// export class Group {
 
-@Entity({ name : "group" })
-@TableInheritance({ column: { type: "varchar", name: "type" } })
-export class Group {
+// 	@PrimaryGeneratedColumn("uuid")
+// 	pk: string;
 
-	@PrimaryGeneratedColumn("uuid")
-	pk: string;
+// 	@Column({ name: "title" })
+// 	title: string;
 
-	@Column({ name: "title" })
-	title: string;
+// 	@OneToMany(
+// 		type => GroupParticipant, 
+// 		group_participant => group_participant.participant,
+// 		{ cascade: true }
+// 	)
+// 	participant: GroupParticipant[];
 
-	@OneToMany(
-		type => GroupParticipant, 
-		group_participant => group_participant.participant,
-		{ cascade: true }
-	)
-	participant: GroupParticipant[];
+// 	@Column({ name: "highest_rank", default: 0 })
+// 	highest_rank: number;
 
-	@Column({ name: "highest_rank", default: 0 })
-	highest_rank: number;
+// 	@Column({ name: "lowest_rank", default: 0 })
+// 	lowest_rank: number;
+// };
 
-	@Column({ name: "lowest_rank", default: 0 })
-	lowest_rank: number;
-};
+// @ChildEntity()
+// export class ChatGroup extends Group {
 
-@ChildEntity()
-export class ChatGroup extends Group {
+// 	@OneToMany((type) => ChatMsg, (chat_msg) => chat_msg.group)
+// 	chat_msg: ChatMsg[];
 
-	@OneToMany((type) => ChatMsg, (chat_msg) => chat_msg.group)
-	chat_msg: ChatMsg[];
+// };
 
-};
-
-@ChildEntity()
-export class PostGroup extends Group {
+// @ChildEntity()
+// export class PostGroup extends Group {
 	
-	@Column({ name: "is_private" })
-	is_private: boolean;
+// 	@Column({ name: "is_private" })
+// 	is_private: boolean;
 
-	// @OneToMany((type) => Post, (post) => post.group)
-	// post: Post[];
+// 	@OneToMany((type) => Post, (post) => post.group)
+// 	post: Post[];
 
-};
+// };
 
-@Entity({ name: "group_participant" })
-export class GroupParticipant {
+// @Entity({ name: "group_participant" })
+// export class GroupParticipant {
 
-	@PrimaryGeneratedColumn("uuid")
-	pk: string;
+// 	@PrimaryGeneratedColumn("uuid")
+// 	pk: string;
 	
-	@IsNotEmpty()
-	@Column({ name: "participant", length: 36, nullable: false })
-	participant_pk: string;
+// 	@IsNotEmpty()
+// 	@Column({ name: "participant", length: 36, nullable: false })
+// 	participant_pk: string;
 
-	@ManyToOne(
-		(type) => Account, 
-		(account) => account.pk, 
-		{ onDelete: "CASCADE" }
-	)
-	@JoinColumn({ name: "participant" })
-	participant: Account;
+// 	@ManyToOne(
+// 		(type) => Account, 
+// 		(account) => account.pk, 
+// 		{ onDelete: "CASCADE" }
+// 	)
+// 	@JoinColumn({ name: "participant" })
+// 	participant: Account;
 
-	@IsNotEmpty()
-	@Column({ name: "group", length: 36, nullable: false })
-	group_pk: string;
+// 	@IsNotEmpty()
+// 	@Column({ name: "group", length: 36, nullable: false })
+// 	group_pk: string;
 
-	@ManyToOne(
-		(type) => Group, 
-		(group) => group.pk, 
-		{ onDelete: "CASCADE" }
-	)
-	@JoinColumn({ name: "group" })
-	group: Account;
+// 	@ManyToOne(
+// 		(type) => Group, 
+// 		(group) => group.pk, 
+// 		{ onDelete: "CASCADE" }
+// 	)
+// 	@JoinColumn({ name: "group" })
+// 	group: Account;
 
-	@Column({ 
-		name: "rank", default: 0,
-		comment: "high number high rank"
-	})
-	rank: number;
+// 	@Column({ 
+// 		name: "rank", default: 0,
+// 		comment: "high number high rank"
+// 	})
+// 	rank: number;
 
-};
+// };

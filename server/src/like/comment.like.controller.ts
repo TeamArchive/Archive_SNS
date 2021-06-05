@@ -2,7 +2,7 @@ import {
     Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UnauthorizedException
 } from '@nestjs/common';
 
-import { VerifyAccessToken } from "src/middleware/jwt.auth";
+// import { VerifyAccessToken } from "src/middleware/jwt.auth";
 import { CommentLikeService } from './like.service';
 
 @Controller()
@@ -45,7 +45,8 @@ export class CommentLikeControl {
         @Body() body,
         @Res() res: Response
     ) {
-        const user_pk = res.locals.jwt_payload.pk;
+        const user_pk = ''
+        // res.locals.jwt_payload.pk;
 
         const Who_Like = await this.comment_like_service.WhoLike(
             user_pk,

@@ -9,6 +9,7 @@ import {
 	JoinColumn
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
+import { Account } from "src/account/account.entity";
 
 // @TODO : Import Module
 

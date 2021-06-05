@@ -11,7 +11,7 @@ export class AccountService {
 	
 	constructor(
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
-		@InjectRepository(Image) private profile_img_repo: ProfileImageRepo
+		// @InjectRepository(Image) private profile_img_repo: ProfileImageRepo
 	) { }
 
 	public async CreateAccount(

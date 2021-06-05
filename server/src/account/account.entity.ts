@@ -11,7 +11,7 @@ import {
 	JoinTable
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-import { GroupParticipant } from "src/group/group.entity";
+// import { GroupParticipant } from "src/group/group.entity";
 import { Image } from '../image/image.entity'
 
 @Entity({ name: "account" })
@@ -39,12 +39,12 @@ export class Account {
 	@JoinColumn({ name: "profile_image" })
 	profile_image: Image | null;
 
-	@OneToMany(
-		type => GroupParticipant, 
-		group_participant => group_participant.participant,
-		{ cascade: true }
-	)
-	own_group: GroupParticipant[];
+	// @OneToMany(
+	// 	type => GroupParticipant, 
+	// 	group_participant => group_participant.participant,
+	// 	{ cascade: true }
+	// )
+	// own_group: GroupParticipant[];
 
 	@Column({ name: "status_msg", nullable: true })
 	status_msg: string;

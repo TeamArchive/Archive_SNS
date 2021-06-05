@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		if (!account) {
 			throw new UnauthorizedException();
 		}
-		return account;
+
+		return account;	//req.user 할당
 	}
 }

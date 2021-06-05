@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Post } from "src/post/post.entity";
+import { PostRepo } from "../post/post.repo";
 
 import { CommentLike, PostLike } from './like.entity';
 import { CommentLikeRepo, PostLikeRepo } from "./like.repo";
@@ -89,9 +90,6 @@ class CommonLikeService<
 		target.n_like = await this.like_repo.GetCount(target_pk);
 		return await this.target_repo.save(target)
 	}
-
-
-
 }
 
 @Injectable()

@@ -10,77 +10,41 @@ import { Account } from "src/account/account.entity";
 
 @Injectable()
 export class AuthService {
-
 	constructor(
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
-		private JwtService: JwtService
-	) { }
+		private jwtService: JwtService
+	) {}
 
-	async AccessTokenGenerator( Account_DTO: AccountDTO ) {
-		const payload = {
-			email: Account_DTO.email, 
-			name: Account_DTO.name,
-		};
 
-		return {
-			access_token: this.JwtService.sign(payload)
-		};
-	}
-
-	public async ValidateAccount(
-		AccountDTO: AccountDTO 
+	async ValidateAccount(
+		account_dto: AccountDTO 
 	): Promise<Account> 
 	{
 		const account = await this.AccountRepo.findOne({
-			where: { email: AccountDTO.email }
+			where: { email: account_dto.email }
 		});
 
 		if ( account ) {
 			const is_pw_match = 
-				await account.check_password (AccountDTO.password);
+				await account.check_password (account_dto.password);
 
 			if (is_pw_match) 
 				return account;
-		}
+		} 
+
 		return null;
 	}
 
-	public async ValidateRefreshToken (
-		account_pk : string,
-		refresh_token : string
-	) {
-		const result = await this.AccountRepo.findOne({
-			select: ["pk", "email", "name"],
-			where: {
-				pk: account_pk,
-				refresh_toke: refresh_token,
-			}
-		});
-		
-		return result ? result : undefined;
-	}
-
-	public async SaveRefreshTokenDirectly(
-		account : Account,
-		refresh_token : string
-	) {
-		account.refresh_token = refresh_token;
-		
-		return await this.AccountRepo.save(account);
-	}
-
-	public async SaveRefreshToken(
-		account_pk : string,
-		refresh_token : string,
-	) : Promise<Account> {
-		const account = await this.AccountRepo.findOne({where: {pk: account_pk}});
-
-		if(account) {
-			account.refresh_token = refresh_token;
-			return await this.AccountRepo.save(account);
+	async login(
+		account: any
+	){
+		const payload = {
+			name: account.name,
+			sub: account.email	// 토큰 제목
 		}
-		
-		return undefined;
-	}
 
+		return {
+			access_token: this.jwtService.sign(payload)
+		};
+	}
 }
