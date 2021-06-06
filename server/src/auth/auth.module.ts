@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from 'src/account/account.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants'
+import { ImageModule } from 'src/image/image.module';
 
 @Module({
         imports: [

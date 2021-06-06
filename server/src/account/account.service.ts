@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ImageDTO } from "src/image/image.dto";
-import { ProfileImageRepo } from "src/image/image.repo";
+import { ImageDTO } from "./../image/image.dto";
+import { ProfileImage } from "./../image/image.entity";
+import { ProfileImageRepo } from "./../image/image.repo";
 import { AccountDTO } from "./account.dto";
 import { Account } from "./account.entity";
 import { AccountRepo } from "./account.repo";
@@ -11,7 +12,7 @@ export class AccountService {
 	
 	constructor(
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
-		// @InjectRepository(Image) private profile_img_repo: ProfileImageRepo
+		@InjectRepository(Image) private profile_img_repo: ProfileImageRepo
 	) { }
 
 	public async CreateAccount(
@@ -21,12 +22,12 @@ export class AccountService {
 	{
 		const account_ent = account_dto.toEntity();
 
-		// if(image_dto) {
-		// 	const profile_img_ent = image_dto.toEntity();
+		if(image_dto) {
+			const profile_img_ent = image_dto.toEntity() as ProfileImage;
 
-		// 	account_ent.profile_image_pk = 
-		// 		(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
-		// }
+			account_ent.profile_image_pk = 
+				(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
+		}
 
 		return await this.AccountRepo.save(account_ent);
 	}
@@ -86,20 +87,19 @@ export class AccountService {
 	}
 
 	public async DeleteAccount(
-		account_pk: string,
-		password: string,
+		account
 	): Promise<boolean>
 	{
 		const target = await this.AccountRepo.findOne({
 			select: ["password"],
-			where: { pk: account_pk },
+			where: { pk: account.pk },
 		});
 
 		if ( target ) {
-			const is_pw_match = await target.check_password (password);
+			const is_pw_match = await target.check_password (account.password);
 
 			if(is_pw_match) {
-				await this.AccountRepo.delete({ pk: account_pk });
+				await this.AccountRepo.delete({ pk: account.pk });
 				return true;
 			}
 		}

@@ -103,7 +103,7 @@ export class AccountDTO {
 	}
 }
 
-export class AcocutBuilder {	
+export class AccountBuilder {	
 
 	private dto: AccountDTO;
 

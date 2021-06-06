@@ -1,8 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { getConnection } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt'
-
 import { AccountRepo } from "src/account/account.repo";
 import { AccountDTO } from "src/account/account.dto";
 import { Account } from "src/account/account.entity";
@@ -14,7 +12,6 @@ export class AuthService {
 		@InjectRepository(Account) private AccountRepo: AccountRepo,
 		private jwtService: JwtService
 	) {}
-
 
 	async ValidateAccount(
 		account_dto: AccountDTO 
@@ -47,4 +44,5 @@ export class AuthService {
 			access_token: this.jwtService.sign(payload)
 		};
 	}
+
 }

@@ -3,8 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostImage } from './image.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([PostImage])],
+    imports: [TypeOrmModule.forFeature([])],
     controllers: [],
-    providers: []
+    providers: [],
+    exports: []
 })
 export class ImageModule {}
