@@ -1,7 +1,8 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Group, ChatGroup, PostGroup, GroupParticipant } from './group.entity';
 
-class GroupRepo<T extends (ChatGroup | PostGroup)> extends Repository<T> { 
+type ET = (ChatGroup | PostGroup)
+export class GroupRepo<T extends ET> extends Repository<T> { 
 	
 	/**
 	 * Group Search

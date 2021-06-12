@@ -1,4 +1,5 @@
 // @TODO : Modify
+
 import {
 	Column,
 	Entity, 
@@ -13,12 +14,9 @@ import {
 	OneToOne
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-import { Post } from "src/post/post.entity";
-import { ChatMsg } from "src/chat/chat.entity";
-import { Account } from "src/account/account.entity";
 
-import { Chat } from '../chat/chat.entity';
-import { User } from "src/user/user.entity";
+import { Chat } from '@chat/chat.entity';
+import { Account } from "@account/account.entity";
 
 @Entity({ name : "group" })
 @TableInheritance({ column: { type: "varchar", name: "type" } })
@@ -57,8 +55,8 @@ export class PostGroup extends Group {
 	@Column({ name: "is_private" })
 	is_private: boolean;
 
-	@OneToMany((type) => Post, (post) => post.group)
-	post: Post[];
+	// @OneToMany((type) => Post, (post) => post.group)
+	// post: Post[];
 
 };
 
@@ -72,9 +70,9 @@ export class GroupParticipant {
 	@Column({ name: "participant", length: 36, nullable: false })
 	participant_pk: string;
 
-	@ManyToOne((type) => User, (user) => user.pk, { onDelete: "CASCADE" })
+	@ManyToOne((type) => Account, (account) => account.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "participant" })
-	participant: User;
+	participant: Account;
  
 	@IsNotEmpty()
 	@Column({ name: "group", length: 36, nullable: false })

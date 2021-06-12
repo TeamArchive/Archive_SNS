@@ -12,11 +12,9 @@ import {
 	OneToOne
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-import { Account } from "src/account/account.entity";
-import { ChatGroup } from "src/group/group.entity";
 
-import { User } from '../user/user.entity';
-import { ChatGroup, Group } from '../group/group.entity';
+import { Account } from '@account/account.entity';
+import { ChatGroup, Group } from '@group/group.entity';
 
 /**
  * Chat Massage Entity
@@ -30,9 +28,9 @@ export class Chat {
 	@Column({ name: "writer", length: 36 })
 	writer_pk: string;
 
-	@ManyToOne( (type) => User, (user) => user.pk )
+	@ManyToOne( (type) => Account, (account) => account.pk )
 	@JoinColumn({ name: "writer" })
-	writer: User;
+	writer: Account;
 
 	@Column({ name: "group", length: 36 })
 	group_pk: string;

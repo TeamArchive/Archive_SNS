@@ -14,8 +14,10 @@
 
     "paths": {
       "@root/*": ["./src/*"],
-      "@user/*": ["./src/user/*"],
-      "@group/*": ["./src/group/*"]
+      "@auth/*": ["./src/auth/*"],
+      "@account/*": ["./src/account/*"],
+      "@group/*": ["./src/group/*"],
+      "@chat/*": ["./src/chat/*"]
     }
   }
 }

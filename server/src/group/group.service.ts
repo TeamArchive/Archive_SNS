@@ -2,18 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, getConnection } from 'typeorm'
 
-import { ChatGroupRepo, PostGroupRepo, GroupParticipantRepo } from './group.repo';
-import { Group, ChatGroup, PostGroup } from './group.entity';
-import { GroupDTO } from './group.dto';
+import { GroupRepo, ChatGroupRepo, PostGroupRepo, GroupParticipantRepo } from '@group/group.repo';
+import { Group, ChatGroup, PostGroup } from '@group/group.entity';
+import { GroupDTO } from '@group/group.dto';
 
-type RT = (ChatGroupRepo | PostGroupRepo)	
-type ET	= (ChatGroup | PostGroup)
+import { AccountRepo } from '@account/account.repo'
 
-abstract class GroupService < RepoType extends RT, EntType extends ET > {
+type ET	= (ChatGroup | PostGroup);
+type RT = (ChatGroupRepo | PostGroupRepo) & GroupRepo<ET>;
+
+abstract class GroupService <RepoType extends RT,EntType extends ET> {
 
 	// Repositories
 	protected group_repo : RepoType;
-	protected account_repo : UserRepo;
+	protected account_repo : AccountRepo;
 	protected group_participant_repo;
 
 	// Minimum number of first members
@@ -22,11 +24,11 @@ abstract class GroupService < RepoType extends RT, EntType extends ET > {
 
 	constructor(
 		group_repo: RepoType,
-		user_repo: UserRepo,
+		account_repo: AccountRepo,
 		group_participant_repo: GroupParticipantRepo
 	) {
 		this.group_repo = group_repo;
-		this.account_repo = user_repo;
+		this.account_repo = account_repo;
 		this.group_participant_repo = GroupParticipantRepo;
 	}
 
@@ -67,14 +69,14 @@ abstract class GroupService < RepoType extends RT, EntType extends ET > {
 		/**
 		 * < Create new group >
 		 */
-		const new_group = group_dto.toEntity() as EntType;
-		const result = await this.group_repo.save(new_group);
+		const group_ent = group_dto.toEntity() as EntType;
+		const group = await this.group_repo.save(group_ent);
 
 		/**
 		 * < Put members in the group >
 		 */
-		this.group_participant_repo.newParticipant(
-			result.pk,
+		const result = await this.group_participant_repo.newParticipant(
+			group.pk,
 			group_dto.member_pk_list,
 			group_dto?.lowest_rank
 		);
@@ -142,12 +144,12 @@ abstract class GroupService < RepoType extends RT, EntType extends ET > {
 		/**
 		 * < Put members in the group >
 		 */
-		await this.group_participant_repo.newParticipant(
+		const result = await this.group_participant_repo.newParticipant(
 			group_pk,
 			member_pk_list
 		);
 
-		return group;
+		return result;
 	}
 
 	/**
@@ -158,7 +160,7 @@ abstract class GroupService < RepoType extends RT, EntType extends ET > {
 	 * @returns Result Group List
 	 */
 	public async search(query: string) : Promise <Group[]> {
-		return this.group_repo.searchGroup(query);
+		return this.group_repo.search(query);
 	}
 }
 
@@ -176,10 +178,10 @@ export class ChatGroupService extends GroupService<ChatGroupRepo, ChatGroup> {
 
 	constructor(
 		@InjectRepository(ChatGroupRepo) group_repo: ChatGroupRepo,
-		@InjectRepository(UserRepo) user_repo: UserRepo,
+		@InjectRepository(AccountRepo) account_repo: AccountRepo,
 		@InjectRepository(GroupParticipantRepo) group_participant_repo: GroupParticipantRepo
 	) {
-		super(group_repo, user_repo, group_participant_repo);
+		super(group_repo, account_repo, group_participant_repo);
 		this.n_min_early_member = 2;
 	}
 
@@ -199,10 +201,10 @@ export class PostGroupService extends GroupService<PostGroupRepo, PostGroup> {
 
 	constructor(
 		@InjectRepository(PostGroupRepo) group_repo: PostGroupRepo,
-		@InjectRepository(UserRepo) user_repo: UserRepo,
+		@InjectRepository(AccountRepo) account_repo: AccountRepo,
 		@InjectRepository(GroupParticipantRepo) group_participant_repo: GroupParticipantRepo
 	) {
-		super(group_repo, user_repo, group_participant_repo);
+		super(group_repo, account_repo, group_participant_repo);
 	}
 
 }
