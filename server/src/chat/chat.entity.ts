@@ -13,15 +13,14 @@ import {
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 
-// @TODO : Import Module
-
-// @TODO : Account -> User 
+import { User } from '../user/user.entity';
+import { ChatGroup, Group } from '../group/group.entity';
 
 /**
  * Chat Massage Entity
  */
-@Entity({ name: "chat_msg" })
-export class ChatMsg {
+@Entity({ name: "chat" })
+export class Chat {
 	
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
@@ -29,19 +28,17 @@ export class ChatMsg {
 	@Column({ name: "writer", length: 36 })
 	writer_pk: string;
 
-	@ManyToOne( (type) => Account, (Account) => Account.pk )
+	@ManyToOne( (type) => User, (user) => user.pk )
 	@JoinColumn({ name: "writer" })
-	writer: Account;
+	writer: User;
 
 	@Column({ name: "group", length: 36 })
 	group_pk: string;
 
-	@ManyToOne((type) => ChatGroup, (chat_group) => chat_group.chat_msg, {
-		cascade: true,
-		onDelete: "CASCADE",
-	})
+	@ManyToOne( (type) => ChatGroup, (chat_group) => chat_group.chat, 
+				{ cascade: true, onDelete: "CASCADE" })
 	@JoinColumn({ name: "group" })
-	group: ChatGroup;
+	group: Group;
 
 	@Column({ name: "content" })
 	content: string;
