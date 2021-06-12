@@ -1,3 +1,5 @@
+import { Account } from 'src/account/account.entity';
+import { Post } from 'src/post/post.entity';
 import { 
 	Entity, 
 	ChildEntity,

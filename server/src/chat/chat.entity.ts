@@ -12,6 +12,8 @@ import {
 	OneToOne
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
+import { Account } from "src/account/account.entity";
+import { ChatGroup } from "src/group/group.entity";
 
 import { User } from '../user/user.entity';
 import { ChatGroup, Group } from '../group/group.entity';

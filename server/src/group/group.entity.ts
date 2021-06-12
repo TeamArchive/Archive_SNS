@@ -1,5 +1,4 @@
 // @TODO : Modify
-
 import {
 	Column,
 	Entity, 
@@ -14,6 +13,9 @@ import {
 	OneToOne
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
+import { Post } from "src/post/post.entity";
+import { ChatMsg } from "src/chat/chat.entity";
+import { Account } from "src/account/account.entity";
 
 import { Chat } from '../chat/chat.entity';
 import { User } from "src/user/user.entity";
@@ -55,8 +57,8 @@ export class PostGroup extends Group {
 	@Column({ name: "is_private" })
 	is_private: boolean;
 
-	// @OneToMany((type) => Post, (post) => post.group)
-	// post: Post[];
+	@OneToMany((type) => Post, (post) => post.group)
+	post: Post[];
 
 };
 

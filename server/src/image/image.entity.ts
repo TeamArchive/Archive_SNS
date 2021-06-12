@@ -1,24 +1,18 @@
 //@TODO : Modify
-
 import {
 	Entity,
-	
 	PrimaryGeneratedColumn,
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
-	
 	ManyToOne,
 	JoinColumn,
-
 	ChildEntity,
 	TableInheritance
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-
-// @TODO : Import Module
-
-// @TODO : Account -> User
+import { Account } from "../account/account.entity"
+import { Post } from "../post/post.entity"
 
 /**
  * Entity which is for saving Image
@@ -78,11 +72,10 @@ export class PostImage extends Image {
 /**
  * Image Entity For which will be use profile image
  */
-
-// @ChildEntity()
-// export class ProfileImage extends Image {
+@ChildEntity()
+export class ProfileImage extends Image {
 	
-// 	@Column({ name: "is_current_use", default: true })
-// 	is_current_use: boolean;
+	@Column({ name: "is_current_use", default: true })
+	is_current_use: boolean;
 
-// }
+}
