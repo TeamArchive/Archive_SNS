@@ -45,12 +45,12 @@ export class AccountService {
 		if (target.entity?.pk === account_pk) {
 			account_dto.updateEntity(target);
 			
-			// if(image_dto) {
-			// 	const profile_img_ent = image_dto.toEntity();
+			if(image_dto) {
+				const profile_img_ent = image_dto.toEntity() as ProfileImage;
 
-			// 	target.entity.profile_image_pk = 
-			// 		(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
-			// }
+				target.entity.profile_image_pk = 
+					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
+			}
 
 			return await this.AccountRepo.save(target.entity);
 		}

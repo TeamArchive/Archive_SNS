@@ -39,7 +39,8 @@ export class FeedLikeControl {
         @Param('post_pk') post_pk: string,
         @Res() res: Response
     ) {
-        const user_pk = res.locals.jwt_payload.user_pk;
+        // const user_pk = res.locals.jwt_payload.user_pk;
+        const user_pk = ''
 
         const IsLike_Result = await this.post_like_service.IsLike(
             user_pk,
@@ -56,8 +57,9 @@ export class FeedLikeControl {
         @Param('feed_pk') feed_pk,
         @Res() res: Response
     ) {
-        const user_pk = res.locals.jwt_payload.user_pk;
-
+        // const user_pk = res.locals.jwt_payload.user_pk;
+        const user_pk = ''
+        
         const ToggleLike_Result = await this.post_like_service.ToggleLike(
             user_pk,
             feed_pk

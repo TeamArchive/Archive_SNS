@@ -8,11 +8,15 @@ import {
 	JoinColumn,
 	ManyToOne,
 	ManyToMany,
-	JoinTable
+	JoinTable,
+	BeforeInsert,
+	BeforeUpdate
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
+import * as bcrypt from 'bcrypt';
 // import { GroupParticipant } from "src/group/group.entity";
 import { Image } from '../image/image.entity'
+import { InternalServerErrorException } from "@nestjs/common";
 
 @Entity({ name: "account" })
 export class Account {
@@ -54,5 +58,28 @@ export class Account {
 
 	async check_password(target: string): Promise<boolean> {
 		return (this.password == target);
+	}
+
+	@BeforeInsert()
+	@BeforeUpdate()
+	async hashPassword(): Promise<void> {
+		if (this.password) {
+		try {
+			this.password = await bcrypt.hash(this.password, 10);
+		} catch (e) {
+			console.log(e);
+			throw new InternalServerErrorException();
+		}
+		}
+	}
+
+	async checkPassword(aPassword: string): Promise<boolean> {
+		try {
+			const compare_result = await bcrypt.compare(aPassword, this.password);
+			return compare_result;
+		} catch (e) {
+			console.log(e);
+			throw new InternalServerErrorException();
+		}
 	}
 }

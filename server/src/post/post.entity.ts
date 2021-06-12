@@ -71,6 +71,8 @@ export class Post {
 		comment: "popularly score"
 	})
 	q_score: number;
+	
+	group: any;
 
 }
 
