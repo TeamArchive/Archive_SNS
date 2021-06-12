@@ -15,11 +15,8 @@ import {
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 
-// @TODO : Import Module
-
-// @TODO : Account -> User
-
-// @TODO : Gropu Entity 통합
+import { Chat } from '../chat/chat.entity';
+import { User } from "src/user/user.entity";
 
 @Entity({ name : "group" })
 @TableInheritance({ column: { type: "varchar", name: "type" } })
@@ -33,8 +30,7 @@ export class Group {
 
 	@OneToMany(
 		type => GroupParticipant, 
-		group_participant => group_participant.participant,
-		{ cascade: true }
+		(group_participant) => group_participant.participant
 	)
 	participant: GroupParticipant[];
 
@@ -48,8 +44,8 @@ export class Group {
 @ChildEntity()
 export class ChatGroup extends Group {
 
-	@OneToMany((type) => ChatMsg, (chat_msg) => chat_msg.group)
-	chat_msg: ChatMsg[];
+	@OneToMany((type) => Chat, (chat) => chat.group)
+	chat: Chat[];
 
 };
 
@@ -74,25 +70,17 @@ export class GroupParticipant {
 	@Column({ name: "participant", length: 36, nullable: false })
 	participant_pk: string;
 
-	@ManyToOne(
-		(type) => Account, 
-		(account) => account.pk, 
-		{ onDelete: "CASCADE" }
-	)
+	@ManyToOne((type) => User, (user) => user.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "participant" })
-	participant: Account;
-
+	participant: User;
+ 
 	@IsNotEmpty()
 	@Column({ name: "group", length: 36, nullable: false })
 	group_pk: string;
 
-	@ManyToOne(
-		(type) => Group, 
-		(group) => group.pk, 
-		{ onDelete: "CASCADE" }
-	)
+	@ManyToOne((type) => Group, (group) => group.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "group" })
-	group: Account;
+	group: Group;
 
 	@Column({ 
 		name: "rank", default: 0,
