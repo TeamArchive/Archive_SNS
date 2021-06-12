@@ -1,7 +1,5 @@
-import { 
-    Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { AccountService } from './account.service';
 import { AccountDTO } from './account.dto';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';

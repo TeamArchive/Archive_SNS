@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AccountModule } from 'src/account/account.module';
 import { AuthService } from 'src/auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
@@ -11,9 +11,8 @@ import { jwtConstants } from './constants'
 
 @Module({
         imports: [
-                TypeOrmModule.forFeature([Account]),
-                AccountModule, 
                 PassportModule,
+                forwardRef(() => AccountModule),
                 JwtModule.register({
                         secret: jwtConstants.secret,
                         signOptions: {

@@ -17,7 +17,8 @@
       "@auth/*": ["./src/auth/*"],
       "@account/*": ["./src/account/*"],
       "@group/*": ["./src/group/*"],
-      "@chat/*": ["./src/chat/*"]
+      "@chat/*": ["./src/chat/*"],
+      "@image/*": ["./src/image/*"],
     }
   }
 }

@@ -9,7 +9,7 @@ import { Account } from "src/account/account.entity";
 @Injectable()
 export class AuthService {
 	constructor(
-		@InjectRepository(Account) private AccountRepo: AccountRepo,
+		private AccountRepo: AccountRepo,
 		private jwtService: JwtService
 	) {}
 

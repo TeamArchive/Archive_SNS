@@ -59,7 +59,7 @@ export class AccountDTO {
 		new_account.name = sanitizeHtml(name);
 		new_account.email = sanitizeHtml(email);
 		new_account.password = sanitizeHtml(password);
-		new_account.profile_image = sanitizeHtml(profile_image);
+		new_account.profile_image = profile_image;
 		new_account.status_msg = sanitizeHtml(status_msg);
 
 		return new_account;
@@ -80,7 +80,7 @@ export class AccountDTO {
 			target.entity.name = sanitizeHtml(name);
 		
 		if(profile_image)
-			target.entity.profile_image = sanitizeHtml(profile_image);
+			target.entity.profile_image = profile_image;
 
 		if(status_msg)
 			target.entity.status_msg = sanitizeHtml(target.entity.status_msg);
@@ -98,7 +98,7 @@ export class AccountDTO {
 		this.name = sanitizeHtml(name);
 		this.email = sanitizeHtml(email);
 		this.password = sanitizeHtml(password);
-		this.profile_image = sanitizeHtml(profile_image);
+		this.profile_image = profile_image;
 		this.status_msg = sanitizeHtml(status_msg);
 	}
 }

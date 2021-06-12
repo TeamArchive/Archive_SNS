@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, getConnection } from 'typeorm'
 
 import { GroupRepo, ChatGroupRepo, PostGroupRepo, GroupParticipantRepo } from '@group/group.repo';
-import { Group, ChatGroup, PostGroup } from '@group/group.entity';
+import { Group, ChatGroup, PostGroup, GroupParticipant } from '@group/group.entity';
 import { GroupDTO } from '@group/group.dto';
 
 import { AccountRepo } from '@account/account.repo'
@@ -177,9 +177,9 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
 export class ChatGroupService extends GroupService<ChatGroupRepo, ChatGroup> {
 
 	constructor(
-		@InjectRepository(ChatGroupRepo) group_repo: ChatGroupRepo,
-		@InjectRepository(AccountRepo) account_repo: AccountRepo,
-		@InjectRepository(GroupParticipantRepo) group_participant_repo: GroupParticipantRepo
+		@InjectRepository(ChatGroup) group_repo: ChatGroupRepo,
+		@InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
+		account_repo: AccountRepo,
 	) {
 		super(group_repo, account_repo, group_participant_repo);
 		this.n_min_early_member = 2;
@@ -200,9 +200,9 @@ export class ChatGroupService extends GroupService<ChatGroupRepo, ChatGroup> {
 export class PostGroupService extends GroupService<PostGroupRepo, PostGroup> {
 
 	constructor(
-		@InjectRepository(PostGroupRepo) group_repo: PostGroupRepo,
-		@InjectRepository(AccountRepo) account_repo: AccountRepo,
-		@InjectRepository(GroupParticipantRepo) group_participant_repo: GroupParticipantRepo
+		@InjectRepository(PostGroup) group_repo: PostGroupRepo,
+		@InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
+		account_repo: AccountRepo,
 	) {
 		super(group_repo, account_repo, group_participant_repo);
 	}

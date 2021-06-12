@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostImage } from './image.entity';
+
+import { PostImage, ProfileImage } from '@image/image.entity';
+import { PostImageRepo, ProfileImageRepo } from '@image/image.repo';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([])],
-    controllers: [],
-    providers: [],
-    exports: []
+    imports: [TypeOrmModule.forFeature([PostImage, ProfileImage])],
+    providers: [PostImageRepo, ProfileImageRepo],
+    exports: [PostImageRepo, ProfileImageRepo]
 })
-export class ImageModule {}
+export class ImageModule  {}
