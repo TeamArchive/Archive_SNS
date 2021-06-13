@@ -4,11 +4,14 @@ import { AccountService } from './account.service';
 import { AccountDTO } from './account.dto';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 
+// @UseGuards(JwtAuthGuard) 유효한 JWT가 request에 존재하는지 판단 하고 endpoint 보호
+
 @Controller('/account')
 export class AccountController {
     constructor(
         private AccountService : AccountService
     ) {}
+    
     // @UseBefore(ProfileImageMulter.single('image'))
     @Post('/register')
     async register(
@@ -22,7 +25,6 @@ export class AccountController {
         }
     }
 
-    // @UseGuards(JwtAuthGuard) 유효한 JWT가 request에 존재하는지 판단 하고 endpoint 보호
     @UseGuards(LocalAuthGuard)
     @Delete()
     async deleteAccount(
