@@ -1,29 +1,31 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt'
-import { AccountRepo } from "src/account/account.repo";
-import { AccountDTO } from "src/account/account.dto";
-import { Account } from "src/account/account.entity";
 
+import { Account } from "src/account/account.entity";
+import { AccountRepo } from "src/account/account.repo";
+import { AccountService } from '@account/account.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private AccountRepo: AccountRepo,
-		private jwtService: JwtService
+		@Inject(forwardRef(() => AccountService))
+		private readonly account_repo: AccountService,
+		private jwt_service: JwtService
 	) {}
 
 	async ValidateAccount(
-		account_dto: AccountDTO 
+		email: string, 
+		password: string,
 	): Promise<Account> 
 	{
-		const account = await this.AccountRepo.findOne({
-			where: { email: account_dto.email }
+		const account = await this.account_repo.findOne({
+			where: { email: email }
 		});
 
 		if ( account ) {
 			const is_pw_match = 
-				await account.check_password (account_dto.password);
+				await account.checkPassword(password);
 
 			if (is_pw_match) 
 				return account;
@@ -32,24 +34,20 @@ export class AuthService {
 		return null;
 	}
 
-	async AccessTokenGenerator(
-		account
-	){
+	async AccessTokenGenerator( account ){
 		const payload = {
 			name: account.name,
 			sub: account.email	// 토큰 제목
 		}
 
 		return {
-			access_token: this.jwtService.sign(payload)
+			access_token: this.jwt_service.sign(payload)
 		};
 	}
 
-	async RefreshTokenGenerator(
-		account
-	){
+	async RefreshTokenGenerator( account ){
 		return {
-			refresh_token: this.jwtService.sign(account.pk)
+			refresh_token: this.jwt_service.sign(account.pk)
 		}
 	}
 
@@ -59,18 +57,18 @@ export class AuthService {
 	){
 		account.refresh_token = refresh_token;
 
-		return await this.AccountRepo.save(account);
+		return await this.account_repo.save(account);
 	}
 
 	public async SaveRefreshToken_pk(
 		account_pk : string,
 		refresh_token : string,
 	) : Promise<Account> {
-		const account = await this.AccountRepo.findOne({where: {pk: account_pk}});
+		const account = await this.account_repo.findOne({where: {pk: account_pk}});
 
 		if(account) {
 			account.refresh_token = refresh_token;
-			return await this.AccountRepo.save(account);
+			return await this.account_repo.save(account);
 		}
 		
 		return undefined;
@@ -80,7 +78,7 @@ export class AuthService {
 		account_pk : string,
 		refresh_token : string
 	) {
-		const result = await this.AccountRepo.findOne({
+		const result = await this.account_repo.findOne({
 			select: ["pk", "email", "name"],
 			where: {
 				pk: account_pk,

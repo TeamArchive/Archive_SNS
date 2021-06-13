@@ -11,7 +11,7 @@ import { AccountRepo } from "./account.repo";
 export class AccountService {
 	
 	constructor(
-		@InjectRepository(Account) private AccountRepo: AccountRepo,
+		@InjectRepository(Account) private account_repo: AccountRepo,
 		private profile_img_repo: ProfileImageRepo
 	) { }
 
@@ -19,11 +19,7 @@ export class AccountService {
 		account_dto: AccountDTO,
 	): Promise<Account> 
 	{
-		console.log(account_dto);
-
 		const account_entity = AccountDTO.toEntity(account_dto);
-		
-		console.log('asd');
 
         if( account_dto.profile_img_url ) {
             const imageDTO = new ImageDTO();
@@ -35,7 +31,7 @@ export class AccountService {
 				(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
         }
 
-		return await this.AccountRepo.save(account_entity);
+		return await this.account_repo.save(account_entity);
 	}
 
 	public async UpdateAccount(
@@ -45,7 +41,7 @@ export class AccountService {
 	): Promise<Account> 
 	{
 		const target = { 
-			entity : await this.AccountRepo.findOne({ where: { pk: account_pk } })
+			entity : await this.account_repo.findOne({ where: { pk: account_pk } })
 		}
 
 		if (target.entity?.pk === account_pk) {
@@ -58,7 +54,7 @@ export class AccountService {
 					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
 			}
 
-			return await this.AccountRepo.save(target.entity);
+			return await this.account_repo.save(target.entity);
 		}
 
 		return null;
@@ -66,9 +62,8 @@ export class AccountService {
 
 	public async GetAccountByPK(
 		account_pk: string
-	)
-	{
-		return await this.AccountRepo.findOne({
+	){
+		return await this.account_repo.findOne({
 			select: [
 				"name", "email", "profile_image", "status_msg",
 			],
@@ -79,7 +74,7 @@ export class AccountService {
 	public async GetAccountByName(
 		target_name: string
 	) {
-		const [account_list, n_account] = await this.AccountRepo.findAndCount({
+		const [account_list, n_account] = await this.account_repo.findAndCount({
 			select: [
 				"pk", "name", "email", "profile_image", "status_msg"
 			],
@@ -96,20 +91,29 @@ export class AccountService {
 		account
 	): Promise<boolean>
 	{
-		const target = await this.AccountRepo.findOne({
+		const target = await this.account_repo.findOne({
 			select: ["password"],
 			where: { pk: account.pk },
 		});
 
 		if ( target ) {
-			const is_pw_match = await target.check_password (account.password);
+			const is_pw_match = await target.checkPassword(account.password);
 
 			if(is_pw_match) {
-				await this.AccountRepo.delete({ pk: account.pk });
+				await this.account_repo.delete({ pk: account.pk });
 				return true;
 			}
 		}
 		
 		return false;
 	}
+
+	public async findOne ( where: any ) {
+		return await this.account_repo.findOne(where);
+	}
+
+	public async save( ent: Account ) {
+		return await this.account_repo.save(ent);
+	}
+
 }

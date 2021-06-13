@@ -15,17 +15,24 @@ export class AuthController {
     async login(
         @Req() req  // req.user = account
     ){
-        // token 생성
-        const access_token = this.AuthService.AccessTokenGenerator(req.user);    
-        const refresh_token = this.AuthService.RefreshTokenGenerator(req.user);
-        if(!access_token || !refresh_token) throw new UnauthorizedException();
 
-        await this.AuthService.SaveRefreshToken(req.user, refresh_token)
+        console.log("get in the function")
+
+        // token 생성
+        const access_token = await this.AuthService.AccessTokenGenerator(req.user);    
+
+        // @TODO : Refresh token generator got error
+
+        // const refresh_token = await this.AuthService.RefreshTokenGenerator(req.user);
+        // if(!access_token || !refresh_token) 
+        if(!access_token) throw new UnauthorizedException();
+
+        // await this.AuthService.SaveRefreshToken(req.user, refresh_token)
 
         return {
             data: {
                 access_token: access_token,
-                refresh_token: refresh_token,
+                // refresh_token: refresh_token,
                 account_pk: req.user.pk
             }
         }

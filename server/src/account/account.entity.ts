@@ -58,10 +58,6 @@ export class Account {
 	@Column({ name: "refresh_token", nullable: true, select: false })
 	refresh_token: string;
 
-	async check_password(target: string): Promise<boolean> {
-		return (this.password == target);
-	}
-
 	@BeforeInsert()
 	@BeforeUpdate()
 	async hashPassword(): Promise<void> {
@@ -78,6 +74,8 @@ export class Account {
 	async checkPassword(aPassword: string): Promise<boolean> {
 		try {
 			const compare_result = await bcrypt.compare(aPassword, this.password);
+			console.log(compare_result);
+
 			return compare_result;
 		} catch (e) {
 			console.log(e);
