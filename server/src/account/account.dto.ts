@@ -55,7 +55,7 @@ export class AccountDTO {
 	@IsString()
 	public status_msg: string | null;
 
-	public static toEntity( dto: AccountDTO ): Account {
+	public static toEntity( accountDTO: AccountDTO ): Account {
 		const { 
 			email, 
 			password, 
@@ -63,7 +63,7 @@ export class AccountDTO {
 			profile_image,
 			profile_img_url, 
 			status_msg
-		} = dto;
+		} = accountDTO;
 
 		const new_account = new Account;
 		new_account.email = sanitizeHtml(email);
@@ -78,14 +78,14 @@ export class AccountDTO {
 
 	public static updateEntity( 
 		target: { entity: Account },  
-		dto: AccountDTO
+		accountDTO: AccountDTO
 	) {
 		const { 
 			password,
 			name, 
 			profile_image, 
 			status_msg
-		} = dto;
+		} = accountDTO;
 
 		if(password) 
 			target.entity.password = sanitizeHtml(password);

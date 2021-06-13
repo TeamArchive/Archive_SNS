@@ -23,7 +23,7 @@ export class AuthService {
 
 		if ( account ) {
 			const is_pw_match = 
-				await account.check_password (account_dto.password);
+				await account.checkPassword (account_dto.password);
 
 			if (is_pw_match) 
 				return account;

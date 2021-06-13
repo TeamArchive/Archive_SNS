@@ -9,7 +9,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         // private readonly config: ConfigService
     ) {
         super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), 
+            // Token 값을 헤더에 Bearer Token 값으로 포함하여 호출해야 서버단에서 토큰을 받아 검사
             ignoreExpiration: false,
             secretOrKey: jwtConstants.secret
         });

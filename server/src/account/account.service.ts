@@ -20,11 +20,8 @@ export class AccountService {
 	): Promise<Account> 
 	{
 		console.log(account_dto);
-
 		const account_entity = AccountDTO.toEntity(account_dto);
 		
-		console.log('asd');
-
         if( account_dto.profile_img_url ) {
             const imageDTO = new ImageDTO();
             imageDTO.url = account_dto.profile_img_url;
@@ -50,17 +47,16 @@ export class AccountService {
 
 		if (target.entity?.pk === account_pk) {
 			AccountDTO.updateEntity(target, account_dto);
-			
+
 			if(image_dto) {
 				const profile_img_ent = image_dto.toEntity() as ProfileImage;
-
 				target.entity.profile_image_pk = 
 					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
 			}
 
 			return await this.AccountRepo.save(target.entity);
 		}
-
+		
 		return null;
 	}
 
@@ -102,7 +98,7 @@ export class AccountService {
 		});
 
 		if ( target ) {
-			const is_pw_match = await target.check_password (account.password);
+			const is_pw_match = await target.checkPassword (account.password);
 
 			if(is_pw_match) {
 				await this.AccountRepo.delete({ pk: account.pk });
