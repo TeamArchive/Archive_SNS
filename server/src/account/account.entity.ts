@@ -43,7 +43,7 @@ export class Account {
 	@JoinColumn({ name: "profile_image" })
 	profile_image: Image | null;
 
-	@Column({ name: "profile_img_url" })
+	@Column({ name: "profile_img_url", nullable: true })
 	profile_img_url: string | null;
 	// @OneToMany(
 	// 	type => GroupParticipant, 
@@ -62,26 +62,26 @@ export class Account {
 		return (this.password == target);
 	}
 
-	// @BeforeInsert()
-	// @BeforeUpdate()
-	// async hashPassword(): Promise<void> {
-	// 	if (this.password) {
-	// 	try {
-	// 		this.password = await bcrypt.hash(this.password, 10);
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 		throw new InternalServerErrorException();
-	// 	}
-	// 	}
-	// }
+	@BeforeInsert()
+	@BeforeUpdate()
+	async hashPassword(): Promise<void> {
+		if (this.password) {
+		try {
+			this.password = await bcrypt.hash(this.password, 10);
+		} catch (e) {
+			console.log(e);
+			throw new InternalServerErrorException();
+		}
+		}
+	}
 
-	// async checkPassword(aPassword: string): Promise<boolean> {
-	// 	try {
-	// 		const compare_result = await bcrypt.compare(aPassword, this.password);
-	// 		return compare_result;
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 		throw new InternalServerErrorException();
-	// 	}
-	// }
+	async checkPassword(aPassword: string): Promise<boolean> {
+		try {
+			const compare_result = await bcrypt.compare(aPassword, this.password);
+			return compare_result;
+		} catch (e) {
+			console.log(e);
+			throw new InternalServerErrorException();
+		}
+	}
 }

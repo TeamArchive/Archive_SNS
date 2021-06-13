@@ -21,7 +21,7 @@ export class AccountService {
 	{
 		console.log(account_dto);
 
-		const account_entity = account_dto.toEntity();
+		const account_entity = AccountDTO.toEntity(account_dto);
 		
 		console.log('asd');
 
@@ -49,7 +49,7 @@ export class AccountService {
 		}
 
 		if (target.entity?.pk === account_pk) {
-			account_dto.updateEntity(target);
+			AccountDTO.updateEntity(target, account_dto);
 			
 			if(image_dto) {
 				const profile_img_ent = image_dto.toEntity() as ProfileImage;
