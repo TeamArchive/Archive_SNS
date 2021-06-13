@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { Group, ChatGroup, PostGroup, GroupParticipant } from './group.entity';
 
 type ET = (ChatGroup | PostGroup)
-export class GroupRepo<T extends ET> extends Repository<T> { 
+export class GroupRepoImpl<T extends ET> extends Repository<T> { 
 	
 	/**
 	 * Group Search
@@ -19,11 +19,22 @@ export class GroupRepo<T extends ET> extends Repository<T> {
 
 }
 
+
+
 @EntityRepository(ChatGroup)
-export class ChatGroupRepo extends GroupRepo<ChatGroup> { }
+export class ChatGroupRepo extends GroupRepoImpl<ChatGroup> { }
+
+
 
 @EntityRepository(PostGroup)
-export class PostGroupRepo extends GroupRepo<PostGroup> { }
+export class PostGroupRepo extends GroupRepoImpl<PostGroup> { }
+
+
+
+@EntityRepository(Group)
+export class GroupRepo extends Repository<Group> { }
+
+
 
 @EntityRepository(GroupParticipant)
 export class GroupParticipantRepo extends Repository<GroupParticipant> {

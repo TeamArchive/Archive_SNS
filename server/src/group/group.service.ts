@@ -2,16 +2,16 @@ import { Injectable, Delete } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, getConnection } from 'typeorm'
 
-import { GroupRepo, ChatGroupRepo, PostGroupRepo, GroupParticipantRepo } from '@group/group.repo';
+import { GroupRepo, ChatGroupRepo, PostGroupRepo, GroupRepoImpl, GroupParticipantRepo } from '@group/group.repo';
 import { Group, ChatGroup, PostGroup, GroupParticipant } from '@group/group.entity';
 import { GroupDTO, GroupParticipantDTO } from '@group/group.dto';
 
 import { AccountRepo } from '@account/account.repo'
 
 type ET	= (ChatGroup | PostGroup);
-type RT = (ChatGroupRepo | PostGroupRepo) & GroupRepo<ET>;
+type RT = (ChatGroupRepo | PostGroupRepo) & GroupRepoImpl<ET>;
 
-abstract class GroupService <RepoType extends RT,EntType extends ET> {
+abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 
 	// Repositories
 	protected group_repo : RepoType;
@@ -46,11 +46,11 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
 		group_dto: GroupDTO,
 	): Promise <EntType | undefined> {
 		// await getManager().transaction(async (transactionalEntityManager) => {
-        //     await this.boardRepository.deleteBoardsByUserId(transactionalEntityManager, userId)
-        //     await this.userRepository.deleteUserByUserId(transactionalEntityManager, userId)
+		//     await this.boardRepository.deleteBoardsByUserId(transactionalEntityManager, userId)
+		//     await this.userRepository.deleteUserByUserId(transactionalEntityManager, userId)
 		// }).catch((err) => {
-        //     throw err
-        // })
+		//     throw err
+		// })
 
 		/**
 		 * < Check is satisfied with min number of first members >
@@ -171,7 +171,7 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
 			where: { pk: dto.group_pk } 
 		});
 		if (!group)	
-		 	return undefined;
+			return undefined;
 
 		const admin = await this.group_participant_repo.findOne({
 			where: { 
@@ -182,7 +182,7 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
 		// check is target rank in range
 		if (!admin || admin.rank == group.highest_rank)	
 			return undefined;
-			 
+			
 		const participant = await this.group_participant_repo.findOne({
 			where: { 
 				participant_pk: dto.participant_pk, 
@@ -212,6 +212,21 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
 	public async search(query: string) : Promise <Group[]> {
 		return this.group_repo.search(query);
 	}
+
+	public async isParticipant(
+		dto: GroupParticipantDTO 
+	) : Promise <GroupParticipant | undefined> {
+		const participant = await this.group_participant_repo.findOne({
+			where: { 
+				participant_pk: dto.participant_pk, 
+				group_pk: dto.group_pk 
+		}});
+		if (!participant)
+			return undefined;
+
+		return participant
+	}
+
 }
 
 
@@ -224,7 +239,7 @@ abstract class GroupService <RepoType extends RT,EntType extends ET> {
  * 	{@link GroupService}
  */
 @Injectable()
-export class PostGroupService extends GroupService<PostGroupRepo, PostGroup> {
+export class PostGroupService extends GroupServiceImpl<PostGroupRepo, PostGroup> {
 
 	constructor(
 		@InjectRepository(PostGroup) group_repo: PostGroupRepo,
@@ -241,7 +256,7 @@ export class PostGroupService extends GroupService<PostGroupRepo, PostGroup> {
 	 * @param dto : Group participant DTO ( Target Group, Creater's PK )
 	 * @returns if deleted successfully return true, if not return false
 	 */
-	 public async delete ( dto: GroupParticipantDTO ) : Promise <boolean> {
+	public async delete ( dto: GroupParticipantDTO ) : Promise <boolean> {
 
 		/**
 		 * < Check is real admin's PK && is group exist >
@@ -279,16 +294,16 @@ export class PostGroupService extends GroupService<PostGroupRepo, PostGroup> {
  * Code Link :
  * 	{@link GroupService}
  */
- @Injectable()
- export class ChatGroupService extends GroupService<ChatGroupRepo, ChatGroup> {
- 
-	 constructor(
-		 @InjectRepository(ChatGroup) group_repo: ChatGroupRepo,
-		 @InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
-		 account_repo: AccountRepo,
-	 ) {
-		 super(group_repo, account_repo, group_participant_repo);
-		 this.n_min_early_member = 2;
-	 }
- 
- }
+@Injectable()
+export class ChatGroupService extends GroupServiceImpl<ChatGroupRepo, ChatGroup> {
+
+	constructor(
+		@InjectRepository(ChatGroup) group_repo: ChatGroupRepo,
+		@InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
+		account_repo: AccountRepo,
+	) {
+		super(group_repo, account_repo, group_participant_repo);
+		this.n_min_early_member = 2;
+	}
+
+}

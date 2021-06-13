@@ -2,7 +2,6 @@ import { IsNotEmpty, Length, IsEmail, IsEmpty, IsString, IsArray, IsOptional } f
 import { ApiProperty } from '@nestjs/swagger';
 import { Group } from './group.entity';
 import { GroupParticipant } from '@group/group.entity';
-import { optional } from '@hapi/joi';
 
 export class GroupDTO {
 	

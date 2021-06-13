@@ -13,5 +13,6 @@ import { AccountModule } from '@account/account.module';
     ],
 	controllers: [PostGroupControlller, ChatGroupControlller],
     providers: [ChatGroupService, PostGroupService],
+	exports: [ChatGroupService, PostGroupService],
 })
 export class GroupModule {}

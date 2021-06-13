@@ -41,7 +41,7 @@ export class Group {
 	lowest_rank: number;
 };
 
-@ChildEntity()
+@ChildEntity("chat_group")
 export class ChatGroup extends Group {
 
 	@OneToMany((type) => Chat, (chat: Chat) => chat.group)
@@ -49,7 +49,7 @@ export class ChatGroup extends Group {
 
 };
 
-@ChildEntity()
+@ChildEntity("post_group")
 export class PostGroup extends Group {
 	
 	@Column({ name: "is_private" })
