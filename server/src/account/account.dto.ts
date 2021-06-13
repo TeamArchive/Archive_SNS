@@ -4,6 +4,7 @@ import {
 import { Image } from "../image/image.entity";
 import sanitizeHtml from 'sanitize-html';
 import { Account } from "./account.entity";
+import { ApiProperty } from "@nestjs/swagger";
 
 /**
  * Length constants
@@ -22,26 +23,34 @@ export class AccountVO {
 	public readonly email		: string | null;
 	public readonly name		: string | null;
 	public readonly profile_image: Image | null;
+	public readonly profile_img_url: string | null;
 	public readonly status_msg	: string | null;
 }
 
 export class AccountDTO {
-
+	@ApiProperty()
 	@Length(MIN_EMAIL_LEN, MAX_EMAIL_LEN)
 	// @IsEmail()
 	public email: string;
 
+	@ApiProperty()
 	@Length(MIN_PW_LEN, MAX_PW_LEN)
 	@IsString()
 	public password: string;
 
+	@ApiProperty()
 	@Length(MIN_NAME_LEN, MAX_NAME_LEN)
 	@IsOptional()
 	@IsString()
 	public name: string | null;
 	
+	@ApiProperty()
 	public profile_image: Image | null;
 
+	@ApiProperty()
+	public profile_img_url: string | null;
+
+	@ApiProperty()
 	@IsOptional()
 	@IsString()
 	public status_msg: string | null;
@@ -51,15 +60,17 @@ export class AccountDTO {
 			email, 
 			password, 
 			name, 
-			profile_image, 
+			profile_image,
+			profile_img_url, 
 			status_msg
 		} = this;
 
-		const new_account = new Account();
-		new_account.name = sanitizeHtml(name);
+		const new_account = new Account;
 		new_account.email = sanitizeHtml(email);
+		new_account.name = sanitizeHtml(name);
 		new_account.password = sanitizeHtml(password);
 		new_account.profile_image = profile_image;
+		new_account.profile_img_url = profile_img_url
 		new_account.status_msg = sanitizeHtml(status_msg);
 
 		return new_account;

@@ -67,8 +67,6 @@ export class PostImage extends Image {
 	post: Post;
 }
 
-// @TODO : 아래 Entity는 다른 Entity와 통합하기
-
 /**
  * Image Entity For which will be use profile image
  */

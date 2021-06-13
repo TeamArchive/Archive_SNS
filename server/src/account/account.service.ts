@@ -17,19 +17,25 @@ export class AccountService {
 
 	public async CreateAccount(
 		account_dto: AccountDTO,
-		image_dto: ImageDTO | null
 	): Promise<Account> 
 	{
-		const account_ent = account_dto.toEntity();
+		console.log(account_dto);
 
-		if(image_dto) {
-			const profile_img_ent = image_dto.toEntity() as ProfileImage;
+		const account_entity = account_dto.toEntity();
+		
+		console.log('asd');
 
-			account_ent.profile_image_pk = 
-				(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
-		}
+        if( account_dto.profile_img_url ) {
+            const imageDTO = new ImageDTO();
+            imageDTO.url = account_dto.profile_img_url;
 
-		return await this.AccountRepo.save(account_ent);
+			const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
+
+			account_entity.profile_image_pk = 
+				(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
+        }
+
+		return await this.AccountRepo.save(account_entity);
 	}
 
 	public async UpdateAccount(
