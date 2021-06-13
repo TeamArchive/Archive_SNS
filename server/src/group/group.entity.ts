@@ -41,15 +41,15 @@ export class Group {
 	lowest_rank: number;
 };
 
-@ChildEntity()
+@ChildEntity("chat_group")
 export class ChatGroup extends Group {
 
-	@OneToMany((type) => Chat, (chat) => chat.group)
+	@OneToMany((type) => Chat, (chat: Chat) => chat.group)
 	chat: Chat[];
 
 };
 
-@ChildEntity()
+@ChildEntity("post_group")
 export class PostGroup extends Group {
 	
 	@Column({ name: "is_private" })
@@ -70,7 +70,7 @@ export class GroupParticipant {
 	@Column({ name: "participant", length: 36, nullable: false })
 	participant_pk: string;
 
-	@ManyToOne((type) => Account, (account) => account.pk, { onDelete: "CASCADE" })
+	@ManyToOne((type) => Account, (account:Account) => account.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "participant" })
 	participant: Account;
  
@@ -87,5 +87,8 @@ export class GroupParticipant {
 		comment: "high number high rank"
 	})
 	rank: number;
+
+	@Column({ name: "is_creater", default: false })
+	is_creater: boolean
 
 };

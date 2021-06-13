@@ -8,6 +8,7 @@ import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/account')
 export class AccountController {
+
     constructor(
         private AccountService : AccountService
     ) {}
@@ -15,14 +16,13 @@ export class AccountController {
     // @UseBefore(ProfileImageMulter.single('image'))
     @Post('/register')
     async register(
-        @Body() AccountDTO: AccountDTO,
+        @Body() dto: AccountDTO,
     ){
-        const createAccount_result = await this.AccountService.CreateAccount(AccountDTO);
-        return {
-            data: {
-                account_pk: createAccount_result.pk
-            }
-        }
+        const createAccount_result = await this.AccountService.CreateAccount(dto);
+
+        return { data: {
+            account_pk: createAccount_result.pk
+        }};
     }
 
     @UseGuards(LocalAuthGuard)

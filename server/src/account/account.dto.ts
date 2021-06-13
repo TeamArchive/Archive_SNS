@@ -55,7 +55,7 @@ export class AccountDTO {
 	@IsString()
 	public status_msg: string | null;
 
-	public toEntity(): Account {
+	public static toEntity( dto: AccountDTO ): Account {
 		const { 
 			email, 
 			password, 
@@ -63,7 +63,7 @@ export class AccountDTO {
 			profile_image,
 			profile_img_url, 
 			status_msg
-		} = this;
+		} = dto;
 
 		const new_account = new Account;
 		new_account.email = sanitizeHtml(email);
@@ -76,13 +76,16 @@ export class AccountDTO {
 		return new_account;
 	}
 
-	public updateEntity( target: { entity: Account } ) {
+	public static updateEntity( 
+		target: { entity: Account },  
+		dto: AccountDTO
+	) {
 		const { 
 			password,
 			name, 
 			profile_image, 
 			status_msg
-		} = this;
+		} = dto;
 
 		if(password) 
 			target.entity.password = sanitizeHtml(password);
@@ -95,60 +98,6 @@ export class AccountDTO {
 
 		if(status_msg)
 			target.entity.status_msg = sanitizeHtml(target.entity.status_msg);
-	}
-
-	public fromJson(json) {
-		const { 
-			email, 
-			password, 
-			name, 
-			profile_image, 
-			status_msg
-		} = json
-
-		this.name = sanitizeHtml(name);
-		this.email = sanitizeHtml(email);
-		this.password = sanitizeHtml(password);
-		this.profile_image = profile_image;
-		this.status_msg = sanitizeHtml(status_msg);
-	}
-}
-
-export class AccountBuilder {	
-
-	private dto: AccountDTO;
-
-	constructor() { 
-		this.dto = new AccountDTO(); 
-	}
-	
-	Email(x: string) {
-		this.dto.email = x;
-		return this;
-	}
-
-	Password(x: string) {
-		this.dto.password = x;
-		return this;
-	}
-
-	Name(x: string) {
-		this.dto.name = x;
-		return this;
-	}
-
-	ProfileImage(x: Image) {
-		this.dto.profile_image = x;
-		return this;
-	}
-
-	StatusMsg(x: string) {
-		this.dto.status_msg = x;
-		return this;
-	}
-	
-	build() { 
-		return this.dto; 
 	}
 
 }
