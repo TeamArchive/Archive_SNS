@@ -29,8 +29,9 @@ export class GroupDTO {
 	@IsOptional()
 	public lowest_rank: number;
 
-	public toEntity(): Group {
-		const { title } = this;
+	public static toEntity ( dto: GroupDTO ): Group {
+		const { title } = dto;
+		
 		const new_group = new Group();
 		new_group.title = title;
 

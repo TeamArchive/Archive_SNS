@@ -20,7 +20,7 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 
 	// Minimum number of first members
 	// 그룹 생성 시 최소 인원수 제한
-	protected n_min_early_member = 2;
+	protected n_min_early_member = 1;
 
 	constructor(
 		group_repo: RepoType,
@@ -69,8 +69,8 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		/**
 		 * < Create new group >
 		 */
-		const group_ent = group_dto.toEntity() as EntType;
-		const group = await this.group_repo.save(group_ent);
+		const group_ent	= GroupDTO.toEntity(group_dto);
+		const group 	= await this.group_repo.save(group_ent);
 
 		/**
 		 * < Put members in the group >
@@ -303,7 +303,7 @@ export class ChatGroupService extends GroupServiceImpl<ChatGroupRepo, ChatGroup>
 		account_repo: AccountRepo,
 	) {
 		super(group_repo, account_repo, group_participant_repo);
-		this.n_min_early_member = 2;
+		this.n_min_early_member = 1;
 	}
 
 }
