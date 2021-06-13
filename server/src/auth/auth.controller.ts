@@ -4,7 +4,7 @@ import {
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 
-@Controller()
+@Controller('/auth')
 export class AuthController {
     constructor(
         private AuthService : AuthService,
