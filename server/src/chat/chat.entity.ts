@@ -45,6 +45,9 @@ export class Chat {
 
 	@CreateDateColumn({ name: "created_at" })
 	createdAt: Date;
+
+	@Column({ name: "is_deleted", default: false })
+	is_deleted: Boolean;
 }
 
 // @TODO : Notify 분리
