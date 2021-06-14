@@ -50,8 +50,6 @@ export class GroupParticipantRepo extends Repository<GroupParticipant> {
 		creater_pk: string = null,
 	) : Promise<GroupParticipant[]>{
 		const result = [];
-
-		console.log("\n\n account_pk : \n", account_pk, "\n\n");
 		
 		account_pk.map( pk => {
 			const new_ent = new GroupParticipant;

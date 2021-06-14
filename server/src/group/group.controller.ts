@@ -39,8 +39,19 @@ abstract class GroupController<T extends ST> {
 		@Req() req, 
 	) {
 		const account 	= req.user;
-		console.log(account);
-		const result 	= await this.group_service.create( account, group_dto );
+		const result 	= await this.group_service.create( account.pk, group_dto );
+
+		return { data: result };
+	}
+
+	@Put('/update')
+	@UseGuards(JwtAuthGuard)
+	public async update(
+		@Body() dto: GroupDTO,
+		@Req() req,
+	) {
+		const account 	= req.user;
+		const result	= await this.group_service.update( account.pk, dto );
 
 		return { data: result };
 	}
@@ -52,7 +63,7 @@ abstract class GroupController<T extends ST> {
         @Req() req,
     ){
         const account 	= req.user;
-        const result 	= await this.group_service.invite( account, group_dto );
+        const result 	= await this.group_service.invite( account.pk, group_dto );
         
 		return { data: result };
     }
@@ -63,8 +74,6 @@ abstract class GroupController<T extends ST> {
 		@Param("group_pk") group_pk: string,
 		@Req() req,
 	) {
-		console.log(group_pk);
-
 		const account = req.user;
 		const result = await this.group_service.exit( {
 			group_pk: group_pk,
@@ -81,7 +90,7 @@ abstract class GroupController<T extends ST> {
 		@Req() req,
 	) {
 		const account	= req.user;
-		const result 	= this.group_service.updateRank(account, dto);
+		const result 	= this.group_service.updateRank(account.pk, dto);
 
 		return { data: result };
 	}
@@ -103,7 +112,7 @@ export class PostGroupControlller extends GroupController<PostGroupService> {
     ){
         const account 	= req.user;
         const result 	= await this.group_service.delete({
-			participant_pk: account, 
+			participant_pk: account.pk, 
 			group_pk: group_pk 
 		} as GroupParticipantDTO);
         

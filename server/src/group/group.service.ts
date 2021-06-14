@@ -43,7 +43,7 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 */
 	public async create(
 		creater_pk: string,
-		group_dto: GroupDTO,
+		dto: GroupDTO,
 	): Promise <EntType | undefined> {
 		// await getManager().transaction(async (transactionalEntityManager) => {
 		//     await this.boardRepository.deleteBoardsByUserId(transactionalEntityManager, userId)
@@ -58,24 +58,24 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		 * < Check is satisfied with min number of first members >
 		 */
 
-		const is_exist_creater = group_dto.member_pk_list.indexOf(creater_pk);
+		const is_exist_creater = dto.member_pk_list.indexOf(creater_pk);
 		if(is_exist_creater == -1) 
-			group_dto.member_pk_list.push(creater_pk);
+			dto.member_pk_list.push(creater_pk);
 
-		if(group_dto.member_pk_list.length < this.n_min_early_member)
+		if(dto.member_pk_list.length < this.n_min_early_member)
 			return undefined;
 
 		/**
 		 * < Check is account exist >
 		 */
-		const account = await this.account_service.findByIds(group_dto.member_pk_list);
+		const account = await this.account_service.findByIds(dto.member_pk_list);
 		if (!account)
 			return undefined;	// if not exist -> do not create group
 
 		/**
 		 * < Create new group >
 		 */
-		const group_ent	= GroupDTO.toEntity(group_dto);
+		const group_ent	= GroupDTO.toEntity(dto);
 		const group 	= await this.group_repo.save(group_ent);
 
 		/**
@@ -83,13 +83,41 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		 */
 		await this.group_participant_repo.newParticipant(
 			group.pk,
-			group_dto.member_pk_list,
-			[group_dto?.lowest_rank, group_dto?.highest_rank],
+			dto.member_pk_list,
+			[dto?.lowest_rank, dto?.highest_rank],
 			creater_pk
 		);
 
 		return group as EntType;
 	}
+
+
+
+	public async update(
+		admin_pk: String,
+		dto: GroupDTO
+	) : Promise <Group | number> {
+
+		/**
+		 * < Check -> is real admin >
+		 */
+		const {admin, group} = await this.isAdmin({
+			participant_pk: admin_pk,
+			group_pk: dto.group_pk
+		} as GroupParticipantDTO );
+
+		if (!group)
+			return 404;
+
+		if (!admin)
+			return 401;
+		
+		const target = { entity : group };
+		GroupDTO.updateEntity(target, dto);
+
+		return await this.group_repo.save(target.entity);
+	}
+
 
 
 	/**
@@ -102,9 +130,10 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 */
 	public async invite(
 		sender_pk: String,
-		group_dto: GroupDTO
+		dto: GroupDTO
 	) : Promise <GroupParticipant[] | number> {
-		const { group_pk, member_pk_list } = group_dto;
+
+		const { group_pk, member_pk_list } = dto;
 		if (!group_pk) return undefined;
 
 		/**
@@ -124,9 +153,8 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		const participant = await this.group_participant_repo.findOne({
 			where: { 
 				participant_pk: sender_pk, 
-				group_pk: group_dto.group_pk
+				group_pk: dto.group_pk
 		}});
-		
 		if (!participant)	return 401;
 
 		/**
@@ -146,8 +174,6 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 * @return Return true if the operation was successful, if not return false
 	 */
 	public async exit ( dto: GroupParticipantDTO ) : Promise<boolean> {
-
-		console.log(dto);
 
 		/**
 		 * < Check is participant exist >
@@ -176,43 +202,38 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 * 
 	 * @param admin_pk : admin's pk
 	 * @param dto : Group participant DTO
-	 * @returns 
+	 * @returns if change successfully, return entity. if not return status code
 	 */
 	public async updateRank ( 
 		admin_pk: string,
 		dto: GroupParticipantDTO 
-	) : Promise <GroupParticipant | undefined> {
+	) : Promise <GroupParticipant | number> {
+
 		/**
-		 * < Check is participant exist >
+		 * < Check -> is real admin >
 		 */
-		const group = await this.group_repo.findOne({
-			where: { pk: dto.group_pk } 
-		});
-		if (!group)	
-			return undefined;
-
-		const admin = await this.group_participant_repo.findOne({
-			where: { 
-				participant_pk: admin_pk, 
-				group_pk: group.pk
-		}});
-
-		// check is target rank in range
-		if (!admin || admin.rank == group.highest_rank)	
-			return undefined;
-			
+		const {admin, group} = await this.isAdmin({
+			participant_pk: admin_pk,
+			group_pk: dto.group_pk
+		} as GroupParticipantDTO );
+		if (!admin)
+			return 401;
+		
+		/**
+		 * < Check -> is account exist in the group >
+		 */
 		const participant = await this.group_participant_repo.findOne({
 			where: { 
 				participant_pk: dto.participant_pk, 
 				group_pk: dto.group_pk 
 		}});
 		if (!participant)
-			return undefined;
+			return 404;
 
 		/**
-		 * < Check is real admin >
+		 * < Check -> target rank in currect range >
 		 */
-		if(group.lowest_rank > dto.rank || dto.rank < group.highest_rank )
+		if(group.lowest_rank > dto.rank || dto.rank > group.highest_rank) 
 			return undefined;
 		
 		participant.rank = dto.rank;
@@ -250,6 +271,31 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 			return undefined;
 
 		return participant
+	}
+
+	public async isAdmin ( dto: GroupParticipantDTO ) {
+
+		/**
+		 * < Find group for get rank info >
+		 */
+		const group = await this.group_repo.findOne({
+			where: { pk: dto.group_pk } 
+		});
+		if (!group)	
+			return { admin: undefined, group: undefined };
+		
+		/**
+		 * < Find Paticipant and Check >
+		 */
+		const admin = await this.group_participant_repo.findOne({
+			where: { 
+				participant_pk: dto.participant_pk, 
+				group_pk: dto.group_pk
+		}});
+		if (!admin || admin.rank < group.highest_rank)	
+			return { admin: undefined, group: group };
+
+		return { admin: admin, group: group };
 	}
 
 }
