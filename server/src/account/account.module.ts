@@ -18,8 +18,8 @@ import { ImageModule } from '../image/image.module';
         ImageModule
     ],
     controllers: [AccountController],
-    providers: [AccountService, AccountRepo],
-    exports: [AccountService, AccountRepo],
+    providers: [AccountService],
+    exports: [AccountService],
 })
 
 export class AccountModule {}

@@ -37,7 +37,7 @@ export class AuthService {
 	async AccessTokenGenerator( account ){
 		const payload = {
 			name: account.name,
-			sub: account.email	// 토큰 제목
+			sub: account.pk	// 토큰 제목
 		}
 
 		return {

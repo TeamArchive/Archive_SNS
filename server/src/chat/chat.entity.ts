@@ -14,7 +14,7 @@ import {
 import { IsNotEmpty } from "class-validator";
 
 import { Account } from '@account/account.entity';
-import { ChatGroup, Group } from '@group/group.entity';
+import { ChatGroup } from '@group/group.entity';
 
 /**
  * Chat Massage Entity
@@ -38,7 +38,7 @@ export class Chat {
 	@ManyToOne( (type) => ChatGroup, (chat_group) => chat_group.chat, 
 				{ cascade: true, onDelete: "CASCADE" })
 	@JoinColumn({ name: "group" })
-	group: Group;
+	group: ChatGroup;
 
 	@Column({ name: "content" })
 	content: string;

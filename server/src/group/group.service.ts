@@ -2,21 +2,21 @@ import { Injectable, Delete } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, getConnection } from 'typeorm'
 
-import { GroupRepo, ChatGroupRepo, PostGroupRepo, GroupRepoImpl, GroupParticipantRepo } from '@group/group.repo';
+import { ChatGroupRepo, PostGroupRepo, GroupRepoImpl, GroupParticipantRepo } from '@group/group.repo';
 import { Group, ChatGroup, PostGroup, GroupParticipant } from '@group/group.entity';
 import { GroupDTO, GroupParticipantDTO } from '@group/group.dto';
 
-import { AccountRepo } from '@account/account.repo'
+import { AccountService } from '@account/account.service';
 
-type ET	= (ChatGroup | PostGroup);
+type ET = (ChatGroup | PostGroup);
 type RT = (ChatGroupRepo | PostGroupRepo) & GroupRepoImpl<ET>;
 
 abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 
 	// Repositories
 	protected group_repo : RepoType;
-	protected account_repo : AccountRepo;
-	protected group_participant_repo;
+	protected account_service : AccountService;
+	protected group_participant_repo : GroupParticipantRepo;
 
 	// Minimum number of first members
 	// 그룹 생성 시 최소 인원수 제한
@@ -24,12 +24,12 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 
 	constructor(
 		group_repo: RepoType,
-		account_repo: AccountRepo,
-		group_participant_repo: GroupParticipantRepo
+		group_participant_repo: GroupParticipantRepo,
+		account_service: AccountService,
 	) {
 		this.group_repo = group_repo;
-		this.account_repo = account_repo;
-		this.group_participant_repo = GroupParticipantRepo;
+		this.account_service = account_service;
+		this.group_participant_repo = group_participant_repo;
 	}
 
 	
@@ -37,12 +37,12 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 * Create Group
 	 * 그룹 생성
 	 * 
-	 * @param creater_account_pk : Creater's account pk
+	 * @param creater_pk : Creater's account pk
 	 * @param group_dto : Group DTO which have Data of the group to be created
 	 * @returns Created group entity ( if error occurred -> return undefined)
 	 */
 	public async create(
-		creater_account_pk: string,
+		creater_pk: string,
 		group_dto: GroupDTO,
 	): Promise <EntType | undefined> {
 		// await getManager().transaction(async (transactionalEntityManager) => {
@@ -52,17 +52,23 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		//     throw err
 		// })
 
+		// @TODO : Regist Creater
+
 		/**
 		 * < Check is satisfied with min number of first members >
 		 */
-		const { member_pk_list } = group_dto;
-		if(member_pk_list.length < this.n_min_early_member)
+
+		const is_exist_creater = group_dto.member_pk_list.indexOf(creater_pk);
+		if(is_exist_creater == -1) 
+			group_dto.member_pk_list.push(creater_pk);
+
+		if(group_dto.member_pk_list.length < this.n_min_early_member)
 			return undefined;
 
 		/**
 		 * < Check is account exist >
 		 */
-		const account = await this.account_repo.FindByPKs(member_pk_list);
+		const account = await this.account_service.findByIds(group_dto.member_pk_list);
 		if (!account)
 			return undefined;	// if not exist -> do not create group
 
@@ -75,13 +81,14 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		/**
 		 * < Put members in the group >
 		 */
-		const result = await this.group_participant_repo.newParticipant(
+		await this.group_participant_repo.newParticipant(
 			group.pk,
 			group_dto.member_pk_list,
-			group_dto?.lowest_rank
+			[group_dto?.lowest_rank, group_dto?.highest_rank],
+			creater_pk
 		);
 
-		return result;
+		return group as EntType;
 	}
 
 
@@ -91,12 +98,12 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 * 
 	 * @param sender_pk : Invite sender's PK
 	 * @param group_dto : Group DTO
-	 * @returns return the Group entity; if not processed successfully return undefined
+	 * @returns return the Group entity; if not processed successfully return state code
 	 */
 	public async invite(
 		sender_pk: String,
 		group_dto: GroupDTO
-	) : Promise <EntType | undefined> {
+	) : Promise <GroupParticipant[] | number> {
 		const { group_pk, member_pk_list } = group_dto;
 		if (!group_pk) return undefined;
 
@@ -105,21 +112,30 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		 */
 		const group = await this.group_repo.findOne({ where: { pk: group_pk } });
 		if (!group)
-			return undefined;
+			return 404;
 
-		const account = await this.account_repo.findByIds(member_pk_list);
+		const account = await this.account_service.findByIds(member_pk_list);
 		if (!account)
-			return undefined;
+			return 404;
+
+		/**
+		 * < Check is serder in the group >
+		 */
+		const participant = await this.group_participant_repo.findOne({
+			where: { 
+				participant_pk: sender_pk, 
+				group_pk: group_dto.group_pk
+		}});
+		
+		if (!participant)	return 401;
 
 		/**
 		 * < Put members in the group >
 		 */
-		const result = await this.group_participant_repo.newParticipant(
+		return await this.group_participant_repo.newParticipant(
 			group_pk,
 			member_pk_list
 		);
-
-		return result;
 	}
 
 	/**
@@ -131,10 +147,12 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 */
 	public async exit ( dto: GroupParticipantDTO ) : Promise<boolean> {
 
+		console.log(dto);
+
 		/**
 		 * < Check is participant exist >
 		 */
-		const participant = await this.account_repo.findOne({
+		const participant = await this.group_participant_repo.findOne({
 			where: { 
 				participant_pk: dto.participant_pk, 
 				group_pk: dto.group_pk 
@@ -163,7 +181,7 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	public async updateRank ( 
 		admin_pk: string,
 		dto: GroupParticipantDTO 
-	) : Promise <EntType | undefined> {
+	) : Promise <GroupParticipant | undefined> {
 		/**
 		 * < Check is participant exist >
 		 */
@@ -199,7 +217,7 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		
 		participant.rank = dto.rank;
 
-		return await this.account_repo.save(participant);
+		return await this.group_participant_repo.save(participant);
 	}
 
 	/**
@@ -213,6 +231,13 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 		return this.group_repo.search(query);
 	}
 
+	/**
+	 * is who participant in the group 
+	 * 그룹에 참가자가 존재하는지 체크
+	 * 
+	 * @param dto Group Participant DTO
+	 * @returns if account is exist in the group, return entity, if not return undefined
+	 */
 	public async isParticipant(
 		dto: GroupParticipantDTO 
 	) : Promise <GroupParticipant | undefined> {
@@ -243,10 +268,10 @@ export class PostGroupService extends GroupServiceImpl<PostGroupRepo, PostGroup>
 
 	constructor(
 		@InjectRepository(PostGroup) group_repo: PostGroupRepo,
-		@InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
-		account_repo: AccountRepo,
+		group_participant_repo: GroupParticipantRepo,
+		account_service: AccountService,
 	) {
-		super(group_repo, account_repo, group_participant_repo);
+		super(group_repo, group_participant_repo, account_service);
 	}
 
 	/**
@@ -266,7 +291,7 @@ export class PostGroupService extends GroupServiceImpl<PostGroupRepo, PostGroup>
 		});
 		if (!group)		return false;
 
-		const creater = this.group_participant_repo.findOne({
+		const creater = await this.group_participant_repo.findOne({
 			where: { 
 				participant_pk: dto.participant_pk, 
 				group_pk: dto.group_pk
@@ -299,10 +324,10 @@ export class ChatGroupService extends GroupServiceImpl<ChatGroupRepo, ChatGroup>
 
 	constructor(
 		@InjectRepository(ChatGroup) group_repo: ChatGroupRepo,
-		@InjectRepository(GroupParticipant) group_participant_repo: GroupParticipantRepo,
-		account_repo: AccountRepo,
+		group_participant_repo: GroupParticipantRepo,
+		account_service: AccountService,
 	) {
-		super(group_repo, account_repo, group_participant_repo);
+		super(group_repo, group_participant_repo, account_service);
 		this.n_min_early_member = 1;
 	}
 
