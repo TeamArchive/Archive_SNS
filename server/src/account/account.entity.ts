@@ -55,7 +55,7 @@ export class Account {
 	@Column({ name: "status_msg", nullable: true })
 	status_msg: string;
 
-	@Column({ name: "refresh_token", nullable: true, select: false })
+	@Column({ name: "refresh_token", nullable: true })
 	refresh_token: string;
 
 	@BeforeInsert()

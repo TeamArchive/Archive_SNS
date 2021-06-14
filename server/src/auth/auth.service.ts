@@ -39,6 +39,7 @@ export class AuthService {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
 		}
+		console.log("AccessTokenGenerator");
 
 		return {
 			access_token: this.jwt_service.sign(payload)
@@ -46,32 +47,37 @@ export class AuthService {
 	}
 
 	async RefreshTokenGenerator( account ){
-		return {
-			refresh_token: this.jwt_service.sign(account.pk)
+		const payload = {
+			name: account.name,
+			sub: account.pk	// 토큰 제목
 		}
+		console.log("RefreshTokenGenerator");
+
+		return this.jwt_service.sign(payload)
 	}
 
-	async SaveRefreshToken(
-		account: Account,
-		refresh_token
-	){
+	public async SaveRefreshTokenDirectly(
+		account : Account,
+		refresh_token : any
+	) {
 		account.refresh_token = refresh_token;
 
-		return await this.account_repo.save(account);
+		const repo_result = await this.account_repo.save(account);
+		console.log("repo_result: ", repo_result);
+
+		return repo_result;
 	}
 
-	public async SaveRefreshToken_pk(
+	async removeRefreshToken(
 		account_pk : string,
-		refresh_token : string,
-	) : Promise<Account> {
+	) {
 		const account = await this.account_repo.findOne({where: {pk: account_pk}});
 
 		if(account) {
-			account.refresh_token = refresh_token;
-			return await this.account_repo.save(account);
+			account.refresh_token = null;
 		}
-		
-		return undefined;
+
+		return this.account_repo.save( account );
 	}
 
 	async ValidateRefreshToken (
@@ -88,4 +94,27 @@ export class AuthService {
 		
 		return result ? result : undefined;
 	}
+
+	// async SaveRefreshToken(
+	// 	account: Account,
+	// 	refresh_token
+	// ){
+	// 	account.refresh_token = refresh_token;
+
+	// 	return await this.account_repo.save(account);
+	// }
+
+	// public async SaveRefreshToken_pk(
+	// 	account_pk : string,
+	// 	refresh_token : string,
+	// ) : Promise<Account> {
+	// 	const account = await this.account_repo.findOne({where: {pk: account_pk}});
+
+	// 	if(account) {
+	// 		account.refresh_token = refresh_token;
+	// 		return await this.account_repo.save(account);
+	// 	}
+		
+	// 	return undefined;
+	// }
 }

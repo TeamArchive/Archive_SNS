@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Delete, Put, Req, Param, UseGuards, Query } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { ChatGroupService, PostGroupService } from '@group/group.service';
 import { GroupDTO, GroupParticipantDTO } from '@group/group.dto';
@@ -8,6 +9,7 @@ import { JwtAuthGuard, LocalAuthGuard } from '@auth/auth.guard';
 // Service Type
 type ST = (ChatGroupService | PostGroupService)
 
+// @ApiBearerAuth('access-token')
 abstract class GroupController<T extends ST> {
 	
 	protected group_service: T;
@@ -37,6 +39,7 @@ abstract class GroupController<T extends ST> {
 		@Req() req, 
 	) {
 		const account 	= req.user;
+		console.log(account);
 		const result 	= await this.group_service.create( account, group_dto );
 
 		return { data: result };
@@ -54,16 +57,18 @@ abstract class GroupController<T extends ST> {
 		return { data: result };
     }
 
-	@Delete('/exit')
+	@Delete('/exit/:group_pk')
 	@UseGuards(JwtAuthGuard)
 	public async exit(
 		@Param("group_pk") group_pk: string,
 		@Req() req,
 	) {
+		console.log(group_pk);
+
 		const account = req.user;
 		const result = await this.group_service.exit( {
 			group_pk: group_pk,
-			participant_pk: account,
+			participant_pk: account.pk,
 		} as GroupParticipantDTO );
 
 		return { data: result };

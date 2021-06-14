@@ -3,7 +3,9 @@ import {
 // import { ImageDTO } from '../image/image.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+// @ApiBearerAuth('access-token')
 @Controller('/auth')
 export class AuthController {
     constructor(
@@ -15,24 +17,28 @@ export class AuthController {
     async login(
         @Req() req  // req.user = account
     ){
-        // token 생성
         const access_token = await this.authService.AccessTokenGenerator(req.user);    
+        const refresh_token = await this.authService.RefreshTokenGenerator(req.user);
+        if(!access_token || !refresh_token) throw new UnauthorizedException();
 
-        // @TODO : Refresh token generator got error
-
-        // const refresh_token = await this.AuthService.RefreshTokenGenerator(req.user);
-        // if(!access_token || !refresh_token) 
-        if(!access_token) throw new UnauthorizedException();
-
-        // await this.AuthService.SaveRefreshToken(req.user, refresh_token)
+        await this.authService.SaveRefreshTokenDirectly(req.user, refresh_token)
 
         return {
             data: {
                 access_token: access_token,
-                // refresh_token: refresh_token,
+                refresh_token: refresh_token,
                 account_pk: req.user.pk
             }
         }
+    }
+
+    @ApiBearerAuth('access-token')
+    @Post('/logout')
+    @UseGuards(JwtAuthGuard)
+    async logout(
+        @Req() req // req.user = account
+    ){
+        return await this.authService.removeRefreshToken(req.user.pk);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -44,8 +50,6 @@ export class AuthController {
             req.user.pk, 
             req.user.refresh_token
         );
-        if(!validateRefreshToken_result) throw new UnauthorizedException();
-
         return { data: validateRefreshToken_result };
     }
 

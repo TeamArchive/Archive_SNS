@@ -1,5 +1,5 @@
-import { EntityRepository, Repository } from "typeorm";
-import { Group, ChatGroup, PostGroup, GroupParticipant } from './group.entity';
+import { Connection, EntityRepository, Repository } from "typeorm";
+import { ChatGroup, PostGroup, GroupParticipant } from './group.entity';
 
 type ET = (ChatGroup | PostGroup)
 export class GroupRepoImpl<T extends ET> extends Repository<T> { 
@@ -31,11 +31,6 @@ export class PostGroupRepo extends GroupRepoImpl<PostGroup> { }
 
 
 
-@EntityRepository(Group)
-export class GroupRepo extends Repository<Group> { }
-
-
-
 @EntityRepository(GroupParticipant)
 export class GroupParticipantRepo extends Repository<GroupParticipant> {
 
@@ -48,14 +43,28 @@ export class GroupParticipantRepo extends Repository<GroupParticipant> {
 	 * @param default_rank : default rank number
 	 * @returns Traget group entity
 	 */
-	public async newParticipant( group_pk: string, account_pk: string[], default_rank = 0 ) {
+	public async newParticipant( 
+		group_pk: string, 
+		account_pk: string[], 
+		rank: number[] = [0, 0],
+		creater_pk: string = null,
+	) : Promise<GroupParticipant[]>{
 		const result = [];
+
+		console.log("\n\n account_pk : \n", account_pk, "\n\n");
 		
 		account_pk.map( pk => {
 			const new_ent = new GroupParticipant;
 			new_ent.participant_pk 	= pk;
 			new_ent.group_pk 		= group_pk;
-			new_ent.rank			= default_rank;
+
+			if(pk == creater_pk) {
+				new_ent.is_creater 	= true;
+				new_ent.rank	 	= rank[1];
+			}
+			else {
+				new_ent.rank 		= rank[0];
+			}
 
 			result.push( this.save(new_ent) );
 		});

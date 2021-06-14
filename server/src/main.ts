@@ -10,7 +10,7 @@ async function bootstrap() {
       .setDescription('Archive SNS API')
       .setVersion('0.0.1')
       .addBearerAuth(
-        { type: 'http', scheme: 'bearer', bearerFormat: 'Token' },
+        { type: 'http', scheme: 'bearer', bearerFormat: 'jwt' },
         'access-token',
       )
       .build();

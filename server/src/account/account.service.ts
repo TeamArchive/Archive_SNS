@@ -107,6 +107,10 @@ export class AccountService {
 		return false;
 	}
 
+	public async findByIds ( ids: any[] ) {
+		return await this.account_repo.findByIds(ids)
+	}
+
 	public async findOne ( where: any ) {
 		return await this.account_repo.findOne(where);
 	}
