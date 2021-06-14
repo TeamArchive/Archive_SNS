@@ -17,8 +17,8 @@ export class AccountController {
     ) {}
     
     // @UseBefore(ProfileImageMulter.single('image'))
-    @Post('/register')
-    async Register(
+    @Post('/signup')
+    async SignUp(
         @Body() accountDTO: AccountDTO,
     ){
         const createAccount_result = await this.AccountService.CreateAccount(accountDTO);
