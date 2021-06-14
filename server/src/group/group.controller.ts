@@ -9,7 +9,7 @@ import { JwtAuthGuard, LocalAuthGuard } from '@auth/auth.guard';
 // Service Type
 type ST = (ChatGroupService | PostGroupService)
 
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 abstract class GroupController<T extends ST> {
 	
 	protected group_service: T;

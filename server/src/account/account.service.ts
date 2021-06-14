@@ -6,6 +6,7 @@ import { ProfileImageRepo } from "./../image/image.repo";
 import { AccountDTO } from "./account.dto";
 import { Account } from "./account.entity";
 import { AccountRepo } from "./account.repo";
+import { UpdateAccountDTO } from "./updateAccount.dto";
 
 @Injectable()
 export class AccountService {
@@ -36,27 +37,36 @@ export class AccountService {
 
 	public async UpdateAccount(
 		account_pk: string,
-		account_dto: AccountDTO,
-		image_dto: ImageDTO | null
+		account_dto: UpdateAccountDTO,
 	): Promise<Account> 
 	{
+		console.log('account_pk :', account_pk);
+		console.log('account_dto :', account_dto);
+
 		const target = { 
 			entity : await this.account_repo.findOne({ where: { pk: account_pk } })
 		}
 
-		if (target.entity?.pk === account_pk) {
-			AccountDTO.updateEntity(target, account_dto);
-			
-			if(image_dto) {
-				const profile_img_ent = image_dto.toEntity() as ProfileImage;
+		console.log('target :', target);
 
+		if (target.entity?.pk === account_pk) {
+			UpdateAccountDTO.updateEntity(target, account_dto);
+
+			if(account_dto.profile_img_url) {
+				const imageDTO = new ImageDTO();
+				imageDTO.url = account_dto.profile_img_url;
+
+				const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
+				
 				target.entity.profile_image_pk = 
-					(await this.profile_img_repo.UploadNewImage(profile_img_ent)).pk;
+					(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
 			}
 
-			return await this.account_repo.save(target.entity);
+			const result = await this.account_repo.save(target.entity);
+			console.log('result : ', result);
+			return result;
 		}
-
+		
 		return null;
 	}
 
@@ -78,7 +88,7 @@ export class AccountService {
 			select: [
 				"pk", "name", "email", "profile_image", "status_msg"
 			],
-			where: { name: target_name }
+			where: { email: target_name }
 		});
 
 		return { 

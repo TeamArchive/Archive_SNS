@@ -3,39 +3,53 @@ import {
 // import { ImageDTO } from '../image/image.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('/auth')
 export class AuthController {
     constructor(
-        private AuthService : AuthService,
+        private authService : AuthService,
     ) {}
     
-    @UseGuards(LocalAuthGuard)  // -> auth.guard.ts (id, password validate)
+    @UseGuards(LocalAuthGuard)
     @Post('/login')
-    async login(
+    async Login(
         @Req() req  // req.user = account
     ){
+        const access_token = await this.authService.AccessTokenGenerator(req.user);    
+        const refresh_token = await this.authService.RefreshTokenGenerator(req.user);
+        if(!access_token || !refresh_token) throw new UnauthorizedException();
 
-        console.log("get in the function")
-
-        // token 생성
-        const access_token = await this.AuthService.AccessTokenGenerator(req.user);    
-
-        // @TODO : Refresh token generator got error
-
-        // const refresh_token = await this.AuthService.RefreshTokenGenerator(req.user);
-        // if(!access_token || !refresh_token) 
-        if(!access_token) throw new UnauthorizedException();
-
-        // await this.AuthService.SaveRefreshToken(req.user, refresh_token)
+        await this.authService.SaveRefreshTokenDirectly(req.user, refresh_token)
 
         return {
             data: {
                 access_token: access_token,
-                // refresh_token: refresh_token,
+                refresh_token: refresh_token,
                 account_pk: req.user.pk
             }
         }
+    }
+
+    @ApiBearerAuth('access-token')
+    @Post('/logout')
+    @UseGuards(JwtAuthGuard)
+    async Logout(
+        @Req() req // req.user = account
+    ){
+        return await this.authService.removeRefreshToken(req.user.pk);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/validate_refresh_token')
+    async ValidateRefreshToken(
+        @Req() req  // req.user = account
+    ){
+        const validateRefreshToken_result = await this.authService.ValidateRefreshToken(
+            req.user.pk, 
+            req.user.refresh_token
+        );
+        return { data: validateRefreshToken_result };
     }
 
 }
