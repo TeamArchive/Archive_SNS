@@ -20,13 +20,12 @@ export class AccountController {
         @Body() accountDTO: AccountDTO,
     ){
         const createAccount_result = await this.AccountService.CreateAccount(accountDTO);
-
         return { data: {
             account_pk: createAccount_result.pk
         }};
     }
 
-    @UseGuards(JwtAuthGuard, LocalAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Delete()
     async deleteAccount(
         @Req() req, // req.user = account

@@ -15,9 +15,6 @@ export class AuthController {
     async login(
         @Req() req  // req.user = account
     ){
-
-        console.log("get in the function")
-
         // token 생성
         const access_token = await this.authService.AccessTokenGenerator(req.user);    
 
