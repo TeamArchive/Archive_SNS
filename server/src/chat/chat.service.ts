@@ -28,18 +28,18 @@ export class ChatService {
 		writer_pk: string,
 		dto: ChatDTO
 	): Promise <Chat | undefined> {
-		const ent = await dto.toEntity();
 		
 		/**
 		 * < Check is it exist >
 		 */
 		const particiapnt = await this.group_service.isParticipant({
 			participant_pk: writer_pk,
-			group_pk: ent.group_pk
-		} as GroupParticipantDTO)
-
+			group_pk: dto.group_pk
+		} as GroupParticipantDTO);
 		if(!particiapnt)
 			return undefined;
+
+		const ent = await ChatDTO.toEntity(dto);
 
 		/**
 		 * < Send Message >
@@ -71,7 +71,7 @@ export class ChatService {
 		 */
 		chat.is_deleted = true;
 
-		return await this.chat_repo.remove(chat);
+		return await this.chat_repo.save(chat);
 	}
 
 }
