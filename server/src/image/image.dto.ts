@@ -1,8 +1,11 @@
 import { IsNotEmpty, Length, IsEmail } from "class-validator";
 import { Image } from "./image.entity";
 import sanitizeHtml from 'sanitize-html';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ImageDTO {
+	
+	@ApiProperty()
 	@IsNotEmpty()
 	url: string;
 

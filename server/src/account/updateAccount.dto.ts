@@ -18,31 +18,26 @@ const MAX_EMAIL_LEN = 64;
 const MIN_NAME_LEN = 1;
 const MAX_NAME_LEN = 64;
 
-export class AccountVO {
-	public readonly pk			: string | null;
-	public readonly email		: string | null;
+export class UpdateAccountVO {
 	public readonly name		: string | null;
 	public readonly profile_image: Image | null;
 	public readonly profile_img_url: string | null;
 	public readonly status_msg	: string | null;
 }
 
-export class AccountDTO {
-	@ApiProperty()
-	@Length(MIN_EMAIL_LEN, MAX_EMAIL_LEN)
-	// @IsEmail()
-	public email: string;
-
-	@ApiProperty()
-	@Length(MIN_PW_LEN, MAX_PW_LEN)
-	@IsString()
-	public password: string;
+export class UpdateAccountDTO {
 
 	@ApiProperty()
 	@Length(MIN_NAME_LEN, MAX_NAME_LEN)
 	@IsOptional()
 	@IsString()
 	public name: string | null;
+	
+	@ApiProperty()
+	@Length(MIN_PW_LEN, MAX_PW_LEN)
+	@IsString()
+	public password: string;
+
 	
 	@ApiProperty()
 	public profile_image: Image | null;
@@ -55,9 +50,8 @@ export class AccountDTO {
 	@IsString()
 	public status_msg: string | null;
 
-	public static toEntity( accountDTO: AccountDTO ): Account {
+	public static toEntity( accountDTO: UpdateAccountDTO ): Account {
 		const { 
-			email, 
 			password, 
 			name, 
 			profile_image,
@@ -66,7 +60,6 @@ export class AccountDTO {
 		} = accountDTO;
 
 		const new_account = new Account;
-		new_account.email = sanitizeHtml(email);
 		new_account.name = sanitizeHtml(name);
 		new_account.password = sanitizeHtml(password);
 		new_account.profile_image = profile_image;
@@ -78,7 +71,7 @@ export class AccountDTO {
 
 	public static updateEntity( 
 		target: { entity: Account },  
-		accountDTO: AccountDTO
+		accountDTO: UpdateAccountDTO
 	) {
 		const { 
 			name,

@@ -5,7 +5,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-// @ApiBearerAuth('access-token')
 @Controller('/auth')
 export class AuthController {
     constructor(
@@ -14,7 +13,7 @@ export class AuthController {
     
     @UseGuards(LocalAuthGuard)
     @Post('/login')
-    async login(
+    async Login(
         @Req() req  // req.user = account
     ){
         const access_token = await this.authService.AccessTokenGenerator(req.user);    
@@ -35,7 +34,7 @@ export class AuthController {
     @ApiBearerAuth('access-token')
     @Post('/logout')
     @UseGuards(JwtAuthGuard)
-    async logout(
+    async Logout(
         @Req() req // req.user = account
     ){
         return await this.authService.removeRefreshToken(req.user.pk);
