@@ -1,23 +1,6 @@
-// @TODO : Modify
-
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	ManyToOne,
-	OneToOne,
-	JoinColumn
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 import { Account } from "src/account/account.entity";
-
-// @TODO : Import Module
-
-// @TODO : Account -> User
-
-/**
- * Friend Entity
- */
 
 @Entity({ name: "friend" })
 export class Friend {
@@ -27,9 +10,6 @@ export class Friend {
 
 	@Column({ name: "accept", default: false })
 	accept: boolean;
-
-	// < Account >
-	// --------------------------------------------------
 
 	@IsNotEmpty()
 	@Column({ name: "account", length: 36 })
@@ -41,9 +21,6 @@ export class Friend {
 	})
 	@JoinColumn({ name: "account" })
 	account: Account;
-
-	// < Friend >
-	// --------------------------------------------------
 
 	@IsNotEmpty()
 	@Column({ name: "friend", length: 36 })
@@ -57,29 +34,3 @@ export class Friend {
 	friend: Account;
 
 }
-
-// @TODO : Notify 분리
-
-// @Entity({ name: "friend_notify" })
-// export class FriendNotify {
-
-// 	constructor(listener_pk: string, friendship: number) {
-// 		this.listener_pk = listener_pk;
-// 		this.friendship	 = friendship;
-// 	}
-
-// 	@PrimaryGeneratedColumn("uuid")
-// 	pk: string;
-
-// 	@Column({ name: "listener", length: 36 })
-// 	listener_pk: string;
-
-// 	@ManyToOne( (type) => Account, (Account) => Account.pk )
-// 	@JoinColumn({ name: "listener" })
-// 	listener: Account;
-
-// 	@Column({ name: "friendship" })
-// 	friendship: number;
-
-// }
-

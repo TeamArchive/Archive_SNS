@@ -1,4 +1,4 @@
-import { Connection, EntityRepository, Repository } from "typeorm";
+import { EntityRepository, Repository } from "typeorm";
 import { ChatGroup, PostGroup, GroupParticipant } from './group.entity';
 
 type ET = (ChatGroup | PostGroup)

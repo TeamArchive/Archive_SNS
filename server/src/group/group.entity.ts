@@ -1,18 +1,4 @@
-// @TODO : Modify
-
-import {
-	Column,
-	Entity, 
-	ManyToMany, 
-	OneToMany,
-	PrimaryGeneratedColumn,
-	TableInheritance,
-	JoinTable,
-	JoinColumn,
-	ChildEntity,
-	ManyToOne,
-	OneToOne
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, TableInheritance, JoinColumn, ChildEntity, ManyToOne } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 
 import { Chat } from '@chat/chat.entity';

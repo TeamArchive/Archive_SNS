@@ -202,7 +202,7 @@ abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
 	 * 
 	 * @param admin_pk : admin's pk
 	 * @param dto : Group participant DTO
-	 * @returns if change successfully, return entity. if not return status code
+	 * @returns if changed successfully, return entity. if not return status code
 	 */
 	public async updateRank ( 
 		admin_pk: string,

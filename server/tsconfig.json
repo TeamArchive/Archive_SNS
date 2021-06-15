@@ -20,6 +20,7 @@
       "@group/*": ["./src/group/*"],
       "@chat/*": ["./src/chat/*"],
       "@image/*": ["./src/image/*"],
+      "@friend/*": ["./src/friend/*"],
     }
   }
 }
