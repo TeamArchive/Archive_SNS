@@ -62,18 +62,19 @@ export class Account {
 	@BeforeUpdate()
 	async hashPassword(): Promise<void> {
 		if (this.password) {
-		try {
-			this.password = await bcrypt.hash(this.password, 10);
-		} catch (e) {
-			console.log(e);
-			throw new InternalServerErrorException();
-		}
+			try {
+				this.password = await bcrypt.hash(this.password, 10);
+			} catch (e) {
+				console.log(e);
+				throw new InternalServerErrorException();
+			}
 		}
 	}
 
 	async checkPassword(aPassword: string): Promise<boolean> {
 		try {
 			const compare_result = await bcrypt.compare(aPassword, this.password);
+			console.log('aPassword :', aPassword,' this.password : ', this.password)
 			console.log(compare_result);
 
 			return compare_result;
