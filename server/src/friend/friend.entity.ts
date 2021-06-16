@@ -15,8 +15,7 @@ export class Friend {
 	@Column({ name: "account", length: 36 })
 	account_pk: string;
 
-	@ManyToOne((type) => Account, (Account) => Account.pk, {
-		cascade: true,
+	@ManyToOne((type) => Account, (account) => account.pk, {
 		onDelete: "CASCADE",
 	})
 	@JoinColumn({ name: "account" })
@@ -26,8 +25,7 @@ export class Friend {
 	@Column({ name: "friend", length: 36 })
 	friend_pk: string;
 
-	@ManyToOne((type) => Account, (Account) => Account.pk, {
-		cascade: true,
+	@ManyToOne((type) => Account, (account) => account.pk, {
 		onDelete: "CASCADE",
 	})
 	@JoinColumn({ name: "friend" })

@@ -43,7 +43,7 @@ export class Comment {
 }
 
 @ChildEntity()
-export class PostComment extends Comment {
+export class ParentComment extends Comment {
 
 	@Column({ name: "post", length: 36 })
 	post_pk: string;
@@ -57,7 +57,7 @@ export class PostComment extends Comment {
 }
 
 @ChildEntity()
-export class PostReComment extends Comment {
+export class ChildComment extends Comment {
 
 	// < Parent >
 	//	: The comment or re-comment which linking directly with this re-comment

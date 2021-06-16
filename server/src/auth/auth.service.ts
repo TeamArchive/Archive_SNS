@@ -22,13 +22,11 @@ export class AuthService {
 		const account = await this.account_repo.findOne({
 			where: { email: email }
 		});
+		console.log('validateAccount - account : ', account);
 
 		if ( account ) {
-			const is_pw_match = 
-				await account.checkPassword(password);
-
-			if (is_pw_match) 
-				return account;
+			const is_pw_match = await account.checkPassword(password);
+			if (is_pw_match) return account;
 		} 
 
 		return null;
@@ -39,11 +37,7 @@ export class AuthService {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
 		}
-		console.log("AccessTokenGenerator");
-
-		return {
-			access_token: this.jwt_service.sign(payload)
-		};
+		return { access_token: this.jwt_service.sign(payload) };
 	}
 
 	async RefreshTokenGenerator( account ){
@@ -51,8 +45,6 @@ export class AuthService {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
 		}
-		console.log("RefreshTokenGenerator");
-
 		return this.jwt_service.sign(payload)
 	}
 
@@ -60,10 +52,10 @@ export class AuthService {
 		account : Account,
 		refresh_token : any
 	) {
-		account.refresh_token = refresh_token;
-
-		const repo_result = await this.account_repo.save(account);
-		console.log("repo_result: ", repo_result);
+		const refresh_account = new Account;
+		refresh_account.pk = account.pk;
+		refresh_account.refresh_token = refresh_token;
+		const repo_result = await this.account_repo.save( refresh_account );
 
 		return repo_result;
 	}
