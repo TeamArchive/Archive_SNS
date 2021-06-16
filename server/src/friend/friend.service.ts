@@ -41,8 +41,6 @@ export class FriendService {
 		if (!receiver)
 			return 400;
 
-		console.log("work at here 2");
-
 		/**
 		 * < Check -> whether the recipient already friend >
 		 */
@@ -53,6 +51,8 @@ export class FriendService {
 		}});
 		if (isFriend)
 			return ;
+
+		console.log(ent);
 
 		/**
 		 * < Add Friend >
@@ -84,8 +84,8 @@ export class FriendService {
 
 
 	public async accept(
-		sender_pk: string,
-		receiver_pk: string
+		accept_pk: string,
+		sender_pk: string
 	): Promise<Friend | number> {
 
 		/**
@@ -94,7 +94,7 @@ export class FriendService {
 		const friend = await this.friend_repo.findOne({ 
 			where: {  
 				account_pk 	: sanitizeHtml(sender_pk),
-				friend_pk	: sanitizeHtml(receiver_pk)
+				friend_pk	: sanitizeHtml(accept_pk)
 		}});
 		if (!friend)
 			return 400;
@@ -124,7 +124,7 @@ export class FriendService {
 		/**
 		 * < Check -> is it exist and already accepted >
 		 */
-		 const friend = await this.friend_repo.findOne({ 
+		const friend = await this.friend_repo.findOne({ 
 			where: {  
 				account_pk 	: sanitizeHtml(sender_pk),
 				friend_pk	: sanitizeHtml(receiver_pk)

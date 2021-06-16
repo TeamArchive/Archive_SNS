@@ -35,12 +35,15 @@ export class FriendController {
 		return { data: result };
 	}
 
-	@Post('/add')
+	@Post('/add/:target_pk')
 	@UseGuards(JwtAuthGuard)
 	public async add(
 		@Param("target_pk") target_pk: string,
 		@Req() req,
 	) {
+		if (!target_pk)
+			return;
+
 		const account 	= req.user;
         const result 	= await this.friend_service.add( account.pk, target_pk );
         
