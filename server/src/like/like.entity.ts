@@ -1,5 +1,3 @@
-// @TODO : Modify
-
 import { 
 	Entity,
 	PrimaryGeneratedColumn,
@@ -11,10 +9,6 @@ import {
 import { Account } from '../account/account.entity';
 import { Comment } from '../comment/comment.entity';
 import { Post } from '../post/post.entity';
-
-// @TODO : Import Module
-// @TODO : Account -> User
-// @TODO : Like 통합
 
 abstract class Like {
 	@PrimaryGeneratedColumn("uuid")
