@@ -11,7 +11,10 @@ import { AccountService } from '@account/account.service';
 type ET = (ChatGroup | PostGroup);
 type RT = (ChatGroupRepo | PostGroupRepo) & GroupRepoImpl<ET>;
 
-abstract class GroupServiceImpl <RepoType extends RT,EntType extends ET> {
+abstract class GroupServiceImpl <
+	RepoType extends RT,
+	EntType extends ET
+> {
 
 	// Repositories
 	protected group_repo : RepoType;

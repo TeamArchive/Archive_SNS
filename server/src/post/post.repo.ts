@@ -1,5 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Post } from './post.entity';
+import { PostListDTO } from "./dtos/postList.dto";
+import { OwnListDTO } from "./dtos/postOwnList.dto";
 
 // @TODO : 
 // const OrderCodes = require('../../../shared/PostOrderCodes.json').post;
@@ -21,10 +23,10 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by : order result by ~/shared/OrderCodes.json
 	 */
-	public async GetPost( offset: number, limit: number, order_by: number ) {
+	public async GetPost( postlistDTO: PostListDTO ) {
 
 		let order_by_query = "";
-		switch(order_by) {
+		switch(postlistDTO.order_by) {
 			case 1:
 			default:
 				order_by_query = "post.createAt";
@@ -35,8 +37,8 @@ export class PostRepo extends Repository<Post> {
 			.leftJoinAndSelect("post.writer", "writer")
 			.leftJoinAndSelect("post.image", "image")
 			.orderBy(order_by_query, "DESC")
-			.skip(offset)
-			.take(limit)
+			.skip(postlistDTO.offset)
+			.take(postlistDTO.limit)
 			.getMany();
 	}
 	
@@ -47,14 +49,14 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by
 	 */
-	public async GetOwnPost( writer_pk: string, offset: number, limit: number ) {
+	public async GetOwnPost( writer_pk: string, ownListDTO: OwnListDTO ) {
 		
 		return this.createQueryBuilder("post")
 			.select(ShortInfoSelect)
 			.where("post.writer_pk = :writer_pk", { writer_pk })
 			.orderBy("post.createdAt", "DESC")
-			.skip(offset)
-			.take(limit)
+			.skip(ownListDTO.offset)
+			.take(ownListDTO.limit)
 			.getMany();
 
 	}

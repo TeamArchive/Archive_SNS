@@ -12,9 +12,7 @@ import { UpdateAccountDTO } from './updateAccount.dto';
 @Controller('/account')
 export class AccountController {
 
-    constructor(
-        private AccountService : AccountService
-    ) {}
+    constructor( private AccountService : AccountService ) {}
     
     // @UseBefore(ProfileImageMulter.single('image'))
     @Post('/signup')
