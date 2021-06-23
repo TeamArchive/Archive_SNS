@@ -2,21 +2,17 @@ import { Injectable, Delete } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import sanitizeHtml from 'sanitize-html';
 
-import { ParentComment, ChildComment } from '@comment/comment.entity';
-import { ParentCommentRepo, ChildCommentRepo } from '@comment/comment.repo';
-import { CommentDTO, ParentCommentDTO } from '@comment/comment.dto';
+import { Comment, Recomment } from '@comment/comment.entity';
+import { CommentRepo, RecommentRepo } from '@comment/comment.repo';
+import { CommentDTO, RecommentDTO } from '@comment/comment.dto';
 
-import { AccountService } from '@account/account.service';
+import { Post } from '@post/post.entity';
+import { PostRepo } from '@post/post.repo';
 
-import { PostGroupService } from '@root/group/group.service';
+type RT = (CommentRepo | RecommentRepo);
+type ET = (Comment | Recomment);
 
-type RT = (ParentCommentRepo | ChildCommentRepo);
-type ET = (ParentComment | ChildComment);
-
-class CommentService<
-	RepoType extends RT,
-	EntType extends ET
-> {
+class CommentServiceImpl <RepoType extends RT, EntType extends ET> {
 	protected comment_repo;
 
 	constructor(
@@ -26,101 +22,150 @@ class CommentService<
 	}
 
 	/**
-	 * Update Comment Service
+	 * Update comment
+	 * 댓글 수정 
 	 * 
 	 * @param writer_pk : writer's PK
-	 * @param comment_pk : comment's PK
-	 * @param comment_dto : Update comment DTO
+	 * @param dto : DTO with comments to be edited
+	 * @returns Return edited entity, if can't edit it will returning status code
 	 */
-	public async UpdateComment(
+	public async update(
 		writer_pk : string,
-		comment_dto : CommentDTO,
-	) : Promise<EntType> 
-	{
-		const test = new ParentCommentRepo;
+		dto : CommentDTO,
+	) : Promise <EntType | number>  {
+
+		const test = new CommentRepo;
 		test.findOne()
 
 		const target = {
 			entity: await this.comment_repo.findOne(
-				{ where: {pk: comment_dto.comment_pk}}
+				{ where: {pk: dto.comment_pk}}
 			)
 		}
+
+		if( !target.entity.writer_pk )
+			return 400
 		
-		if( target.entity?.writer_pk === writer_pk ) {
-			comment_dto.updateEntity(target);
+		else if( target.entity.writer_pk === writer_pk ) {
+			CommentDTO.updateEntity(target, dto);
 			await this.comment_repo.save(target.entity);
 			return target.entity;
 		}
-		
-		return null;
+		else return 403;
 	}
 
 	/**
-	 * Delete Post Service
+	 * Delete Comment
+	 * 댓글 삭제
 	 * 
-	 * @param writer_pk : Writer's PK
-	 * @param comment_pk : Comment's PK
+	 * @param writer_pk 
+	 * @param comment_pk 
+	 * @returns 
 	 */
-	public async DeleteComment(
-		writer_pk : string,
-		comment_pk : string
-	): Promise<boolean> 
-	{
+	public async delete(
+		writer_pk: string,
+		comment_pk: string
+	): Promise <boolean | number> {
+		
 		const target = await this.comment_repo.findOne({ 
 			where: {pk: comment_pk}
 		});
 
-		if( target?.writer_pk === writer_pk ) {
+		if( !target.writer_pk )
+			return 400;
+		
+		else if( target.writer_pk === writer_pk ) {
 			await this.comment_repo.delete(target);
 			return true;
 		}
+		else return false;
+	}
 
-		return false;
+	/**
+	 * Commend list getter
+	 * 댓글 목록 얻기
+	 * 
+	 * @param target_pk : PK of the post with comments which is want to get ( if wanna recommand, put in the commant PK instead of post PK )
+	 * @param offset : 
+	 * @param limit : 
+	 * @param order_by :  
+	 * @returns 
+	 */
+	public async getList (
+		target_pk: string,
+		offset: number,
+		limit: number,
+		order_by: string
+	) : Promise <Comment[]>{
+		return await this.comment_repo.getList(
+			target_pk, offset, limit, order_by
+		);
 	}
 }
 
 @Injectable()
-export class  extends CommentService< ParentCommentRepo, ParentComment> {
+export class CommentService extends CommentServiceImpl< CommentRepo, Comment> {
 
-	constructor(
-		private post_group_service: PostGroupService,
-		comment_repo : ParentCommentRepo,
+	constructor (
+		comment_repo: CommentRepo,
+		private post_repo: PostRepo
 	) {
 		super(comment_repo);
 	}
 
 	/**
-	 * Create Comment Service
+	 * Create comment
+	 * 코맨트 생성
 	 * 
 	 * @param writer_pk : Writer's PK
-	 * @param post_pk : post's PK which want to post a comment
-	 * @param comment_dto : Create comment DTO
+	 * @param dto : Comment DTO
+	 * @returns 
 	 */
-	public async CreateComment(
-		writer_pk : string,
-		group_pk: string,
-		dto : ParentCommentDTO
-	) : Promise<{comment: ParentComment}> {
+	public async create(
+		writer_pk: string,
+		dto: CommentDTO
+	) : Promise <Comment | number> {
 
-		const comment_ent : ParentComment = CommentDTO.toEntity(dto) as ParentComment;
+		const target: Post = await this.post_repo.findOne(dto.post_pk);
+		if(!target) 
+			return 400;
 
-		comment_ent.writer_pk 	= writer_pk;
+		const ent: Comment = CommentDTO.toEntity(dto) as Comment;
+		ent.writer_pk = writer_pk;
 
-		const comment_result = await this.comment_repo.save(comment_ent);
-
-		const recivers = await this.post_group_service.getRecivers(writer_pk, group_pk);
-
-		return comment_result,
+		return await this.comment_repo.save(ent);
 	}
 
-	public async GetPostComment(
-		post_pk: string,
-		offset: number,
-		limit: number,
-		order_by: string
-	) {
-		return await this.comment_repo
-			.GetComment(post_pk, offset, limit, order_by);
+}
+
+@Injectable()
+export class RecommentService extends CommentServiceImpl< RecommentRepo, Recomment> {
+
+	constructor (recomment_repo : RecommentRepo) {
+		super(recomment_repo);
+	}
+	
+	/**
+	 * Create comment
+	 * 코맨트 생성
+	 * 
+	 * @param writer_pk : Writer's PK
+	 * @param dto : Recomment DTO
+	 * @returns 
+	 */
+	public async create(
+		writer_pk: string,
+		dto: RecommentDTO
+	) : Promise <Comment | number> {
+
+		const target: Comment = await this.comment_repo.findOne(dto.parent_pk);
+		if(!target || (target.post_pk !== dto.post_pk)) 
+			return 400;
+
+		const ent: Recomment = CommentDTO.toEntity(dto) as Recomment;
+		ent.parent_pk = target.pk;
+
+		return await this.comment_repo.save(ent);
 	}
 
 }

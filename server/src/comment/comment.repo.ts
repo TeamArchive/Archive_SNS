@@ -3,7 +3,7 @@ import {
 	EntityRepository, Repository, TransactionManager
 } from "typeorm";
 
-import { Comment, ParentComment, ChildComment } from '@comment/comment.entity';
+import { Comment, Recomment } from '@comment/comment.entity';
 
 export const enum PostOrder {
 	latest = "post.createAt",
@@ -12,17 +12,13 @@ export const enum PostOrder {
 // < Common Repository > 
 // --------------------------------------------------
 
-class CommonCommentRepo<T> extends Repository<T> {}
+abstract class CommentRepoImpl<T> extends Repository<T> {}
 
 // < Repositories > 
 // --------------------------------------------------
 
 @EntityRepository(Comment)
-export class CommentRepo extends CommonCommentRepo<Comment> { }
-
-
-@EntityRepository(ParentComment)
-export class ParentCommentRepo extends CommonCommentRepo<ParentComment> { 
+export class CommentRepo extends CommentRepoImpl<Comment> { 
 	
 	public async GetComment ( 
 		post_pk: string,
@@ -41,11 +37,11 @@ export class ParentCommentRepo extends CommonCommentRepo<ParentComment> {
 
 }
 
-@EntityRepository(ChildComment)
-export class ChildCommentRepo extends CommonCommentRepo<ChildComment> { 
+@EntityRepository(Recomment)
+export class RecommentRepo extends CommentRepoImpl<Recomment> { 
 
-	public async GetComment ( 
-		target_comment_pk: string,
+	public async getList ( 
+		comment_pk: string,
 		offset: number, 
 		limit: number, 
 		order_by: string 
@@ -53,7 +49,7 @@ export class ChildCommentRepo extends CommonCommentRepo<ChildComment> {
 		return this.createQueryBuilder("comment")
 			// .select( ParentComment )
 			.leftJoinAndSelect("comment.writer", "writer")
-			.where("comment.root_pk = :target_comment_pk", { target_comment_pk })
+			.where("comment.parent_pk = :target_comment_pk", { comment_pk })
 			.orderBy(order_by, "DESC")
 			.skip(offset)
 			.take(limit)
