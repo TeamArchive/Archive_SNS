@@ -38,9 +38,6 @@ export class PostController {
         return { data : createPost_result };
     }
 
-    /**
-     * 정리가 더 필요함
-     */
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
     @Put('/:post_pk')
@@ -50,6 +47,8 @@ export class PostController {
         @Body() postDTO: PostDTO,
         @Body() body
     ){
+        console.log("postDTO :", postDTO);
+        console.log("body: ", body);
         const del_img_list = body.del_img_list
 
         let ImgDTO: ImageDTO[];

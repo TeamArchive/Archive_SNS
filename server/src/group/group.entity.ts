@@ -59,7 +59,7 @@ export class GroupParticipant {
 	@ManyToOne((type) => Account, (account:Account) => account.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "participant" })
 	participant: Account;
- 
+
 	@IsNotEmpty()
 	@Column({ name: "group", length: 36, nullable: false })
 	group_pk: string;

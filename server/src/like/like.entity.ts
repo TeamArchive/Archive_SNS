@@ -4,13 +4,17 @@ import {
 	Column,
 	JoinColumn,
 	CreateDateColumn,
-	ManyToOne
+	ManyToOne,
+	TableInheritance,
+	ChildEntity
 } from 'typeorm';
 import { Account } from '../account/account.entity';
 import { Comment } from '../comment/comment.entity';
 import { Post } from '../post/post.entity';
 
-abstract class Like {
+@Entity({ name: "like" })
+@TableInheritance({ column: { type: "varchar", name: "type" } })
+export class Like {
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
 
@@ -28,7 +32,7 @@ abstract class Like {
 	createdAt: Date;
 }
 
-@Entity({ name: "post_like" })
+@ChildEntity( "post_like" )
 export class PostLike extends Like {
 	@Column({ name: "post_pk", length: 36 })
 	post_pk: string;
@@ -41,7 +45,7 @@ export class PostLike extends Like {
 	post: Post;
 }
 
-@Entity({ name: "comment_like" })
+@ChildEntity( "comment_like" )
 export class CommentLike extends Like {
 	@Column({ name: "comment_pk", length: 36 })
 	comment_pk: string;

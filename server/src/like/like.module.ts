@@ -11,10 +11,11 @@ import { CommentLikeService, PostLikeService } from './like.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([PostLike, CommentLike]),
+        TypeOrmModule.forFeature([PostRepo]),
         PostModule
     ],
     controllers: [PostLikeControl, CommentLikeControl],
-    providers: [PostLikeService, CommentLikeService, PostRepo]
+    providers: [PostLikeService, CommentLikeService]
 })
 
 export class LikeModule {}
