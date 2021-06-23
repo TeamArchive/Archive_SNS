@@ -21,6 +21,8 @@
       "@chat/*": ["./src/chat/*"],
       "@image/*": ["./src/image/*"],
       "@friend/*": ["./src/friend/*"],
+      "@comment/*": ["./src/comment/*"],
+      "@post/*": ["./src/post/*"],
     }
   }
 }

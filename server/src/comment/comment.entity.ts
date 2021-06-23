@@ -40,10 +40,6 @@ export class Comment {
 	})
 	@JoinColumn({ name: "writer" })
 	writer: Account;
-}
-
-@ChildEntity()
-export class PostComment extends Comment {
 
 	@Column({ name: "post", length: 36 })
 	post_pk: string;
@@ -57,7 +53,7 @@ export class PostComment extends Comment {
 }
 
 @ChildEntity()
-export class PostReComment extends Comment {
+export class Recomment extends Comment {
 
 	// < Parent >
 	//	: The comment or re-comment which linking directly with this re-comment
@@ -71,19 +67,6 @@ export class PostReComment extends Comment {
 	})
 	@JoinColumn({ name: "parent" })
 	parent: Comment;
-
-	// < Root > 
-	//	: starting comment (source comemnt) of re-comment
-
-	@Column({ name: "root_pk", length: 36 })
-	root_pk: string;
-
-	@ManyToOne((type) => Comment, (Comment) => Comment.pk, {
-		cascade: true,
-		onDelete: "CASCADE",
-	})
-	@JoinColumn({ name: "root" })
-	root: Comment;
 
 }
 
