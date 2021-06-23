@@ -41,16 +41,15 @@ const Container = (props, context) => {
 
 	const __submit_handler__ = event => {
 		event.preventDefault();
-		const data = new FormData();
-		props.createAccount(data);
+		props.createAccount(account);
 	};
 
 	return (
 		<Signup
-			email_val		= {email}
-			pw_val			= {password}
-			confirm_pw_val	= {confirm_pw}
-			alias_val		= {name}
+			email			= {email}
+			password		= {password}
+			confirm_pw		= {confirm_pw}
+			name			= {name}
 			current_stage 	= {stage}
 
 			back_stage			= {__back_stage__}

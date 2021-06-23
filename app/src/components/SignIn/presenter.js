@@ -25,6 +25,7 @@ const SignIn = (props) => (
         <input
             type = 'submit'
             value = 'click'
+            onClick = {props.submit_handler}
             />
             
             

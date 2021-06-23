@@ -13,26 +13,26 @@ import { UpdateAccountDTO } from './updateAccount.dto';
 export class AccountController {
 
     constructor(
-        private AccountService : AccountService
+        private account_service : AccountService
     ) {}
     
     // @UseBefore(ProfileImageMulter.single('image'))
     @Post('/signup')
-    async SignUp(
-        @Body() accountDTO: AccountDTO,
-    ){
-        const createAccount_result = await this.AccountService.CreateAccount(accountDTO);
-        return { data: { account_pk: createAccount_result.pk }};
+    async singUp(
+        @Body() dto: AccountDTO,
+    ) {
+        const result = await this.account_service.CreateAccount(dto);
+        return { data: { account_pk: result.pk }};
     }
 
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
     @Delete()
-    async DeleteAccount(
+    async delete(
         @Req() req, // req.user = pk, email
     ){
-        const deleteAccount_result = await this.AccountService.DeleteAccount( req.user );
-        return { data: deleteAccount_result }
+        const result = await this.account_service.DeleteAccount( req.user );
+        return { data: result }
     }
 
     @ApiBearerAuth('access-token')
@@ -40,28 +40,28 @@ export class AccountController {
     @Put()
     async UpdateAccount(
         @Req() req, // req.user = pk, email
-        @Body() accountDTO: UpdateAccountDTO,
+        @Body() dto: UpdateAccountDTO,
     ){
-        const updateAccount_result = await this.AccountService.UpdateAccount( 
+        const result = await this.account_service.UpdateAccount( 
             req.user.pk,
-            accountDTO,
+            dto,
         );
-        return { data: updateAccount_result }
+        return { data: result }
     }
 
-    @Get('/getaccount_bypk/:account_pk')
+    @Get('/account/:pk')
     async GetAccountByPK(
-        @Param('account_pk') account_pk: string
+        @Param('pk') pk: string
     ){
-        const getAccountByPK_result = await this.AccountService.GetAccountByPK( account_pk );
-        return { data: getAccountByPK_result }
+        const result = await this.account_service.GetAccountByPK( pk );
+        return { data: result }
     }
 
-    @Get('/getaccount_byname/:name')
+    @Get('/account/name/:name')
     async GetAccountByName(
         @Param('name') name: string
     ){
-        const GetAccountByEmail_result = await this.AccountService.GetAccountByName( name );
-        return { data: GetAccountByEmail_result }
+        const result = await this.account_service.GetAccountByName( name );
+        return { data: result }
     }
 }

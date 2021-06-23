@@ -32,6 +32,7 @@ function passData(data) {
 // --------------------------------------------------
 
 function defaultLogin(email, password) {
+	
 	return (dispatch, getState) => {
 
 		fetch("/auth/login", {
@@ -55,13 +56,15 @@ function defaultLogin(email, password) {
 }
 
 function createAccount(data) {
+
 	return dispatch => {
 
-		fetch("/auth/registration", {
+		fetch("/account/signup", {
 			method: "POST",
-			body: data
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
 		})
-		.then(response =>  response.json())
+		.then(response => response.json())
 		.then(json => {
 			if (json.data) {
 				dispatch(saveToken(json.data));

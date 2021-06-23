@@ -6,8 +6,9 @@ import Auth from '../Auth';
 import SignUp from '../SignUp';
 
 const App = props => [
-props.isLoggedIn ? <PrivateRoutes key={1} /> : <PublicRoutes key={1} />,
-// props.isLoggedIn ? <PrivateRoutes key={1} /> : <PrivateRoutes key={1} />,
+    // props.isLoggedIn ? <PublicRoutes key={1} /> : <PublicRoutes key={1} />,
+    // props.isLoggedIn ? <PrivateRoutes key={1} /> : <PrivateRoutes key={1} />,
+    props.isLoggedIn ? <PublicRoutes key={1} /> : <PrivateRoutes key={1} />,
 ];
 
 App.propTypes = {

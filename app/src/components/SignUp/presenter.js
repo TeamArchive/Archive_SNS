@@ -19,30 +19,30 @@ const SignUp = (props) => (
 
                 <input 
                     type = 'email'
-                    name = 'email_val'
-                    placeholder = 'insert id'
+                    name = 'email'
+                    placeholder = 'email'
                     value = {props.account_email}
                     onChange = {props.String_input_handler}
                     />
 
                 <input
                     type = 'password'
-                    name = 'pw_val'
-                    placeholder = 'insert password'    
+                    name = 'password'
+                    placeholder = 'password'    
                     value = {props.account_pw}
                     onChange = {props.String_input_handler}
                     />
                 
                 <input
                     type = 'password'
-                    name = 'confirm_pw_val'
-                    placeholder = 'insert confirm password'    
+                    name = 'confirm_pw'
+                    placeholder = 'confirm password'    
                     value = {props.account_pw}
                     onChange = {props.String_input_handler}
                     />
 
                 <button
-                    type='submit'
+                    type='button'
                     value='Continue'
                     onClick={props.next_stage}
                     >
@@ -57,23 +57,23 @@ const SignUp = (props) => (
 
                 <input
                     type = 'text'
-                    name = 'alias_val'
-                    placeholder = 'insert alias'    
+                    name = 'name'
+                    placeholder = 'alias'    
                     value = {props.account_alias}
                     onChange = {props.String_input_handler}
                     />
 
                 <button
-                    type='submit'
-                    value='Continue'
+                    type='button'
+                    value='back'
                     onClick={props.back_stage}
                     >
                         go back		
                 </button>
 
                 <input
-						type='submit'
-						value='Sign up' 
+                    type='submit'
+                    value='Sign up' 
                 />
 
             </>
@@ -84,20 +84,20 @@ const SignUp = (props) => (
         <>
             <br/><br/>
 			test_load<br/>
-			email : {props.email_val}<br/>
-			pw : {props.pw_val}<br/>
-			confirm_pw : {props.confirm_pw_val}<br/>
-			alias : {props.alias_val}<br/>
+			email : {props.email}<br/>
+			pw : {props.password}<br/>
+			confirm_pw : {props.confirm_pw}<br/>
+			name : {props.name}<br/>
 		</>       
             
     </>
 );  
 
 SignUp.propTypes = {
-	email_val		        : PropTypes.string.isRequired,
-	pw_val			        : PropTypes.string.isRequired,
-	confirm_pw_val	        : PropTypes.string.isRequired,
-	alias_val		        : PropTypes.string.isRequired,
+	email		            : PropTypes.string.isRequired,
+	password			    : PropTypes.string.isRequired,
+	confirm_pw	            : PropTypes.string.isRequired,
+	name		            : PropTypes.string.isRequired,
 
     current_stage	        : PropTypes.number.isRequired,
 	next_stage			    : PropTypes.func.isRequired,
