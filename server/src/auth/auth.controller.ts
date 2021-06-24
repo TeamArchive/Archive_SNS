@@ -2,8 +2,9 @@ import {
     Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
 // import { ImageDTO } from '../image/image.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
+import { GoogleStrategy, JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/auth')
 export class AuthController {
@@ -38,6 +39,29 @@ export class AuthController {
         @Req() req // req.user = account
     ){
         return await this.authService.removeRefreshToken(req.user.pk);
+    }
+
+    @Get('google')  // 1
+    @UseGuards(GoogleStrategy)
+    async googleAuth(@Req() req) {}
+
+    @Get('google/callback') // 2
+    @UseGuards(GoogleStrategy)
+    async googleAuthRedirect(
+        @Req() req
+    ) {
+        console.log("req.user:", req.user);
+        const google_name = req.user.lastName + req.user.firstName
+        const refresh_token = await this.authService.RefreshTokenGenerator(google_name);
+        if(!refresh_token) throw new UnauthorizedException();
+
+        return {
+            data: {
+                access_token: req.user.accessToken,
+                refresh_token: refresh_token,
+                account_pk: req.user.pk
+            }
+        }
     }
 
     @UseGuards(JwtAuthGuard)

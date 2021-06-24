@@ -87,6 +87,15 @@ export class AuthService {
 		return result ? result : undefined;
 	}
 
+	googleLogin(req) {
+		if (!req.user) return 'No user from google';
+
+		return {
+			message: 'User information from google',
+			user: req.user,
+		};
+	}
+	
 	// async SaveRefreshToken(
 	// 	account: Account,
 	// 	refresh_token
