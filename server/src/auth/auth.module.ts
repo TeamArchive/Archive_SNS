@@ -1,18 +1,17 @@
 import { Module, forwardRef, Controller } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthService } from 'src/auth/auth.service';
 import { AuthController } from './auth.controller';
 
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './strategy/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategy/jwt.strategy';
 import { jwtConstants } from './constants'
 
-import { Account } from '@account/account.entity';
 import { AccountModule } from '@account/account.module';
 import { AccountRepo } from '@account/account.repo';
+import { GoogleStrategy } from './strategy/google.strategy';
 
 @Module({
 	imports: [
@@ -26,7 +25,7 @@ import { AccountRepo } from '@account/account.repo';
 		})
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy, AccountRepo],
+	providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy, AccountRepo],
 	exports: [AuthService, JwtModule],
 })
 
