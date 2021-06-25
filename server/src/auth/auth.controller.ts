@@ -50,10 +50,12 @@ export class AuthController {
     async googleAuthRedirect(
         @Req() req
     ) {
-        console.log("req.user:", req.user);
+        console.log("google account:", req.user);
         const google_name = req.user.lastName + req.user.firstName
         const refresh_token = await this.authService.RefreshTokenGenerator(google_name);
         if(!refresh_token) throw new UnauthorizedException();
+
+        await this.authService.googleSaveRefreshToken(req.user, refresh_token)
 
         return {
             data: {

@@ -55,9 +55,7 @@ export class AuthService {
 		const refresh_account = new Account;
 		refresh_account.pk = account.pk;
 		refresh_account.refresh_token = refresh_token;
-		const repo_result = await this.account_repo.save( refresh_account );
-
-		return repo_result;
+		return await this.account_repo.save( refresh_account );
 	}
 
 	async removeRefreshToken(
@@ -86,24 +84,20 @@ export class AuthService {
 		
 		return result ? result : undefined;
 	}
-
-	googleLogin(req) {
-		if (!req.user) return 'No user from google';
-
-		return {
-			message: 'User information from google',
-			user: req.user,
-		};
-	}
 	
-	// async SaveRefreshToken(
-	// 	account: Account,
-	// 	refresh_token
-	// ){
-	// 	account.refresh_token = refresh_token;
+	async googleSaveRefreshToken(
+		googleAccount,
+		refresh_token
+	){
+		const account = new Account;
+		const google_name =
+			googleAccount.lastName + googleAccount.firstName;
+		account.name = google_name;
+		account.email = googleAccount.email;
+		account.refresh_token = refresh_token;
 
-	// 	return await this.account_repo.save(account);
-	// }
+		return await this.account_repo.save(account);
+	}
 
 	// public async SaveRefreshToken_pk(
 	// 	account_pk : string,

@@ -32,8 +32,7 @@ export class Account {
 	@Column({ name: "email", length: 64 })
 	email: string;
 
-	@IsNotEmpty()
-	@Column({ name: "password" })
+	@Column({ name: "password", nullable: true })
 	password: string;
 
 	@Column({ name: "profile_image", length: 36, nullable: true })
@@ -84,3 +83,4 @@ export class Account {
 		}
 	}
 }
+
