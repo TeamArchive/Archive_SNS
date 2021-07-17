@@ -37,7 +37,7 @@ export class AuthService {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
 		}
-		return { access_token: this.jwt_service.sign(payload) };
+		return this.jwt_service.sign(payload);
 	}
 
 	async RefreshTokenGenerator( account ){
@@ -45,7 +45,7 @@ export class AuthService {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
 		}
-		return this.jwt_service.sign(payload)
+		return this.jwt_service.sign(payload);
 	}
 
 	public async SaveRefreshTokenDirectly(
