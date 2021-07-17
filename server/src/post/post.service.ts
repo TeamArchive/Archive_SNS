@@ -93,9 +93,9 @@ export class PostService {
 
 	public async GetSinglePost( 
 		post_pk: string 
-		): Promise<Post> 
+	): Promise<Post> 
 	{
-		return await this.postRepo.GetSinglePost(post_pk);
+		return await this.postRepo.findOne({ where: {pk: post_pk} });
 	}
 
 	public async GetPostList(
