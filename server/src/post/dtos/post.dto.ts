@@ -1,14 +1,18 @@
 import { Post } from "../post.entity";
 import sanitizeHtml from 'sanitize-html';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class PostDTO {
 
+	@ApiProperty()
 	public title: string;
 
+	@ApiProperty()
 	public text_content: string; 
 
-	public toEntity(): Post {
-		const { title, text_content } = this;
+	public static toEntity( postDTO: PostDTO ): Post {
+		const { title, text_content } = postDTO;
+
 		const newPost = new Post();
 		
 		newPost.title = sanitizeHtml(title);

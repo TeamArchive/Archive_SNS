@@ -23,21 +23,21 @@ export class PostService {
 	public async CreatePost(
 		writer_pk: string,
 		post_dto : PostDTO,
-		img_dto  : ImageDTO[]
+		// img_dto  : ImageDTO[]
 	): Promise<Post> 
 	{
-		const post_ent = post_dto.toEntity();
+		const post_ent = PostDTO.toEntity(post_dto);
 		post_ent.writer_pk = writer_pk;
 
 		const result = await this.postRepo.save(post_ent);
 
-		img_dto.map( async elem => {
-			const new_img = elem.toEntity() as PostImage;
-			new_img.uploader_pk = writer_pk;
-			new_img.post = result;
+		// img_dto.map( async elem => {
+		// 	const new_img = elem.toEntity() as PostImage;
+		// 	new_img.uploader_pk = writer_pk;
+		// 	new_img.post = result;
 
-			await this.postImageRepo.save(new_img);
-		});
+		// 	await this.postImageRepo.save(new_img);
+		// });
 
 		return result;
 	}

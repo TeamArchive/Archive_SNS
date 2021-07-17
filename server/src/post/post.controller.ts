@@ -20,19 +20,24 @@ export class PostController {
         @Body() postDTO: PostDTO,
         @Req() req,
     ){
-        const path = req.files.map(img => img.path);
+        console.log("postDTO : ", postDTO);
+        console.log("req : ", req.user);
+        console.log("req : ", req.files);
 
-        const img_dto = [];
-        path.map(img_path => {
-            const new_dto = new ImageDTO;
-            new_dto.url = img_path;
-            img_dto.push(new_dto);
-        });
+
+        // const path = req.files.map(img => img.path);
+
+        // const img_dto = [];
+        // path.map(img_path => {
+        //     const new_dto = new ImageDTO;
+        //     new_dto.url = img_path;
+        //     img_dto.push(new_dto);
+        // });
         
         const createPost_result = await this.postService.CreatePost(
             req.user.pk, 
             postDTO, 
-            img_dto
+            // img_dto
         );
 
         return { data : createPost_result };
