@@ -5,7 +5,10 @@ const SignIn = (props) => (
 
     <>
         <h3> SignIn Page </h3>
-
+    <form
+        method="POST"
+        onSubmit={props.submit_handler}
+        >
         <input 
             type = 'email'
             name = 'email'
@@ -25,9 +28,8 @@ const SignIn = (props) => (
         <input
             type = 'submit'
             value = 'click'
-            onClick = {props.submit_handler}
             />
-            
+    </form>
             
     </>
 );  
