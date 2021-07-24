@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
 
 import Auth from '../Auth';
-import SignUp from '../SignUp';
+import Home from '../Home'
 
 const App = props => [
-    // props.isLoggedIn ? <PublicRoutes key={1} /> : <PublicRoutes key={1} />,
-    // props.isLoggedIn ? <PrivateRoutes key={1} /> : <PrivateRoutes key={1} />,
-    props.isLoggedIn ? <PublicRoutes key={1} /> : <PrivateRoutes key={1} />,
+    props.isLoggedIn ? <PrivateRoutes key={1} /> : <PublicRoutes key={1} />,
 ];
 
 App.propTypes = {
@@ -20,17 +18,15 @@ const PrivateRoutes = props => (
 
 <Route>
     <Switch>
-        
+        <Route exact path="/" component={Home} />
     </Switch>
 </Route>
 );
-
 
 //after login
 const PublicRoutes = props => (
 <Switch>
     <Route exact path="/" component={Auth} />
-    <Route exact path="/signUp" component={SignUp} />
 </Switch>
 );
 
