@@ -25,7 +25,7 @@ export class PostRepo extends Repository<Post> {
 	 */
 	public async GetPost( postlistDTO: PostListDTO ) {
 
-		let order_by_query = "";
+		let order_by_query = ""; 
 		switch(postlistDTO.order_by) {
 			case 1:
 			default:
