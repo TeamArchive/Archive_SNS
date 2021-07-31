@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors} from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -6,38 +6,46 @@ import { PostService } from './post.service';
 import { PostDTO } from './dtos/post.dto';
 import { PostListDTO } from './dtos/postList.dto';
 import { OwnListDTO } from './dtos/postOwnList.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from '@root/middleware/multerOptions';
+import UploadService from '@root/image/upload.service';
 
 @Controller('/post')
 export class PostController {
 
-    constructor( private postService : PostService ) {}
+    constructor( 
+        private postService: PostService,
+        private uploadService: UploadService
+    ) {}
     
-    // @UseBefore(ProfileImageMulter.single('image'))
+    // FilesInterceptor 첫번째 매개변수: formData의 key값,
+    // 두번째 매개변수: 파일 최대 갯수
     @ApiBearerAuth('access-token')
+    @UseInterceptors(FilesInterceptor('images', null, multerOptions))    
     @UseGuards(JwtAuthGuard)
     @Post('/create')
     async CreatePost(
         @Body() postDTO: PostDTO,
         @Req() req,
+        @UploadedFiles() files: File[]
     ){
-        console.log("postDTO : ", postDTO);
+        console.log("postDTO : ", postDTO.title);
         console.log("req : ", req.user);
-        console.log("req : ", req.files);
 
+        const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
+        console.log("uploadedFiles :", uploadedFiles);
 
-        // const path = req.files.map(img => img.path);
-
-        // const img_dto = [];
-        // path.map(img_path => {
-        //     const new_dto = new ImageDTO;
-        //     new_dto.url = img_path;
-        //     img_dto.push(new_dto);
-        // });
+        const img_dto = [];
+        uploadedFiles.map(img_path => {
+            const new_dto = new ImageDTO;
+            new_dto.url = img_path;
+            img_dto.push(new_dto);
+        });
         
         const createPost_result = await this.postService.CreatePost(
             req.user.pk, 
             postDTO, 
-            // img_dto
+            img_dto
         );
 
         return { data : createPost_result };

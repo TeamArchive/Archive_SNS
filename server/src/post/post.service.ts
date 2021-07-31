@@ -15,12 +15,15 @@ import { OwnListDTO } from "./dtos/postOwnList.dto";
 @Injectable()
 export class PostService {
 
-	constructor( private postRepo: PostRepo	) {}
+	constructor( 
+		private postRepo: PostRepo,
+		private postImageRepo: PostImageRepo
+	) {}
 	
 	public async CreatePost(
 		writer_pk: string,
 		post_dto : PostDTO,
-		// img_dto  : ImageDTO[]
+		img_dto  : ImageDTO[]
 	): Promise<Post> 
 	{
 		const post_ent = PostDTO.toEntity(post_dto);
@@ -28,13 +31,13 @@ export class PostService {
 
 		const result = await this.postRepo.save(post_ent);
 
-		// img_dto.map( async elem => {
-		// 	const new_img = elem.toEntity() as PostImage;
-		// 	new_img.uploader_pk = writer_pk;
-		// 	new_img.post = result;
+		img_dto.map( async elem => {
+			const new_img = elem.toEntity() as PostImage;
+			new_img.uploader_pk = writer_pk;
+			new_img.post = result;
 
-		// 	await this.postImageRepo.save(new_img);
-		// });
+			await this.postImageRepo.save(new_img);
+		});
 
 		return result;
 	}
