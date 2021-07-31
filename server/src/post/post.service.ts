@@ -14,11 +14,8 @@ import { OwnListDTO } from "./dtos/postOwnList.dto";
 
 @Injectable()
 export class PostService {
-	
-	constructor(
-		@InjectRepository(Post) private postRepo: PostRepo,
-		@InjectRepository(Image) private postImageRepo: PostImageRepo
-	) {}
+
+	constructor( private postRepo: PostRepo	) {}
 	
 	public async CreatePost(
 		writer_pk: string,
@@ -46,8 +43,8 @@ export class PostService {
 		writer_pk: string,
 		post_pk: string,
 		post_dto: PostDTO | null,
-		new_img_dto: ImageDTO[] | null,
-		del_img_list: string[] | null,
+		// new_img_dto: ImageDTO[] | null,
+		// del_img_list: string[] | null,
 	): Promise<Post | null> {
 
 		const target = {
@@ -59,16 +56,16 @@ export class PostService {
 			post_dto?.updateEntity(target);
 			await this.postRepo.save(target.entity);
 			
-			del_img_list?.forEach( async elem => {
-				await this.postImageRepo.delete({ pk: elem });
-			});
+			// del_img_list?.forEach( async elem => {
+			// 	await this.postImageRepo.delete({ pk: elem });
+			// });
 
-			new_img_dto?.forEach( async elem => {
-				const img_ent = elem.toEntity() as PostImage;
-				img_ent.post = target.entity;
+			// new_img_dto?.forEach( async elem => {
+			// 	const img_ent = elem.toEntity() as PostImage;
+			// 	img_ent.post = target.entity;
 
-				await this.postImageRepo.save(img_ent);
-			});
+			// 	await this.postImageRepo.save(img_ent);
+			// });
 
 			return target.entity;
 		}

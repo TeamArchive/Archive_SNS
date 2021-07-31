@@ -8,10 +8,10 @@ import { PostRepo } from './post.repo';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Post, Image]),
+        TypeOrmModule.forFeature([Post, Image, PostRepo]),
     ],
     controllers: [PostController],
-    providers: [PostService, PostRepo],
-    exports: [PostService, PostRepo],
+    providers: [PostService],
+    exports: [PostService],
 })
 export class PostModule {}

@@ -43,38 +43,38 @@ export class PostController {
         return { data : createPost_result };
     }
 
-    @ApiBearerAuth('access-token')
-    @UseGuards(JwtAuthGuard)
-    @Put('/:post_pk')
-    async UpdatePost(
-        @Param("post_pk") post_pk: string,
-        @Req() req,    // req.user = pk, email
-        @Body() postDTO: PostDTO,
-        @Body() body
-    ){
-        console.log("postDTO :", postDTO);
-        console.log("body: ", body);
-        const del_img_list = body.del_img_list
+    // @ApiBearerAuth('access-token')
+    // @UseGuards(JwtAuthGuard)
+    // @Put('/:post_pk')
+    // async UpdatePost(
+    //     @Param("post_pk") post_pk: string,
+    //     @Req() req,    // req.user = pk, email
+    //     @Body() postDTO: PostDTO,
+    //     @Body() body
+    // ){
+    //     console.log("postDTO :", postDTO);
+    //     console.log("body: ", body);
+    //     const del_img_list = body.del_img_list
 
-        let ImgDTO: ImageDTO[];
+    //     let ImgDTO: ImageDTO[];
         
-        for(let i = 0; i < body.url.Length; i++) {
-            const temp_img_dto = new ImageDTO;
-            temp_img_dto.url = body.url;
+    //     for(let i = 0; i < body.url.Length; i++) {
+    //         const temp_img_dto = new ImageDTO;
+    //         temp_img_dto.url = body.url;
 
-            ImgDTO.push(temp_img_dto);
-        }
+    //         ImgDTO.push(temp_img_dto);
+    //     }
 
-        const UpdatePost_Result = await this.postService.UpdatePost(
-            req.user.pk,
-            post_pk,
-            postDTO,
-            ImgDTO,
-            del_img_list
-        );
+    //     const UpdatePost_Result = await this.postService.UpdatePost(
+    //         req.user.pk,
+    //         post_pk,
+    //         postDTO,
+    //         ImgDTO,
+    //         del_img_list
+    //     );
 
-        return { data : UpdatePost_Result };
-    }
+    //     return { data : UpdatePost_Result };
+    // }
 
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
@@ -93,7 +93,7 @@ export class PostController {
         return { data : await this.postService.GetSinglePost( post_pk ) };
     }
 
-    @Get("/list")
+    @Post("/list")
     async GetPostList(
         @Body() postListDTO: PostListDTO,
     ){

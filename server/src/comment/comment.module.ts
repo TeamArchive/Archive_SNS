@@ -7,11 +7,13 @@ import { CommentService, RecommentService } from '@comment/comment.service';
 import { CommentController } from '@comment/comment.controller';
 
 import { PostModule } from '@post/post.module';
+import { PostRepo } from '@root/post/post.repo';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Comment, Recomment]),
 		TypeOrmModule.forFeature([CommentRepo, RecommentRepo]),
+		TypeOrmModule.forFeature([PostRepo]),
 		PostModule
     ],
 	controllers: [CommentController],

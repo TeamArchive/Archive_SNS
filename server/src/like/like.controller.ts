@@ -18,14 +18,14 @@ export class PostLikeControl {
         return { data : CountLike_Result };
     }
 
-    @Get('/who/:post_pk')
+    @Get('/who/:post_pk/:limit')
     public async WhoLike(
         @Param('post_pk') post_pk: string,
-        @Body() body,
+        @Param('limit') limit: number
     ) {
         const WhoLike_Result = await this.post_like_service.WhoLike(
             post_pk,
-            body.limit
+            limit
         );
         return { data : WhoLike_Result };
     }
@@ -43,15 +43,15 @@ export class PostLikeControl {
         return { data : IsLike_Result };
     }
 
-    @Post('/toggle/:feed_pk')
+    @Post('/toggle/:post_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(
-        @Param('feed_pk') feed_pk,
+        @Param('post_pk') post_pk,
         @Req() req
     ) {
         const ToggleLike_Result = await this.post_like_service.ToggleLike(
             req.user.pk,
-            feed_pk
+            post_pk
         );
         return { data : ToggleLike_Result };
     }
@@ -71,19 +71,19 @@ export class CommentLikeControl {
         return { data : CountLike_Result };
     }
 
-    @Get('/who/:comment_pk')
+    @Get('/who/:comment_pk/:limit')
     public async WhoLike(
         @Param("comment_pk") comment_pk: string, 
-        @Body() body
+        @Param("limit") limit: number, 
     ) {
         const Who_Like = await this.comment_like_service.WhoLike(
             comment_pk,
-            body.limit
+            limit
         );
         return { data : Who_Like };
     }
 
-    @Get('/toggle/:comment_pk')
+    @Post('/toggle/:comment_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(
         @Param("comment_pk") comment_pk: number,
