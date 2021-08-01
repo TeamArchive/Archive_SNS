@@ -46,8 +46,8 @@ export class PostService {
 		writer_pk: string,
 		post_pk: string,
 		post_dto: PostDTO | null,
-		// new_img_dto: ImageDTO[] | null,
-		// del_img_list: string[] | null,
+		new_img_dto: ImageDTO[] | null,
+		del_img_list: string[] | null,
 	): Promise<Post | null> {
 
 		const target = {
@@ -55,20 +55,21 @@ export class PostService {
 		}
 
 		if(target.entity?.writer_pk === writer_pk ) {
-
-			post_dto?.updateEntity(target);
+			
+			PostDTO.updateEntity(target, post_dto);
+			
 			await this.postRepo.save(target.entity);
 			
-			// del_img_list?.forEach( async elem => {
-			// 	await this.postImageRepo.delete({ pk: elem });
-			// });
+			await this.postImageRepo.delete( del_img_list );
+			
+			new_img_dto?.forEach( async elem => {
+				const img_ent = elem.toEntity() as PostImage;
+				img_ent.uploader_pk = writer_pk;
 
-			// new_img_dto?.forEach( async elem => {
-			// 	const img_ent = elem.toEntity() as PostImage;
-			// 	img_ent.post = target.entity;
+				img_ent.post = target.entity;
 
-			// 	await this.postImageRepo.save(img_ent);
-			// });
+				await this.postImageRepo.save(img_ent);
+			});
 
 			return target.entity;
 		}

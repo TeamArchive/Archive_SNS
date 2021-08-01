@@ -37,9 +37,9 @@ export class PostRepo extends Repository<Post> {
 			.select(ShortInfoSelect)
 			.leftJoinAndSelect("post.writer", "writer")
 			.leftJoinAndSelect("post.image", "image")
-			.orderBy(order_by_query, "DESC")
-			.skip(postlistDTO.offset)
-			.take(postlistDTO.limit)
+			.orderBy("post.createdAt", "DESC")
+			.skip(0)
+			.take(10)
 			.getMany();
 	}
 	

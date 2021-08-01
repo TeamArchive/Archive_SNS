@@ -26,7 +26,7 @@ export class PostController {
     @Post('/create')
     async CreatePost(
         @Body() postDTO: PostDTO,
-        @Req() req,
+        @Req() req, // req.user = pk, email
         @UploadedFiles() files: File[]
     ){
         console.log("postDTO : ", postDTO.title);
@@ -51,38 +51,43 @@ export class PostController {
         return { data : createPost_result };
     }
 
-    // @ApiBearerAuth('access-token')
-    // @UseGuards(JwtAuthGuard)
-    // @Put('/:post_pk')
-    // async UpdatePost(
-    //     @Param("post_pk") post_pk: string,
-    //     @Req() req,    // req.user = pk, email
-    //     @Body() postDTO: PostDTO,
-    //     @Body() body
-    // ){
-    //     console.log("postDTO :", postDTO);
-    //     console.log("body: ", body);
-    //     const del_img_list = body.del_img_list
+    @ApiBearerAuth('access-token')
+    @UseInterceptors(FilesInterceptor('images', null, multerOptions))
+    @UseGuards(JwtAuthGuard)
+    @Put('/:post_pk')
+    async UpdatePost(
+        @Param("post_pk") post_pk: string,
+        @Req() req,    // req.user = pk, email
+        @Body() postDTO: PostDTO,
+        @Body() del_img_list: string[],
+        @UploadedFiles() files: File[]
+    ){
+        console.log("postDTO :", postDTO.title);
+        console.log("req : ", req.user);
+        console.log("body: ", files);
 
-    //     let ImgDTO: ImageDTO[];
+        const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
+        console.log("uploadedFiles :", uploadedFiles);
         
-    //     for(let i = 0; i < body.url.Length; i++) {
-    //         const temp_img_dto = new ImageDTO;
-    //         temp_img_dto.url = body.url;
+        const ImgDTO = [];
+        
+        for(let i = 0; i < uploadedFiles.length; i++) {
+            const temp_img_dto = new ImageDTO;
+            temp_img_dto.url = uploadedFiles[i];
+            console.log("testtest : ", temp_img_dto.url)
+            ImgDTO.push(temp_img_dto);
+        }
 
-    //         ImgDTO.push(temp_img_dto);
-    //     }
+        const UpdatePost_Result = this.postService.UpdatePost(
+            req.user.pk,
+            post_pk,
+            postDTO,
+            ImgDTO,
+            del_img_list
+        );
 
-    //     const UpdatePost_Result = await this.postService.UpdatePost(
-    //         req.user.pk,
-    //         post_pk,
-    //         postDTO,
-    //         ImgDTO,
-    //         del_img_list
-    //     );
-
-    //     return { data : UpdatePost_Result };
-    // }
+        return { data : UpdatePost_Result };
+    }
 
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
