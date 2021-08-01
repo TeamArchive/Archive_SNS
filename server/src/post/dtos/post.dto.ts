@@ -21,14 +21,19 @@ export class PostDTO {
 		return newPost;
 	}
 
-	public updateEntity(target) {
-		const { title, text_content } = this;
+	public static updateEntity(
+		target: { entity: Post },  
+		dto: PostDTO
+	) {
+		const { title, text_content } = dto;
 
 		if( title )
 			target.entity.title = sanitizeHtml(title);
 
 		if( text_content )
 			target.entity.text_content = sanitizeHtml(text_content);
+
+		return target;
 	}
 
 	public fromJson(json) {

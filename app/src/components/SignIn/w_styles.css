@@ -1,0 +1,28 @@
+.signInBgform{
+    z-index: 1;
+    background: linear-gradient(-135deg, #E4A972, #9941D8) fixed;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    align-items: center;
+}
+
+.submitForm{
+    width: 17vw;
+    height: 3vw;
+    background-color: white;
+    font-size: 2vw;
+    border-radius: 3vw;
+    color: tomato;
+    border: none;
+}
+
+.signInform{
+    padding-top: 15em;
+}
+
+.signInform h1{
+    color: white;
+    font-size: 5vw;
+}

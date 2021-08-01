@@ -13,7 +13,7 @@ import { ImageModule } from '../image/image.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Account]),
+        TypeOrmModule.forFeature([Account, AccountRepo]),
         forwardRef(() => AuthModule),
         ImageModule
     ],

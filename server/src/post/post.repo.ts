@@ -24,8 +24,9 @@ export class PostRepo extends Repository<Post> {
 	 * @param order_by : order result by ~/shared/OrderCodes.json
 	 */
 	public async GetPost( postlistDTO: PostListDTO ) {
-
-		let order_by_query = "";
+		console.log("repo data : ", postlistDTO);
+		
+		let order_by_query = ""; 
 		switch(postlistDTO.order_by) {
 			case 1:
 			default:
@@ -36,9 +37,9 @@ export class PostRepo extends Repository<Post> {
 			.select(ShortInfoSelect)
 			.leftJoinAndSelect("post.writer", "writer")
 			.leftJoinAndSelect("post.image", "image")
-			.orderBy(order_by_query, "DESC")
-			.skip(postlistDTO.offset)
-			.take(postlistDTO.limit)
+			.orderBy("post.createdAt", "DESC")
+			.skip(0)
+			.take(10)
 			.getMany();
 	}
 	

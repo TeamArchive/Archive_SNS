@@ -1,0 +1,81 @@
+.inputForm{
+    margin: 2vw;
+    background: none;
+    font-size: 1.5vw;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+}
+
+.inputForm::placeholder{
+    border-color: 1px white;
+    outline: none;
+    color: white;
+}
+
+.submitForm{
+    width: 17vw;
+    height: 3vw;;
+    background-color: white;
+    font-size: 2vw;
+    border-radius: 3vw;
+    color: linear-gradient(-135deg, #E4A972, #9941D8) fixed;
+    border: none;
+}
+
+.btn-menu{
+    position: absolute;
+    border: none;
+    top: -1vw;
+    width: 8vw;
+    height: 2vw;
+    border-radius: 1vw 1vw 0 0;
+    background-color: #00ADB5;
+}
+
+.btn-menu::before {
+    content: "";
+    position: absolute;
+    /* background-color: transparent; */
+    bottom: -2em;
+    right: 0;
+    
+    height: 2em;
+    width: 1em;
+    border-top-right-radius: 1em;
+    box-shadow: 0 -1em 0 0 #373737;
+  }
+  .btn-menu::after {
+    content: "";
+    position: absolute;
+    /* background-color: transparent; */
+    top: -2em;
+    right: 0;
+    
+    height: 2em;
+    width: 1em;
+    border-bottom-right-radius: 1em;
+    box-shadow: 0 1em 0 0 #373737;
+  }
+
+.sideForm{
+    background-color: #00ADB5;
+    height: 100vw;
+}
+
+.side-menu{ 
+    z-index: 1;
+    position: absolute;
+    left: 25%;
+    bottom: 0;
+    height: 0;
+    margin-bottom: 2vw;
+    width: 50%;
+    text-align: center;
+    align-items: center;
+    transition:transform 300ms cubic-bezier(0.4, 0, 0.2, 1); 
+} 
+.signUpform.menuon .side-menu{ 
+    transform:translate(0, -50vw); 
+}

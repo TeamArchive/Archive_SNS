@@ -12,9 +12,9 @@ import { UpdateAccountDTO } from "./updateAccount.dto";
 export class AccountService {
 	
 	constructor(
-		@InjectRepository(Account) private account_repo: AccountRepo,
+		private account_repo: AccountRepo,
 		private profile_img_repo: ProfileImageRepo
-	) { }
+	) {}
 
 	public async CreateAccount(
 		account_dto: AccountDTO,
@@ -88,7 +88,7 @@ export class AccountService {
 			select: [
 				"pk", "name", "email", "profile_image", "status_msg"
 			],
-			where: { email: target_name }
+			where: { name: target_name }
 		});
 
 		return { 
@@ -97,25 +97,9 @@ export class AccountService {
 		};
 	}
 
-	public async DeleteAccount(
-		account
-	): Promise<boolean>
+	public async DeleteAccount( account )
 	{
-		const target = await this.account_repo.findOne({
-			select: ["password"],
-			where: { pk: account.pk },
-		});
-
-		if ( target ) {
-			const is_pw_match = await target.checkPassword(account.password);
-
-			if(is_pw_match) {
-				await this.account_repo.delete({ pk: account.pk });
-				return true;
-			}
-		}
-		
-		return false;
+		return await this.account_repo.delete({ pk: account.pk });
 	}
 
 	public async findByIds ( ids: any[] ) {

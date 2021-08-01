@@ -1,0 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    display: flex;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%;
+}
