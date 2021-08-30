@@ -14,6 +14,11 @@ export class AccountController {
 
     constructor (private account_service : AccountService) {}
     
+    /**
+     * 회원가입 한다.
+     * @param dto 
+     * @returns 
+     */
     // @UseBefore(ProfileImageMulter.single('image'))
     @Post('/signup')
     async singUp(
@@ -23,6 +28,11 @@ export class AccountController {
         return { data: { account_pk: result.pk }};
     }
 
+    /**
+     * 회원탈퇴 한다.
+     * @param req 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
     @Delete()
@@ -33,6 +43,12 @@ export class AccountController {
         return { data: result }
     }
 
+    /**
+     * 계정정보를 수정한다.
+     * @param req 
+     * @param dto 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
     @Put()

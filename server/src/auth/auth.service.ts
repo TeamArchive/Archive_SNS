@@ -10,7 +10,7 @@ import { AccountService } from '@account/account.service';
 export class AuthService {
 	constructor(
 		@Inject(forwardRef(() => AccountService))
-		private readonly account_repo: AccountService,
+		private readonly account_repo: AccountRepo,
 		private jwt_service: JwtService
 	) {}
 

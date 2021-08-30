@@ -70,8 +70,7 @@ export class UpdateAccountDTO {
 	}
 
 	public static updateEntity( 
-		target: { entity: Account },  
-		accountDTO: UpdateAccountDTO
+		target: { entity: Account }, accountDTO: UpdateAccountDTO
 	) {
 		const { 
 			name,
@@ -79,7 +78,6 @@ export class UpdateAccountDTO {
 			profile_image, 
 			status_msg
 		} = accountDTO;
-
 		if(name) 
 			target.entity.name = sanitizeHtml(name);
 		
@@ -91,6 +89,7 @@ export class UpdateAccountDTO {
 
 		if(status_msg)
 			target.entity.status_msg = sanitizeHtml(status_msg);
+
 	}
 
 }

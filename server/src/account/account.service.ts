@@ -40,27 +40,23 @@ export class AccountService {
 		account_dto: UpdateAccountDTO,
 	): Promise<Account> 
 	{
-		console.log('account_pk :', account_pk);
-		console.log('account_dto :', account_dto);
-
 		const target = { 
 			entity : await this.account_repo.findOne({ where: { pk: account_pk } })
 		}
 
-		console.log('target :', target);
-
 		if (target.entity?.pk === account_pk) {
 			UpdateAccountDTO.updateEntity(target, account_dto);
+			console.log("target : ", target);
 
-			if(account_dto.profile_img_url) {
-				const imageDTO = new ImageDTO();
-				imageDTO.url = account_dto.profile_img_url;
+			// if(account_dto.profile_img_url) {
+			// 	const imageDTO = new ImageDTO();
+			// 	imageDTO.url = account_dto.profile_img_url;
 
-				const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
+			// 	const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
 				
-				target.entity.profile_image_pk = 
-					(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
-			}
+			// 	target.entity.profile_image_pk = 
+			// 		(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
+			// }
 
 			const result = await this.account_repo.save(target.entity);
 			console.log('result : ', result);
