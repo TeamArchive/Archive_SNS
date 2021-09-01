@@ -23,9 +23,7 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by : order result by ~/shared/OrderCodes.json
 	 */
-	public async GetPost( postlistDTO: PostListDTO ) {
-		console.log("repo data : ", postlistDTO);
-		
+	public async GetPost( postlistDTO: PostListDTO ) {		
 		let order_by_query = ""; 
 		switch(postlistDTO.order_by) {
 			case 1:

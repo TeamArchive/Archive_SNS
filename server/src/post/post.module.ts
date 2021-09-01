@@ -11,7 +11,12 @@ import { PostImageRepo } from '@root/image/image.repo';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Post, Image, PostRepo, PostImageRepo]),
+        TypeOrmModule.forFeature([
+            Post, 
+            Image, 
+            PostRepo, 
+            PostImageRepo
+        ]),
         ImageModule
     ],
     controllers: [PostController],

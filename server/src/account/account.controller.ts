@@ -1,10 +1,15 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UploadedFile, UploadedFiles, UseGuards, UseInterceptors} from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
 import { AccountService } from './account.service';
-import { AccountDTO } from './account.dto';
+import { AccountDTO } from './dtos/account.dto';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { UpdateAccountDTO } from './updateAccount.dto';
+import { UpdateAccountDTO } from './dtos/updateAccount.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import UploadService from '@root/image/upload.service';
+import { CreateAccountDTO } from './dtos/createAccount.dto';
+import { Account } from './account.entity';
+import { multerOptions } from '@root/middleware/multerOptions';
 
 // @UseGuards(JwtAuthGuard) 유효한 JWT가 request에 존재하는지 판단 하고 endpoint 보호
 // @UseGuards(LocalAuthGuard) -> auth.guard.ts (id, password validate) => account
@@ -12,20 +17,57 @@ import { UpdateAccountDTO } from './updateAccount.dto';
 @Controller('/account')
 export class AccountController {
 
-    constructor (private account_service : AccountService) {}
+    constructor (
+        private account_service : AccountService,
+        private uploadService: UploadService
+    ) {}
     
     /**
-     * 회원가입 한다.
+     * 계정을 생성한다.
      * @param dto 
      * @returns 
      */
-    // @UseBefore(ProfileImageMulter.single('image'))
-    @Post('/signup')
+    @UseInterceptors(FilesInterceptor('images', 1, multerOptions))    
+    @Post()
     async singUp(
-        @Body() dto: AccountDTO,
+        @Body() dto: CreateAccountDTO,
+        @UploadedFiles() files: File[] | null
     ) {
-        const result = await this.account_service.CreateAccount(dto);
+        let uploadedFiles = null
+
+        if(files) {
+            uploadedFiles = this.uploadService.uploadFiles(files);
+        }
+        
+        const result: Account = await this.account_service.CreateAccount(
+            dto,
+            uploadedFiles
+        );
         return { data: { account_pk: result.pk }};
+    }
+
+    /**
+     * 계정정보를 수정한다.
+     * @param req 
+     * @param dto 
+     * @returns 
+     */
+    @ApiBearerAuth('access-token')
+    @UseInterceptors(FilesInterceptor('images', 1, multerOptions))    
+    @UseGuards(JwtAuthGuard)
+    @Put()
+    async UpdateAccount(
+        @Req() req, // req.user = pk, email
+        @Body() dto: UpdateAccountDTO,
+        @UploadedFiles() files: File[] | null
+    ){
+        const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
+        const result: Account = await this.account_service.UpdateAccount( 
+            req.user.pk,
+            dto,
+            uploadedFiles
+        );
+        return { data: result }
     }
 
     /**
@@ -44,25 +86,10 @@ export class AccountController {
     }
 
     /**
-     * 계정정보를 수정한다.
-     * @param req 
-     * @param dto 
+     * PK로 계정을 조회한다.
+     * @param pk 
      * @returns 
      */
-    @ApiBearerAuth('access-token')
-    @UseGuards(JwtAuthGuard)
-    @Put()
-    async UpdateAccount(
-        @Req() req, // req.user = pk, email
-        @Body() dto: UpdateAccountDTO,
-    ){
-        const result = await this.account_service.UpdateAccount( 
-            req.user.pk,
-            dto,
-        );
-        return { data: result }
-    }
-
     @Get('/:pk')
     async GetAccountByPK(
         @Param('pk') pk: string
@@ -71,6 +98,11 @@ export class AccountController {
         return { data: result }
     }
 
+    /**
+     * Name으로 계정을 조회한다.
+     * @param name 
+     * @returns 
+     */
     @Get('/:name')
     async GetAccountByName(
         @Param('name') name: string

@@ -24,8 +24,7 @@ export class Image {
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
 
-	@IsNotEmpty()
-	@Column({ name: "uploader", length: 36, nullable: false })
+	@Column({ name: "uploader", length: 36, nullable: true })
 	uploader_pk: string;
 
 	@ManyToOne((type) => Account, (account) => account.pk, {

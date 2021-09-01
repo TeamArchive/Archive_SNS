@@ -18,6 +18,13 @@ export class PostController {
         private uploadService: UploadService
     ) {}
     
+    /**
+     * 게시물을 작성한다.
+     * @param postDTO 
+     * @param req 
+     * @param files 
+     * @returns 
+     */
     // FilesInterceptor 첫번째 매개변수: formData의 key값,
     // 두번째 매개변수: 파일 최대 갯수
     @ApiBearerAuth('access-token')
@@ -29,12 +36,9 @@ export class PostController {
         @Req() req, // req.user = pk, email
         @UploadedFiles() files: File[]
     ){
-        console.log("postDTO : ", postDTO.title);
-        console.log("req : ", req.user);
-
         const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
-        console.log("uploadedFiles :", uploadedFiles);
-
+        console.log("uploadedFiles : ", uploadedFiles);
+        
         const img_dto = [];
         uploadedFiles.map(img_path => {
             const new_dto = new ImageDTO;
@@ -51,6 +55,15 @@ export class PostController {
         return { data : createPost_result };
     }
 
+    /**
+     * 게시물을 수정한다.
+     * @param post_pk 
+     * @param req 
+     * @param postDTO 
+     * @param del_img_list 
+     * @param files 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @UseInterceptors(FilesInterceptor('images', null, multerOptions))
     @UseGuards(JwtAuthGuard)
@@ -62,15 +75,11 @@ export class PostController {
         @Body() del_img_list: string[],
         @UploadedFiles() files: File[]
     ){
-        console.log("postDTO :", postDTO.title);
-        console.log("req : ", req.user);
         console.log("body: ", files);
-
         const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
         console.log("uploadedFiles :", uploadedFiles);
         
         const ImgDTO = [];
-        
         for(let i = 0; i < uploadedFiles.length; i++) {
             const temp_img_dto = new ImageDTO;
             temp_img_dto.url = uploadedFiles[i];
@@ -89,6 +98,12 @@ export class PostController {
         return { data : UpdatePost_Result };
     }
 
+    /**
+     * 게시물을 삭제한다.
+     * @param post_pk 
+     * @param req 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @UseGuards(JwtAuthGuard)
     @Delete('/:post_pk')

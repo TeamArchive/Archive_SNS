@@ -42,8 +42,9 @@ export class Account {
 	@JoinColumn({ name: "profile_image" })
 	profile_image: Image | null;
 
-	@Column({ name: "profile_img_url", nullable: true })
-	profile_img_url: string | null;
+	// @Column({ name: "profile_img_url", nullable: true })
+	// profile_img_url: string | null;
+
 	// @OneToMany(
 	// 	type => GroupParticipant, 
 	// 	group_participant => group_participant.participant,
