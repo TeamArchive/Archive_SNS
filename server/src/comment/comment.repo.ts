@@ -12,19 +12,19 @@ export const enum PostOrder {
 // < Common Repository > 
 // --------------------------------------------------
 
-abstract class CommentRepoImpl<T> extends Repository<T> {}
+abstract class CommentRepoImpl<T> extends Repository<T> { }
 
 // < Repositories > 
 // --------------------------------------------------
 
 @EntityRepository(Comment)
-export class CommentRepo extends CommentRepoImpl<Comment> { 
-	
-	public async GetComment ( 
+export class CommentRepo extends CommentRepoImpl<Comment> {
+
+	public async getList(
 		post_pk: string,
-		offset: number, 
-		limit: number, 
-		order_by: string 
+		offset: number,
+		limit: number,
+		order_by: string
 	) {
 		return this.createQueryBuilder("comment")
 			.leftJoinAndSelect("comment.writer", "writer")
@@ -38,18 +38,17 @@ export class CommentRepo extends CommentRepoImpl<Comment> {
 }
 
 @EntityRepository(Recomment)
-export class RecommentRepo extends CommentRepoImpl<Recomment> { 
+export class RecommentRepo extends CommentRepoImpl<Recomment> {
 
-	public async getList ( 
+	public async getList(
 		comment_pk: string,
-		offset: number, 
-		limit: number, 
-		order_by: string 
+		offset: number,
+		limit: number,
+		order_by: string
 	) {
 		return this.createQueryBuilder("comment")
-			// .select( ParentComment )
 			.leftJoinAndSelect("comment.writer", "writer")
-			.where("comment.parent_pk = :target_comment_pk", { comment_pk })
+			.where("comment.parent_pk = :comment_pk", { comment_pk })
 			.orderBy(order_by, "DESC")
 			.skip(offset)
 			.take(limit)

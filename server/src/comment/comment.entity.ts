@@ -1,7 +1,7 @@
 import { Account } from 'src/account/account.entity';
 import { Post } from 'src/post/post.entity';
-import { 
-	Entity, 
+import {
+	Entity,
 	ChildEntity,
 	TableInheritance,
 	PrimaryGeneratedColumn,
@@ -18,11 +18,11 @@ import {
 @Entity({ name: "comment" })
 @TableInheritance({ column: { type: "varchar", name: "type" } })
 export class Comment {
-	
+
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
 
-	@Column({ name: "file_name" })
+	@Column({ name: "content" })
 	content: string;
 
 	@Column({ default: 0 })
