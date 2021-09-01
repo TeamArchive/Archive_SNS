@@ -24,7 +24,8 @@
       "@friend/*": ["./src/friend/*"],
       "@comment/*": ["./src/comment/*"],
       "@post/*": ["./src/post/*"],
-      "@like/*": ["./src/like/*"]
+      "@like/*": ["./src/like/*"],
+      "@middleware/*": ["./src/middleware/*"]
     }
   }
 }

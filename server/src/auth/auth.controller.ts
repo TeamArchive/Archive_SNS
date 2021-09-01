@@ -10,9 +10,14 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('/auth')
 export class AuthController {
     constructor(
-        private authService: AuthService,
-    ) { }
-
+        private authService : AuthService,
+    ) {}
+    
+    /**
+     * 로그인 한다.
+     * @param req 
+     * @returns 
+     */
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     async Login(
@@ -35,6 +40,11 @@ export class AuthController {
         }
     }
 
+    /**
+     * 로그아웃 한다.
+     * @param req 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @Post('/logout')
     @UseGuards(JwtAuthGuard)
@@ -44,6 +54,10 @@ export class AuthController {
         return await this.authService.removeRefreshToken(req.user.pk);
     }
 
+    /**
+     * 구글로그인 페이지로 간다.
+     * @param req 
+     */
     @Get('google')  // 1
     @UseGuards(GoogleStrategy)
     async googleAuth(@Req() req) { }
