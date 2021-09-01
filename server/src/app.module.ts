@@ -15,17 +15,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'sk362712',
-      database: 'archive_sns_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      logging: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(),
     AccountModule,
     ChatModule,
     CommentModule,
