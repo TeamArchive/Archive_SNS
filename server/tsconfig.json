@@ -12,9 +12,10 @@
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
 
     "paths": {
-      "@root/*": ["./src/*"],
+      "@root/*": ["./*"],
       "@auth/*": ["./src/auth/*"],
       "@account/*": ["./src/account/*"],
       "@group/*": ["./src/group/*"],
@@ -23,6 +24,7 @@
       "@friend/*": ["./src/friend/*"],
       "@comment/*": ["./src/comment/*"],
       "@post/*": ["./src/post/*"],
+      "@like/*": ["./src/like/*"]
     }
   }
 }
