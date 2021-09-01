@@ -12,6 +12,7 @@ import { CommentLikeService, PostLikeService } from '@like/like.service';
     imports: [
         TypeOrmModule.forFeature([PostLike, CommentLike]),
         TypeOrmModule.forFeature([PostRepo]),
+        TypeOrmModule.forFeature([PostLikeRepo, CommentLikeRepo]),
         PostModule
     ],
     controllers: [PostLikeControl, CommentLikeControl],

@@ -47,7 +47,7 @@ export class AccountController {
         return { data: result }
     }
 
-    @Get('/account/:pk')
+    @Get('/:pk')
     async GetAccountByPK(
         @Param('pk') pk: string
     ){
@@ -55,11 +55,11 @@ export class AccountController {
         return { data: result }
     }
 
-    @Get('/account/name/:name')
+    @Get('/:name')
     async GetAccountByName(
         @Param('name') name: string
     ){
-        const result = await this.account_service.GetAccountByName( name );
+        const result = await this.account_service.findOne(name);
         return { data: result }
     }
 }

@@ -14,8 +14,8 @@ const ShortInfoSelect = [
 ];
 
 @EntityRepository(Post)
-export class PostRepo extends Repository<Post> { 
-	
+export class PostRepo extends Repository<Post> {
+
 	/**
 	 *  Get list that short post information
 	 * 
@@ -23,10 +23,11 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by : order result by ~/shared/OrderCodes.json
 	 */
-	public async GetPost( postlistDTO: PostListDTO ) {
+	public async GetPost(postlistDTO: PostListDTO) {
+		console.log("repo data : ", postlistDTO);
 
 		let order_by_query = "";
-		switch(postlistDTO.order_by) {
+		switch (postlistDTO.order_by) {
 			case 1:
 			default:
 				order_by_query = "post.createAt";
@@ -36,12 +37,12 @@ export class PostRepo extends Repository<Post> {
 			.select(ShortInfoSelect)
 			.leftJoinAndSelect("post.writer", "writer")
 			.leftJoinAndSelect("post.image", "image")
-			.orderBy(order_by_query, "DESC")
-			.skip(postlistDTO.offset)
-			.take(postlistDTO.limit)
+			.orderBy("post.createdAt", "DESC")
+			.skip(0)
+			.take(10)
 			.getMany();
 	}
-	
+
 	/**
 	 *  Get list that short post information which written by user
 	 * 
@@ -49,8 +50,8 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by
 	 */
-	public async GetOwnPost( writer_pk: string, ownListDTO: OwnListDTO ) {
-		
+	public async GetOwnPost(writer_pk: string, ownListDTO: OwnListDTO) {
+
 		return this.createQueryBuilder("post")
 			.select(ShortInfoSelect)
 			.where("post.writer_pk = :writer_pk", { writer_pk })
@@ -69,7 +70,7 @@ export class PostRepo extends Repository<Post> {
 	public async GetSinglePost(post_pk: string) {
 		return this.createQueryBuilder("post")
 			.leftJoinAndSelect("post.user", "user")
-			.where("post.pk = :post_pk", {post_pk})
+			.where("post.pk = :post_pk", { post_pk })
 			.getOne();
 	}
 
