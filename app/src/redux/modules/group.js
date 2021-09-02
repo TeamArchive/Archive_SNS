@@ -1,5 +1,6 @@
 const SAVE_NEW_GROUP = "SAVE_NEW_GROUP";
 const INVITE_GROUP = "INVITE_GROUP";
+const GET_GROUP_LIST = "GET_GROUP_LIST";
 
 
 function SaveNewGroup(data) {
@@ -16,6 +17,13 @@ function InviteGroup(data) {
     }
 }
 
+function GetGroupList(data) {
+    return {
+        type: GET_GROUP_LIST,
+        data
+    }
+}
+
 function groupCreate(Group_title, User_Pk) {
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
@@ -24,7 +32,7 @@ function groupCreate(Group_title, User_Pk) {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-			    Authorization: `Bearer ${AccessToken}`
+                Authorization: `Bearer ${AccessToken}`
 			},
 			body: JSON.stringify({
 				
@@ -52,7 +60,7 @@ function groupInvite(group_pk) {
 		const { account : { AccessToken }} = getState();
 		
 		fetch("/post_group/invite" + group_pk, {
-			method: "post",
+			method: "POST",
 			headers: {
 			Authorization: `${AccessToken}`
 			},
@@ -62,6 +70,27 @@ function groupInvite(group_pk) {
 		.then(json => {
 			if(json.data) {
 				dispatch(InviteGroup(json.data));
+			}
+		})
+		.catch(err => console.log(err));
+    };  
+};
+
+function getGroupList() {
+    return (dispatch, getState) => {
+		const { account : { AccessToken }} = getState();
+		
+		fetch("/post_group", {
+			method: "GET",
+			headers: {
+			Authorization: `${AccessToken}`
+			},
+			
+		})
+		.then(res => res.json())
+		.then(json => {
+			if(json.data) {
+				dispatch(GetGroupList(json.data));
 			}
 		})
 		.catch(err => console.log(err));
@@ -79,6 +108,9 @@ function reducer (state = initialState, action) {
 
         case INVITE_GROUP:
             return applyInviteGroup(state, action);
+
+        case GET_GROUP_LIST:
+            return applyGetGroupList(state, action);
 
             default:
                 return state;
@@ -102,9 +134,20 @@ function applyInviteGroup(state, action) {
     }
 }
 
+function applyGetGroupList(state, action) {
+    const { data } = action;
+
+    return {
+        ...state,
+        group_list: data
+    }
+}
+
 const actionCreators = {
     groupCreate,
-    groupInvite
+    groupInvite,
+    getGroupList,
+
 };
 
 export { actionCreators }; 
