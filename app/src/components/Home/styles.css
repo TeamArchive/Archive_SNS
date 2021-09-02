@@ -1,0 +1,97 @@
+/* Top-bar-form */
+.Top-bar{
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    margin-bottom: 1vw;
+    box-shadow: 0px 10px 10px 1px rgba(212, 212, 212, 0.521);
+}
+
+.logo{
+    width: 50px;
+    height: 50px;
+    margin: 0.5vw;
+}
+
+.search-input{
+    border-style: solid;
+    border-width: 1px;
+    margin: 1vw;
+    height: 2vw;
+    width: 14vw;
+    padding-left: 1vw;
+    border-radius: 1vw;
+}
+
+.user_action_form{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    
+}
+
+.action_form{
+    width: 61.9vw;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.letf_content_form{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    height: 100%;
+}
+
+.right_content_form{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    height: 100%;
+}
+
+.action_btn, .action_btn:link {
+    width: 15vw;
+    border: none;
+    background: none;
+    text-decoration:none; color:#555;
+}
+    
+.action_btn:hover { animation: rainbow 0.8s infinite linear; }
+
+@keyframes rainbow {
+    0%   {color: red; }
+    10%   {color: orange; }
+    23%  {color: yellow; }
+    36%  {color: yellowgreen; }
+    49%  {color: green; }
+    62%   {color: blue; }
+    74%  {color: indigo; }
+    86%   {color: purple; }
+    100% {color: red; }
+}
+/* Profile-form */
+.Profile-form{
+    position: fixed;
+    top: 12%;
+    left: 1%;
+}
+.Profile-user-img-form{
+    background-color: azure;
+    padding: 10vw 3vw;
+}
+
+
+/* center-form */
+.center-form{
+    margin-left: 25vw;
+    width: 50vw;
+    height: 100%;
+}

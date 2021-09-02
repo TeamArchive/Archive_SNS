@@ -68,10 +68,10 @@ function createAccount(data) {
 			body: JSON.stringify(data)
 		})
 		.then(response => response.json())
-		.then(json => {
+		.then(json => { 
 			if (json.data) {
 				dispatch(saveToken(json.data));
-			}
+			};
 		})
 		.catch(err => console.log(err));
 	};
@@ -108,18 +108,20 @@ function reducer(state = initialState, action) {
 
 function applySetToken(state, action) {
 
-	const { access_token, refresh_token, pk } = action.token;
+	const { access_token, 
+			refresh_token, 
+			account_pk } = action.token;
 
 	localStorage.setItem("AccessToken", access_token);
 	localStorage.setItem("RefreshToken", refresh_token);
-	localStorage.setItem("PK", pk);
+	localStorage.setItem("PK", account_pk);
 
 	return {
 		...state,
 		isLoggedIn		: true,
 		AccessToken		: access_token,
 		RefreshToken	: refresh_token,
-		PK				: pk,
+		PK				: account_pk,
 	};
 }
 
@@ -153,6 +155,8 @@ const actionCreators = {
 	defaultLogin,
 	createAccount,
 	logout,
+	passData
+	
 };
 
 export { actionCreators };
