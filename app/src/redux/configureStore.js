@@ -6,6 +6,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 //redux modules import
 import account from './modules/account'
+import socket from './modules/socket'
 
 const env = process.env.NODE_ENV;
 const history = createBrowserHistory();
@@ -17,6 +18,7 @@ if (env === "development") {
 }
 
 const reducer = combineReducers({
+    socket,
     account,
     router : connectRouter(history),
 });
@@ -26,9 +28,9 @@ let store;
 if (env === "development") {
     store = initialState =>
         createStore(reducer, composeWithDevTools(applyMiddleware(...middlewares)));
-    } else {
+} else {
     store = initialState => createStore(reducer, applyMiddleware(...middlewares));
-    }
+}
 
 export { history };
 

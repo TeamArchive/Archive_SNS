@@ -12,6 +12,7 @@ import { ImageModule } from './image/image.module';
 import { GroupModule } from './group/group.module';
 import { LikeModule } from './like/like.module';
 import { AuthModule } from './auth/auth.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
-export class AppModule {}
+export class AppModule { }

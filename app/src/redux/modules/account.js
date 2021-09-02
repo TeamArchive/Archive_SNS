@@ -1,3 +1,5 @@
+import { actionCreators as socketAct } from "./socket";
+
 // < Actions >
 // --------------------------------------------------
 
@@ -48,7 +50,8 @@ function defaultLogin(email, password) {
 		.then(response => response.json())
 		.then(json => {
 			if (json.data) {
-				dispatch(saveToken(json.data));
+				dispatch( socketAct.setToken(json.data.access_token) );
+				dispatch( saveToken(json.data) );
 			}
 		})
 		.catch(err => console.log(err));

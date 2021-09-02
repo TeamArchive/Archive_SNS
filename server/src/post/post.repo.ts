@@ -14,8 +14,8 @@ const ShortInfoSelect = [
 ];
 
 @EntityRepository(Post)
-export class PostRepo extends Repository<Post> { 
-	
+export class PostRepo extends Repository<Post> {
+
 	/**
 	 *  Get list that short post information
 	 * 
@@ -40,7 +40,7 @@ export class PostRepo extends Repository<Post> {
 			.take(10)
 			.getMany();
 	}
-	
+
 	/**
 	 *  Get list that short post information which written by user
 	 * 
@@ -48,8 +48,8 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by
 	 */
-	public async GetOwnPost( writer_pk: string, ownListDTO: OwnListDTO ) {
-		
+	public async GetOwnPost(writer_pk: string, ownListDTO: OwnListDTO) {
+
 		return this.createQueryBuilder("post")
 			.select(ShortInfoSelect)
 			.where("post.writer_pk = :writer_pk", { writer_pk })
@@ -68,7 +68,7 @@ export class PostRepo extends Repository<Post> {
 	public async GetSinglePost(post_pk: string) {
 		return this.createQueryBuilder("post")
 			.leftJoinAndSelect("post.user", "user")
-			.where("post.pk = :post_pk", {post_pk})
+			.where("post.pk = :post_pk", { post_pk })
 			.getOne();
 	}
 

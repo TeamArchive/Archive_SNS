@@ -17,14 +17,13 @@ import { AccountModule } from '@account/account.module';
 			GroupParticipantRepo
 		]),
 		AccountModule
-    ],
+	],
 	controllers: [PostGroupControlller, ChatGroupControlller],
-    providers: [
+	providers: [
 		// Services
 		ChatGroupService,
-		PostGroupService, 
-
+		PostGroupService,
 	],
 	exports: [ChatGroupService, PostGroupService],
 })
-export class GroupModule {}
+export class GroupModule { }
