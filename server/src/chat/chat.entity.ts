@@ -1,6 +1,6 @@
 // @TODO : Modify
 
-import { 
+import {
 	Column,
 	JoinColumn,
 	JoinTable,
@@ -21,22 +21,25 @@ import { ChatGroup } from '@group/group.entity';
  */
 @Entity({ name: "chat" })
 export class Chat {
-	
+
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
 
 	@Column({ name: "writer", length: 36 })
 	writer_pk: string;
 
-	@ManyToOne( (type) => Account, (account) => account.pk )
+	@ManyToOne((type) => Account, (account) => account.pk)
 	@JoinColumn({ name: "writer" })
 	writer: Account;
 
 	@Column({ name: "group", length: 36 })
 	group_pk: string;
 
-	@ManyToOne( (type) => ChatGroup, (chat_group) => chat_group.chat, 
-				{ cascade: true, onDelete: "CASCADE" })
+	@ManyToOne(
+		(type) => ChatGroup,
+		(chat_group: ChatGroup) => chat_group.chat,
+		{ cascade: true, onDelete: "CASCADE" }
+	)
 	@JoinColumn({ name: "group" })
 	group: ChatGroup;
 
