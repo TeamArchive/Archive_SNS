@@ -1,5 +1,5 @@
 const SAVE_NEW_POST = "SAVE_NEW_POST";
-// const DELETE_POST   = "DELETE_POST";
+const DELETE_POST   = "DELETE_POST";
 const GET_POST_LIST = "GET_POST_LIST";
 
 
@@ -10,12 +10,12 @@ function saveNewPost(data) {
 	}
 }
 
-// function deletePostFromList(pk) {
-// 	return {
-// 		type: DELETE_POST,
-// 		pk
-// 	}
-// }
+function deletePostFromList(pk) {
+	return {
+		type: DELETE_POST,
+		pk
+	}
+}
 
 function getPostList(data) {
 	return {
@@ -34,12 +34,9 @@ function createPost(data) {
 			headers: {
 				Authorization: `Bearer ${AccessToken}`
 			},
-			body: JSON.stringify({
-				"title": "sd",
-				"text_content": "ss"
-			})
+			body: data
+			
 		})
-		.then(console.log("redux createPost AccessToken : ", AccessToken, "data : ", data))
 		.then(res => res.json())
 		.then(json => {
 			if(json.data) {
@@ -52,34 +49,34 @@ function createPost(data) {
     
 };
 
-// function deletePost( post_pk ) {
+function deletePost( post_pk ) {
 
-//     return (dispatch, getState) => {
-// 		const { account : { AccessToken }} = getState();
+    return (dispatch, getState) => {
+		const { account : { AccessToken }} = getState();
 		
-// 		fetch("/post/" + post_pk, {
-// 			method: "delete",
-// 			headers: {
-// 			"Content-Type": "application/json",
-// 			Authorization: `${AccessToken}`
-// 			}
-// 		})
-// 		.then(res => {
-// 			if(res.status == 200) {
-// 				dispatch(deletePostFromList(post_pk));
-// 			}
-// 		})
-// 		.catch(err => console.log(err));
-//     };
+		fetch("/post/" + post_pk, {
+			method: "delete",
+			headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${AccessToken}`
+			}
+		})
+		.then(res => {
+			if(res.status == 200) {
+				dispatch(deletePostFromList(post_pk));
+			}
+		})
+		.catch(err => console.log(err));
+    };
     
-// };
+};
 
 function postList(offset, limit, order_by) {
 
 	return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
-		fetch("/post", {
+		fetch("/post/list", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -93,7 +90,6 @@ function postList(offset, limit, order_by) {
 		})
 		.then(response => response.json())
 		.then(json => {
-			console.log(json.data)
 			if (json.data) {
 				dispatch(getPostList(json.data));
 			}
@@ -116,8 +112,8 @@ function reducer(state = initialState, action) {
 		case SAVE_NEW_POST:
 			return applySaveNewPost(state, action);
 
-        // case DELETE_POST:
-        //     return applyDeletePost(state, action);
+        case DELETE_POST:
+            return applyDeletePost(state, action);
 
 		case GET_POST_LIST:
 			return applyGetPostList(state, action);
@@ -128,8 +124,6 @@ function reducer(state = initialState, action) {
 }
 
 function applySaveNewPost(state, action) {
-	
-	const { data } = action;
 
 	return  {
 		...state,
@@ -137,17 +131,17 @@ function applySaveNewPost(state, action) {
 	}
 }
 
-// function applyDeletePost(state, action) {
-// 	const { pk } = action;
-// 	const { post_list } = state;
+function applyDeletePost(state, action) {
+	const { pk } = action;
+	const { post_list } = state;
 
-// 	post_list.splice(post_list.filter((elem) => elem.pk == pk), 1)
+	post_list.splice(post_list.filter((elem) => elem.pk == pk), 1)
 
-// 	return {
-// 		...state,
-// 		post_list : post_list
-// 	}
-// }
+	return {
+		...state,
+		post_list : post_list
+	}
+}
             
 function applyGetPostList(state, action) {
 
@@ -165,7 +159,7 @@ function applyGetPostList(state, action) {
 const actionCreators = {
 	createPost,
 	postList,
-	// deletePost
+	deletePost
 };
 
 export { actionCreators };

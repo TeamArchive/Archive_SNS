@@ -1,37 +1,37 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import './styles.css';
 
 const SignIn = (props) => (
 
-    <>
-        <h3> SignIn Page </h3>
-    <form
-        method="POST"
-        onSubmit={props.submit_handler}
-        >
-        <input 
-            type = 'email'
-            name = 'email'
-            placeholder = 'insert id'
-            value = {props.account_email}
-            onChange = {props.input_hander}
-            />
+    <div className="SignIn-entirety">
+        <form
+            className="box-form"
+            method="POST"
+            onSubmit={props.submit_handler}>
 
-        <input
-            type = 'password'
-            name = 'password'
-            placeholder = 'insert password'    
-            value = {props.account_pw}
-            onChange = {props.input_hander}
-            />
+            <input 
+                className="Auth-input-form"
+                type = 'email'
+                name = 'email'
+                placeholder = 'Email@archive.com'
+                value = {props.account_email}
+                onChange = {props.input_hander}/>
 
-        <input
-            type = 'submit'
-            value = 'click'
-            />
-    </form>
-            
-    </>
+            <input
+                className="Auth-input-form"
+                type = 'password'
+                name = 'password'
+                placeholder = 'password'    
+                value = {props.account_pw}
+                onChange = {props.input_hander}/>
+
+            <input
+                className='submit-btn'
+                type = 'submit'
+                value = 'Login'/>
+        </form>     
+    </div>
 );  
 
 SignIn.propTypes = {

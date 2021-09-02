@@ -15,8 +15,8 @@ function Container(props, content) {
 	
 	return (
 		<Home
-			User_hanlder = {__User_handler__}
-			logout_handler = {__logout_handler__}
+			User_hanlder 	= {__User_handler__}
+			logout_handler 	= {__logout_handler__}
 		/>
 	);
 }

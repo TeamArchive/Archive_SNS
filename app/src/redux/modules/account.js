@@ -153,6 +153,7 @@ const actionCreators = {
 	defaultLogin,
 	createAccount,
 	logout,
+	passData
 	
 };
 

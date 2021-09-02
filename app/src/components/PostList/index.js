@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch, props) => {
         postList: (offset, limit, order_by) => {
             dispatch(PostAct.postList(offset, limit, order_by));
         },
-
+        
         deletePost : ( post_pk ) => {
             dispatch(PostAct.deletePost( post_pk ));
             console.log("deletePost index run")

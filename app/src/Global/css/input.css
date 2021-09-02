@@ -1,0 +1,8 @@
+.Auth-input-form{
+    width: 100%;
+    height: 3vw;
+
+    border: solid 0.5px rgb(232, 232, 232);
+    
+    padding-left: 1vw;
+}

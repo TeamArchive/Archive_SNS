@@ -1,15 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Post from "./presenter";
 
 function Container(props, content) {
+
+	const [upload, setUpload] = useState(-1);
 
 	const PostInfoInit = {
 		title				: '',
 		text_content		: '',
 	};
 
-	const [PostInfo, setPostInfo] = useState(PostInfoInit);
+    const [PostInfo, setPostInfo] = useState(PostInfoInit);
+
+	useEffect(() => {
+
+		if(upload == props.new_post_count) {
+			setUpload(-1);
+
+			setPostInfo(PostInfoInit);
+		}
+		
+	}, [props.new_post_count])
+	
+	const __text_input_handler__ = event => {
+		const { value, name } = event.target;
+		setPostInfo({
+			...PostInfo,
+			[name]: value
+		});
+    };
+
+	const __submit_handler__ = event => {
+		event.preventDefault(); 
+		setUpload(props.new_post_count + 1);
+	};
 
 	const __uploader__ = (img) => {
 		const data = new FormData();
@@ -23,28 +48,13 @@ function Container(props, content) {
 		props.createPost(data);
 	}
 
-	const __text_input_handler__ = event => {
-		const { value, name } = event.target;
-		setPostInfo({
-			...PostInfo,
-			[name]: value
-		});
-    };
-
-	const __submit_handler__ = event => {
-		event.preventDefault(); 
-		console.log("new_Post_input_run ...")
-		console.log(PostInfo);
-		props.createPost(PostInfo);
-
-	};
-
 	return (
 		<Post
 			text_input_handler 		= {__text_input_handler__}
 			submit_handler 			= {__submit_handler__} 
 			uploader				= {__uploader__}
 
+			upload					= {upload}
 			post_info 				= {PostInfo}
 		/>
 	);
