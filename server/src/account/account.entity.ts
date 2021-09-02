@@ -38,7 +38,11 @@ export class Account {
 	@Column({ name: "profile_image", length: 36, nullable: true })
 	profile_image_pk: string | null;
 
-	@OneToOne( (type) => Image, { nullable: true } )
+	@OneToOne((type) => Image, { 
+		nullable: true, 
+		cascade: true,
+		onDelete: "CASCADE"
+	})
 	@JoinColumn({ name: "profile_image" })
 	profile_image: Image | null;
 
