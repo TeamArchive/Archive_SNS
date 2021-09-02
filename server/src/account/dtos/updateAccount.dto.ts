@@ -36,13 +36,7 @@ export class UpdateAccountDTO {
 	@ApiProperty()
 	@Length(MIN_PW_LEN, MAX_PW_LEN)
 	@IsString()
-	public password: string;
-
-	@ApiProperty()
-	public profile_image: Image | null;
-
-	@ApiProperty()
-	public profile_img_url: string | null;
+	public password: string | null;
 
 	@ApiProperty()
 	@IsOptional()
@@ -53,14 +47,12 @@ export class UpdateAccountDTO {
 		const { 
 			password, 
 			name, 
-			profile_image,
 			status_msg
 		} = accountDTO;
 
 		const new_account = new Account;
 		new_account.name = sanitizeHtml(name);
 		new_account.password = sanitizeHtml(password);
-		new_account.profile_image = profile_image;
 		new_account.status_msg = sanitizeHtml(status_msg);
 
 		return new_account;
@@ -72,7 +64,6 @@ export class UpdateAccountDTO {
 		const { 
 			name,
 			password, 
-			profile_image, 
 			status_msg
 		} = accountDTO;
 		if(name) 
@@ -80,9 +71,6 @@ export class UpdateAccountDTO {
 		
 		if(password) 
 			target.entity.password = sanitizeHtml(password);
-		
-		if(profile_image)
-			target.entity.profile_image = profile_image;
 
 		if(status_msg)
 			target.entity.status_msg = sanitizeHtml(status_msg);
