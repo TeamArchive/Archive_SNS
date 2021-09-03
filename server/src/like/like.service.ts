@@ -25,7 +25,7 @@ abstract class CommonLikeService<
 		giver_pk : string,
 		target_pk : string
 	) : Promise<boolean> {
-		const old_like = this.like_repo.GetLike(giver_pk, target_pk);
+		const old_like = await this.like_repo.GetLike(giver_pk, target_pk);
 		return old_like ? true : false;
 	}
 
@@ -53,11 +53,11 @@ abstract class CommonLikeService<
 			return undefined;
 
 		// Find like row which satisfying condition
-		const old_like = this.like_repo.GetLike(giver_pk, target_pk);
+		const old_like = await this.like_repo.GetLike(giver_pk, target_pk);
 
 		// ( OFF ) If exist row => Delete it 
 		if(old_like) 
-			this.like_repo.delete({ pk: old_like.pk});
+			await this.like_repo.delete({ pk: old_like.pk});		
 
 		// ( ON ) If not exist => Make new one
 		else 
@@ -65,6 +65,7 @@ abstract class CommonLikeService<
 
 		// Save n_like at Target
 		target.n_like = await this.like_repo.GetCount(target_pk);
+
 		return await this.target_repo.save(target)
 	}
 }
@@ -73,7 +74,7 @@ abstract class CommonLikeService<
 export class PostLikeService extends CommonLikeService<PostLikeRepo, PostLike>{
 
 	constructor(
-		@InjectRepository(PostLike) like_repo : PostLikeRepo,
+		like_repo : PostLikeRepo,
 		private post_repo : PostRepo
 	) {
 		super( like_repo, post_repo );
@@ -85,7 +86,7 @@ export class PostLikeService extends CommonLikeService<PostLikeRepo, PostLike>{
 export class CommentLikeService extends CommonLikeService<CommentLikeRepo, CommentLike>{
 
 	constructor(
-		@InjectRepository(CommentLike) like_repo : CommentLikeRepo,
+		like_repo : CommentLikeRepo,
 		private post_repo : PostRepo
 	) {
 		super( like_repo, post_repo );

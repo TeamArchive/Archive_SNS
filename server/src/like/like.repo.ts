@@ -38,7 +38,7 @@ export class PostLikeRepo extends Repository<PostLike> {
 	public async GetWho(target_pk: string, limit: number) {
 		return super.createQueryBuilder("PostLike")
 			.where("post_pk = :target_pk", {target_pk})
-			.orderBy("like.createdAt", "DESC")
+			.orderBy("created_at", "DESC")
 			.take(limit)
 			.getMany();
 	}
