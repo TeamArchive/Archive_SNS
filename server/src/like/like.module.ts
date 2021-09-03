@@ -10,9 +10,13 @@ import { CommentLikeService, PostLikeService } from '@like/like.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([PostLike, CommentLike]),
-        TypeOrmModule.forFeature([PostRepo]),
-        TypeOrmModule.forFeature([PostLikeRepo, CommentLikeRepo]),
+        TypeOrmModule.forFeature([
+            PostLike, 
+            CommentLike, 
+            PostLikeRepo, 
+            CommentLikeRepo, 
+            PostRepo
+        ]),
         PostModule
     ],
     controllers: [PostLikeControl, CommentLikeControl],

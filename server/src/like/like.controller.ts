@@ -7,12 +7,13 @@ import { CommentLikeService, PostLikeService } from './like.service';
 @Controller('/postlike')
 export class PostLikeControl {
 
-    constructor(private post_like_service: PostLikeService) { }
+    constructor( private post_like_service: PostLikeService ) { }
 
     @Get('/count/:post_pk')
     public async CountLike(
         @Param('post_pk') post_pk: string,
     ) {
+        console.log("1 : ", post_pk);
         const CountLike_Result =
             await this.post_like_service.CountLike(post_pk);
         return { data: CountLike_Result };
