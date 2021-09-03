@@ -6,16 +6,12 @@ const MAX_SIGNUP_STAGE = 2
 
 const SignUp = (props) => (
     <React.Fragment>
-        <h3> SignUp </h3>
-
         <form
-            className='signIn-form'
+            className='SignIn-entirety'
             onSubmit={props.submit_handler}>
 
         { props.current_stage === 1 && (
             <React.Fragment>
-                <h5> User form (1/2) </h5>
-
                 <input 
                     className="Auth-input-form"
                     type = 'email'
@@ -52,10 +48,8 @@ const SignUp = (props) => (
 
         { props.current_stage === 2 && (
             <React.Fragment>
-                <h5> User form (2/2) </h5>
-
                 <input
-                    className="input-form" 
+                    className="Auth-input-form" 
                     type = 'text'
                     name = 'name'
                     placeholder = 'alias'    
@@ -66,7 +60,6 @@ const SignUp = (props) => (
                     className="ImgUploaderFrom">
 
                     <div className="ImgPreview">
-                        test:
                         <img src={props.account_img_preview} alt='preview_img' />
                     </div>
 
@@ -80,12 +73,14 @@ const SignUp = (props) => (
 
                 <button
                     type='button'
+                    className="submit-btn"
                     value='back'
                     onClick={props.back_stage}>
                         go back		
                 </button>
 
                 <input
+                    className="submit-btn"
                     type='submit'
                     value='Sign up'/>
             </React.Fragment>
