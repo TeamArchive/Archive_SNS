@@ -10,6 +10,7 @@ import post from "./modules/post"
 import group from "./modules/group"
 import comment from "./modules/comment"
 import socket from './modules/socket'
+import chat from './modules/chat'
 
 const env = process.env.NODE_ENV;
 const history = createBrowserHistory();
@@ -26,6 +27,7 @@ const reducer = combineReducers({
     post,
     group,
     comment,
+    chat,
     router : connectRouter(history),
 });
 

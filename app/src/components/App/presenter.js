@@ -6,6 +6,7 @@ import Navigation from "../Navigation";
 
 import Auth from '../Auth';
 import Home from '../Home';
+import Chat from '../Chat';
 
 const App = props => [
     props.isLoggedIn ? <PrivateRoutes key={1} /> : <PublicRoutes key={1} />,
@@ -20,8 +21,11 @@ const PrivateRoutes = props => (
 
 <Route>
     <Navigation />
+    <h1>a</h1>
+    <h1>a</h1>
     <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/chat" component={Chat} />
     </Switch>
 </Route>
 );
