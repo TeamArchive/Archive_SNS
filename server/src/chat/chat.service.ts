@@ -9,11 +9,13 @@ import { ChatDTO } from '@chat/chat.dto';
 import { ChatGroupService } from '@group/group.service';
 import { GroupParticipantDTO } from '@group/group.dto';
 
+@Injectable()
 export class ChatService {
 
 	constructor(
-		@InjectRepository(Chat) private chat_repo: ChatRepo,
-		private group_service: ChatGroupService
+		// @InjectRepository(Chat) private chat_repo: ChatRepo,
+		private chat_repo: ChatRepo,
+		private chat_group_service: ChatGroupService
 	) { }
 
 	/**
@@ -27,16 +29,16 @@ export class ChatService {
 	public async send(
 		writer_pk: string,
 		dto: ChatDTO
-	): Promise <Chat | undefined> {
-		
+	): Promise<Chat | undefined> {
+
 		/**
 		 * < Check is it exist >
 		 */
-		const particiapnt = await this.group_service.isParticipant({
+		const particiapnt = await this.chat_group_service.isParticipant({
 			participant_pk: writer_pk,
 			group_pk: dto.group_pk
 		} as GroupParticipantDTO);
-		if(!particiapnt)
+		if (!particiapnt)
 			return undefined;
 
 		const ent = await ChatDTO.toEntity(dto);
@@ -55,7 +57,7 @@ export class ChatService {
 	 * @param chat_pk : Chat Message's PK
 	 * @returns 
 	 */
-	public async delete (
+	public async delete(
 		writer_pk: string,
 		chat_pk: string
 	) {
@@ -63,7 +65,7 @@ export class ChatService {
 		 * < Check is it exist && is real this chat writer >
 		 */
 		const chat = await this.chat_repo.findOne(chat_pk);
-		if(!chat || chat.writer_pk != writer_pk)
+		if (!chat || chat.writer_pk != writer_pk)
 			return undefined
 
 		/**
@@ -72,6 +74,31 @@ export class ChatService {
 		chat.is_deleted = true;
 
 		return await this.chat_repo.save(chat);
+	}
+
+	/**
+	 * Get previous chat history
+	 * 이전 체팅 내역 가져오기
+	 */
+	public async getHistory(
+		viewer_pk: string,
+		group_pk: string,
+		offset: number,
+		limit: number,
+	): Promise<Chat[] | undefined> {
+
+		console.log(this.chat_group_service)
+
+		if (
+			await await this.chat_group_service.isParticipant({
+				participant_pk: viewer_pk,
+				group_pk: group_pk
+			} as GroupParticipantDTO)
+		) {
+			return this.chat_repo.getChat(group_pk, offset, limit);
+		}
+
+		return undefined;
 	}
 
 }

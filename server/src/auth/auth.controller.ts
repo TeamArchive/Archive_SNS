@@ -1,5 +1,6 @@
-import { 
-    Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards} from '@nestjs/common';
+import {
+    Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UseGuards
+} from '@nestjs/common';
 // import { ImageDTO } from '../image/image.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { GoogleStrategy, JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
@@ -12,14 +13,21 @@ export class AuthController {
         private authService : AuthService,
     ) {}
     
+    /**
+     * 로그인 한다.
+     * @param req 
+     * @returns 
+     */
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     async Login(
         @Req() req  // req.user = account
-    ){
-        const access_token = await this.authService.AccessTokenGenerator(req.user);    
+    ) {
+        const access_token = await this.authService.AccessTokenGenerator(req.user);
         const refresh_token = await this.authService.RefreshTokenGenerator(req.user);
-        if(!access_token || !refresh_token) throw new UnauthorizedException();
+
+        if (!access_token || !refresh_token)
+            throw new UnauthorizedException();
 
         await this.authService.SaveRefreshTokenDirectly(req.user, refresh_token)
 
@@ -32,18 +40,27 @@ export class AuthController {
         }
     }
 
+    /**
+     * 로그아웃 한다.
+     * @param req 
+     * @returns 
+     */
     @ApiBearerAuth('access-token')
     @Post('/logout')
     @UseGuards(JwtAuthGuard)
     async Logout(
         @Req() req // req.user = account
-    ){
+    ) {
         return await this.authService.removeRefreshToken(req.user.pk);
     }
 
+    /**
+     * 구글로그인 페이지로 간다.
+     * @param req 
+     */
     @Get('google')  // 1
     @UseGuards(GoogleStrategy)
-    async googleAuth(@Req() req) {}
+    async googleAuth(@Req() req) { }
 
     @Get('google/callback') // 2
     @UseGuards(GoogleStrategy)
@@ -53,7 +70,7 @@ export class AuthController {
         console.log("google account:", req.user);
         const google_name = req.user.lastName + req.user.firstName
         const refresh_token = await this.authService.RefreshTokenGenerator(google_name);
-        if(!refresh_token) throw new UnauthorizedException();
+        if (!refresh_token) throw new UnauthorizedException();
 
         await this.authService.googleSaveRefreshToken(req.user, refresh_token)
 
@@ -70,9 +87,9 @@ export class AuthController {
     @Post('/validate_refresh_token')
     async ValidateRefreshToken(
         @Req() req  // req.user = account
-    ){
+    ) {
         const validateRefreshToken_result = await this.authService.ValidateRefreshToken(
-            req.user.pk, 
+            req.user.pk,
             req.user.refresh_token
         );
         return { data: validateRefreshToken_result };

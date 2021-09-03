@@ -13,12 +13,13 @@ import {
 
 } from "typeorm";
 import { IsNotEmpty } from "class-validator";
-import { PostImage } from "src/image/image.entity";
-import { Account } from "src/account/account.entity";
+import { PostImage } from "@image/image.entity";
+import { Account } from "@account/account.entity";
+import { PostGroup } from "@group/group.entity";
 
 @Entity({ name: "post" })
 export class Post {
-	
+
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
 
@@ -41,7 +42,7 @@ export class Post {
 	@JoinColumn({ name: "writer" })
 	writer: Account;
 
-	@OneToMany( (type) => PostImage, (PostImage) => PostImage.post )
+	@OneToMany((type) => PostImage, (PostImage) => PostImage.post)
 	image: PostImage[];
 
 	@Column({ default: 0 })
@@ -56,13 +57,22 @@ export class Post {
 	@UpdateDateColumn({ name: "updated_at" })
 	updatedAt: Date;
 
-	@Column({ 
-		default: 0, 
+	@Column({
+		default: 0,
 		comment: "popularly score"
 	})
 	q_score: number;
-	
-	group: any;
+
+	@Column({ name: "group", length: 36, nullable: true })
+	group_pk: string;
+
+	@ManyToOne(
+		(type) => PostGroup,
+		(post_group: PostGroup) => post_group.post,
+		{ cascade: true, onDelete: "CASCADE" }
+	)
+	@JoinColumn({ name: "group" })
+	group: PostGroup;
 
 }
 

@@ -1,9 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { createImageURL } from "@root/middleware/multerOptions";
+import { createImageURL } from "@middleware/multerOptions";
 
 @Injectable()
 export default class UploadService {
 
+    /**
+     * 여러 파일을 저장한다.
+     * @param files 
+     * @returns 
+     */
     public uploadFiles(files: File[]): string[] {
         const generatedFiles: string[] = [];
 
@@ -14,4 +19,6 @@ export default class UploadService {
 
         return generatedFiles;
     }
+
+
 }

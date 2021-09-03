@@ -8,30 +8,38 @@ export class PostDTO {
 	public title: string;
 
 	@ApiProperty()
-	public text_content: string; 
+	public group_pk: string;
 
-	public static toEntity( postDTO: PostDTO ): Post {
-		const { title, text_content } = postDTO;
+	@ApiProperty()
+	public text_content: string;
+
+	public static toEntity(postDTO: PostDTO): Post {
+		const { title, text_content, group_pk } = postDTO;
 
 		const newPost = new Post();
-		
+
 		newPost.title = sanitizeHtml(title);
 		newPost.text_content = sanitizeHtml(text_content);
+		if(group_pk)
+			newPost.group_pk = sanitizeHtml(group_pk);
 
 		return newPost;
 	}
 
 	public static updateEntity(
-		target: { entity: Post },  
+		target: { entity: Post },
 		dto: PostDTO
 	) {
-		const { title, text_content } = dto;
+		const { title, text_content, group_pk } = dto;
 
-		if( title )
+		if (title)
 			target.entity.title = sanitizeHtml(title);
 
-		if( text_content )
+		if (text_content)
 			target.entity.text_content = sanitizeHtml(text_content);
+
+		if (group_pk)
+			target.entity.group_pk = sanitizeHtml(group_pk);
 
 		return target;
 	}

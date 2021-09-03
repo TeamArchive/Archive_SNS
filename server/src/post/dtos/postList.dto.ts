@@ -1,5 +1,5 @@
-import { 
-    IsNotEmpty, Length, IsEmail, IsString, IsOptional 
+import {
+	IsNotEmpty, Length, IsEmail, IsString, IsOptional
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -13,6 +13,8 @@ const MIN_ORDER_BY_LEN = 1;
 const MAX_ORDER_BY_LEN = 64;
 
 export class PostListDTO {
+
+	public group_pk: string | null;
 
 	@ApiProperty()
 	@Length(MIN_OFFSET_LEN, MAX_OFFSET_LEN)

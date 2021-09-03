@@ -11,9 +11,9 @@ import { JwtAuthGuard } from '@auth/auth.guard';
 @ApiBearerAuth('access-token')
 export class CommentController {
 
-	constructor (
-		private comment_service : CommentService, 
-		private recomment_service : RecommentService
+	constructor(
+		private comment_service: CommentService,
+		private recomment_service: RecommentService
 	) { }
 
 	@Post(':post_pk')
@@ -24,32 +24,33 @@ export class CommentController {
 		@Req() req,
 	) {
 		const account = req.user;
-		dto.post_pk   = target_post_pk
+		dto.post_pk = target_post_pk
 
 		const result = await this.comment_service.create(account.pk, dto);
 
 		return { data: result };
 	}
 
-	@Post(':post_pk/:comment_pk')
+	@Post(':comment_pk/re')
 	@UseGuards(JwtAuthGuard)
 	public async createRecomment(
-		@Param("post_pk") target_post_pk: string,
-		@Param("post_pk") target_comment_pk: string,
+		@Param("comment_pk") comment_pk: string,
 		@Body() dto: RecommentDTO,
 		@Req() req,
 	) {
 		const account = req.user;
-		dto.post_pk   = target_post_pk
+		dto.parent_pk = comment_pk;
 
-		const result = await this.comment_service.create(account.pk, dto);
+		const result = await this.recomment_service.create(account.pk, dto);
 
 		return { data: result };
 	}
 
+
+
 	@Get(':post_pk')
 	@UseGuards(JwtAuthGuard)
-	public async getCommentList( 
+	public async getCommentList(
 		@Param("post_pk") target_post_pk: string,
 		@Query('offset') offset: number,
 		@Query('limit') limit: number,
@@ -65,10 +66,10 @@ export class CommentController {
 		return { data: result };
 	}
 
-	@Get(':comment_pk')
+	@Get(':comment_pk/re')
 	@UseGuards(JwtAuthGuard)
 	public async getRecommentList(
-		@Param("comment_pk") target_comment_pk: string,
+		@Param("comment_pk") comment_pk: string,
 		@Query('offset') offset: number,
 		@Query('limit') limit: number,
 		@Query('order_by') order_by: string,
@@ -76,45 +77,45 @@ export class CommentController {
 	) {
 		const account = req.user;
 
-		const result = await this.comment_service.getList(
-			target_comment_pk, offset, limit, order_by
+		const result = await this.recomment_service.getList(
+			comment_pk, offset, limit, order_by
 		);
 
 		return { data: result };
 	}
 
-	@Put(':post_pk/:comment_pk')
+
+
+	@Put(':comment_pk')
 	@UseGuards(JwtAuthGuard)
 	public async update(
-		@Param("post_pk") target_post_pk: string,
 		@Param("comment_pk") target_comment_pk: string,
 		@Body() dto: CommentDTO,
-        @Req() req,
-    ){
-        const account 	= req.user;
-		dto.post_pk 	= target_post_pk;
-		dto.comment_pk 	= target_comment_pk;
+		@Req() req,
+	) {
+		const account = req.user;
+		dto.comment_pk = target_comment_pk;
 
-        const result = await this.comment_service.update( 
+		const result = await this.comment_service.update(
 			account.pk, dto
 		);
-        
-		return { data: result };
-    }
 
-	@Delete(':target_pk')
+		return { data: result };
+	}
+
+	@Delete(':comment_pk')
 	@UseGuards(JwtAuthGuard)
-    async delete(
-		@Param("target_pk") target_pk: string,
-        @Req() req,
-    ){
+	async delete(
+		@Param("comment_pk") comment_pk: string,
+		@Req() req,
+	) {
 		const account = req.user;
 
-        const result = await this.comment_service.delete( 
-			account.pk, target_pk
+		const result = await this.comment_service.delete(
+			account.pk, comment_pk
 		);
-        
+
 		return { data: result };
-    }
+	}
 
 }
