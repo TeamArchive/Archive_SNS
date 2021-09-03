@@ -95,6 +95,15 @@ abstract class GroupController<T extends ST> {
 		return { data: result };
 	}
 
+	@Get('/:group_pk/participant')
+	public async getParticipant(
+		@Param("group_pk") group_pk: string,
+	) {
+		const result = await this.group_service.getParticipant(group_pk);
+
+		return { data: result };
+	}
+
 }
 
 @Controller('post_group')

@@ -23,9 +23,9 @@ export class PostRepo extends Repository<Post> {
 	 * @param limit 
 	 * @param order_by : order result by ~/shared/OrderCodes.json
 	 */
-	public async GetPost( postlistDTO: PostListDTO ) {		
-		let order_by_query = ""; 
-		switch(postlistDTO.order_by) {
+	public async GetPost(postlistDTO: PostListDTO) {
+		let order_by_query = "";
+		switch (postlistDTO.order_by) {
 			case 1:
 			default:
 				order_by_query = "post.createAt";
@@ -38,6 +38,24 @@ export class PostRepo extends Repository<Post> {
 			.orderBy("post.createdAt", "DESC")
 			.skip(0)
 			.take(10)
+			.getMany();
+	}
+
+	/**
+	 *  Get list that short post information
+	 * 
+	 * @param offset 
+	 * @param limit 
+	 * @param order_by : order result by ~/shared/OrderCodes.json
+	 */
+	public async GetGroupPost(group_pk: string, ownListDTO: OwnListDTO) {
+
+		return this.createQueryBuilder("post")
+			.select(ShortInfoSelect)
+			.where("post.group_pk = :group_pk", { group_pk })
+			.orderBy("post.createdAt", "DESC")
+			.skip(ownListDTO.offset)
+			.take(ownListDTO.limit)
 			.getMany();
 	}
 

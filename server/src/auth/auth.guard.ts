@@ -37,7 +37,12 @@ export class WsJwtGuard implements CanActivate {
 			if (!account)
 				return false;
 
-			switched.getData()['writer_id'] = account.sub;
+			const data = switched.getData();
+
+			if (switched.getData())
+				data['writer_pk'] = account.sub;
+			else
+				context.getArgs()[1] = account.sub;
 
 			return true;
 

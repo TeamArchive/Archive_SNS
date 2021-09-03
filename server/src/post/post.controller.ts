@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, Session, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, Session, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
 import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -35,17 +35,19 @@ export class PostController {
     async CreatePost(
         @Body() postDTO: PostDTO,
         @Req() req, // req.user = pk, email
-        @UploadedFiles() files: File[]
+        @UploadedFiles() files: File[] | undefined
     ) {
-        const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
-        console.log("uploadedFiles : ", uploadedFiles);
 
         const img_dto = [];
-        uploadedFiles.map(img_path => {
-            const new_dto = new ImageDTO;
-            new_dto.url = img_path;
-            img_dto.push(new_dto);
-        });
+
+        if (files) {
+            const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
+            uploadedFiles.map(img_path => {
+                const new_dto = new ImageDTO;
+                new_dto.url = img_path;
+                img_dto.push(new_dto);
+            });
+        }
 
         const createPost_result = await this.postService.CreatePost(
             req.user.pk,
@@ -127,6 +129,14 @@ export class PostController {
         @Body() postListDTO: PostListDTO,
     ) {
         return { data: await this.postService.GetPostList(postListDTO) };
+    }
+
+    @Get("/group/:group_pk")
+    async GetGroupPost(
+        @Param('group_pk') group_pk: string,
+        @Query() ownListDTO: OwnListDTO,
+    ) {
+        return { data: await this.postService.GetGroupList(group_pk, ownListDTO) };
     }
 
     @Get("/list/:writer_pk")

@@ -1,0 +1,9 @@
+.box-form{
+    height: 100%;
+    width: 20rem;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    row-gap: 15px;
+    flex-direction: column;
+}

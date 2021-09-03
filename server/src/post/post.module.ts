@@ -10,6 +10,7 @@ import { Image } from '@image/image.entity';
 import { ImageModule } from '@image/image.module';
 import UploadService from '@image/upload.service';
 import { PostImageRepo } from '@image/image.repo';
+import { GroupModule } from '@group/group.module';
 
 @Module({
     imports: [
@@ -19,7 +20,8 @@ import { PostImageRepo } from '@image/image.repo';
             PostRepo,
             PostImageRepo
         ]),
-        ImageModule
+        ImageModule,
+        GroupModule
     ],
     controllers: [PostController],
     providers: [PostService, UploadService],

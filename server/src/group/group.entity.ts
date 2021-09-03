@@ -3,8 +3,9 @@ import { IsNotEmpty } from "class-validator";
 
 import { Chat } from '@chat/chat.entity';
 import { Account } from "@account/account.entity";
+import { Post } from "@post/post.entity";
 
-@Entity({ name : "group" })
+@Entity({ name: "group" })
 @TableInheritance({ column: { type: "varchar", name: "type" } })
 export class Group {
 
@@ -15,7 +16,7 @@ export class Group {
 	title: string;
 
 	@OneToMany(
-		type => GroupParticipant, 
+		type => GroupParticipant,
 		(group_participant) => group_participant.participant
 	)
 	participant: GroupParticipant[];
@@ -37,12 +38,12 @@ export class ChatGroup extends Group {
 
 @ChildEntity("post_group")
 export class PostGroup extends Group {
-	
+
 	@Column({ name: "is_private" })
 	is_private: boolean;
 
-	// @OneToMany((type) => Post, (post) => post.group)
-	// post: Post[];
+	@OneToMany((type) => Post, (post: Post) => post.group)
+	post: Post[];
 
 };
 
@@ -51,12 +52,12 @@ export class GroupParticipant {
 
 	@PrimaryGeneratedColumn("uuid")
 	pk: string;
-	
+
 	@IsNotEmpty()
 	@Column({ name: "participant", length: 36, nullable: false })
 	participant_pk: string;
 
-	@ManyToOne((type) => Account, (account:Account) => account.pk, { onDelete: "CASCADE" })
+	@ManyToOne((type) => Account, (account: Account) => account.pk, { onDelete: "CASCADE" })
 	@JoinColumn({ name: "participant" })
 	participant: Account;
 
@@ -68,7 +69,7 @@ export class GroupParticipant {
 	@JoinColumn({ name: "group" })
 	group: Group;
 
-	@Column({ 
+	@Column({
 		name: "rank", default: 0,
 		comment: "high number high rank"
 	})
