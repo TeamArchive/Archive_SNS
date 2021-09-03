@@ -9,16 +9,26 @@ export class PostLikeControl {
 
     constructor( private post_like_service: PostLikeService ) { }
 
+    /**
+     * 좋아요 수를 조회한다.
+     * @param post_pk 
+     * @returns 
+     */
     @Get('/count/:post_pk')
     public async CountLike(
         @Param('post_pk') post_pk: string,
     ) {
-        console.log("1 : ", post_pk);
         const CountLike_Result =
             await this.post_like_service.CountLike(post_pk);
         return { data: CountLike_Result };
     }
 
+    /**
+     * 좋아요 누른 유저 목록을 조회한다.
+     * @param post_pk 
+     * @param limit 
+     * @returns 
+     */
     @Get('/who/:post_pk/:limit')
     public async WhoLike(
         @Param('post_pk') post_pk: string,
@@ -31,6 +41,12 @@ export class PostLikeControl {
         return { data: WhoLike_Result };
     }
 
+    /**
+     * 본인이 좋아요를 눌렀는가 조회한다.
+     * @param post_pk 
+     * @param req 
+     * @returns 
+     */
     @Get('/islike/:post_pk')
     @UseGuards(JwtAuthGuard)
     public async IsLike(
@@ -44,6 +60,12 @@ export class PostLikeControl {
         return { data: IsLike_Result };
     }
 
+    /**
+     * 좋아요를 Toggle한다.
+     * @param post_pk 
+     * @param req 
+     * @returns 
+     */
     @Post('/toggle/:post_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(
