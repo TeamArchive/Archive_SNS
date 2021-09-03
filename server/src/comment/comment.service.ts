@@ -75,8 +75,11 @@ class CommentServiceImpl <RepoType extends RT, EntType extends ET> {
 			return 400;
 		
 		else if( target.writer_pk === writer_pk ) {
-			await this.comment_repo.delete(target);
-			return true;
+			const result = await this.comment_repo.delete(target.pk);
+			if(result)
+				return true;
+			
+			return 500;
 		}
 		else return false;
 	}
