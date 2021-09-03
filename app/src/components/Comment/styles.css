@@ -1,0 +1,21 @@
+.Comment{
+    padding: 2%;
+}
+
+.comment_input_form{
+    border: 0;
+    width: 80%;
+    border-radius: 20px;
+    padding: 2%;
+    color: white;
+    background-color: rgb(220, 220, 220);
+}
+
+.comment-btn{
+    border: 0;
+    margin-left: 1%;
+    padding: 2%;
+    border-radius: 20px;
+    color: white;
+    background-color: royalblue;
+}

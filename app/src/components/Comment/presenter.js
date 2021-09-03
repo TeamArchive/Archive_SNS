@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import './styles.css'
 
 export const CommentView = props => (
     <React.Fragment>
@@ -23,12 +24,13 @@ const Comment = props => (
             method="post">
 
             <input 
+                className="comment_input_form"
                 name="comment"
                 placeholder = "댓글을 입력해주세요." 
                 value={props.comment}
                 onChange = {props.comment_input_handler} />
             
-            <input type="submit"/>
+            <input className="comment-btn" type="submit" value="댓글"/>
         </form>
         { props.draw_handler() }
     </div>

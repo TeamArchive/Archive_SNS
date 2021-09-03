@@ -1,7 +1,5 @@
 .postList_form{
-    background-color: white; 
-    border-radius: 0.3vw;
-    height: 15vw;
+    height: 50%;
     margin-bottom: 3vw;
 }
 
@@ -9,45 +7,46 @@
     width: 40vw;
 }
 
+.post_list-top{
+    background-color: rgb(220, 220, 220);
+    padding: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
 .post-content-form{
     display: flex;
     flex-direction: column;
     height: 100%;
+    border-radius: 1vw;
+    background-color: white;
+    box-shadow: 0px 10px 10px 1px rgba(212, 212, 212, 0.521);
 }
 
-.top{
-    display: flex;
-    flex-direction: row;
-    padding: 0.5vw;
-    background-color: rgb(245, 245, 245);
-}
-
-.title{
+.post_title{
     font-weight: bolder;
     width: 70%;
 }
 
-.writer{
+.post_writer{
     font-weight: normal;
-    width: 30%;
+    float: right;
 }
 
-.bottem{
+.post-bottem{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     float: right;
 }
 
-.btn{
-    width: 4rem;
-    height: 2rem;
-    border: none;
-    background: none;
-}
-
 /* center */
 .textarea{
     float: left;
     padding: 1vw;
+}
+
+
+.comment_form{
+    
 }

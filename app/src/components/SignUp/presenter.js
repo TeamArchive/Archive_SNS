@@ -56,19 +56,20 @@ const SignUp = (props) => (
                     value = {props.account_alias}
                     onChange = {props.String_input_handler}/>
 
-                <div
-                    className="ImgUploaderFrom">
-
+                <div className="ImgUploaderFrom">
                     <div className="ImgPreview">
-                        <img src={props.account_img_preview} alt='preview_img' />
+                        <img src={props.account_img_preview} />
                     </div>
-
-                    <input
-                        type="file"
-                        accept='image/jpg, impge/png, image/jpeg, image/gif'
-                        name="img" 
-                        value={props.account_img}
-                        onChange={props.img_input_handler} />
+                    <span>프로필 이미지 선택</span>
+                    <div class="file_box"> 
+                        <input
+                            className="file_upload-btn"
+                            type="file"
+                            accept='image/jpg, impge/png, image/jpeg, image/gif'
+                            name="img" 
+                            value={props.account_img}
+                            onChange={props.img_input_handler} />
+                    </div>
 				</div>
 
                 <button

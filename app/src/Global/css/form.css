@@ -5,3 +5,7 @@
     text-align: center;
     align-items: center;
 }
+
+.file_box{
+    float: left;
+}

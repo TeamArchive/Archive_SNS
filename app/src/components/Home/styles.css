@@ -1,4 +1,11 @@
 /* Top-bar-form */
+.Home_form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(245, 245, 245);
+}
+
 .Top-bar{
     position: fixed;
     display: flex;
@@ -8,7 +15,7 @@
     background-color: white;
     width: 100%;
     margin-bottom: 1vw;
-    box-shadow: 0px 10px 10px 1px rgba(212, 212, 212, 0.521);
+    box-shadow: 0px 1px 5px 1px rgba(212, 212, 212, 0.521);
 }
 
 .logo{
@@ -41,20 +48,14 @@
     text-align: center;
 }
 
-.letf_content_form{
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    align-items: center;
-    height: 100%;
-}
-
 .right_content_form{
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    align-items: center;
-    height: 100%;
+    position: fixed;
+    padding: 1rem;
+    height: 80%;
+    top: 12%;
+    left: 80%;
+    background-color: white;
+    box-shadow: 0px 10px 10px 1px rgba(212, 212, 212, 0.521);
 }
 
 .action_btn, .action_btn:link {
@@ -88,10 +89,10 @@
     padding: 10vw 3vw;
 }
 
-
 /* center-form */
 .center-form{
-    margin-left: 25vw;
-    width: 50vw;
+    width: 50%;
     height: 100%;
+    margin-left: 25%;
+    margin-right: 25%;
 }

@@ -10,9 +10,7 @@ export const GroupView = props => (
 
 const GroupHome = props => (
     <div className = "groupHome">
-        <br/>
-        <h1> Group Page </h1>
-
+        <h1>Group</h1>
         <div>
             <div>
                 <input
@@ -21,14 +19,12 @@ const GroupHome = props => (
                     value = "Find" />
             </div>
             
-
             <div>
                 <input
                     type = "button"
                     name = "groupInvite"
                     value = "Invite" />
             </div>
-            
         </div>
 
         <form
@@ -49,7 +45,7 @@ const GroupHome = props => (
             <input
                 type = "submit"
                 value = "Create" />
-            </form>
+        </form>
         { props.draw_handler() }
     </div>  
 );
