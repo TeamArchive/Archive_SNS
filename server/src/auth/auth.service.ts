@@ -114,14 +114,26 @@ export class AuthService {
 		googleAccount,
 		refresh_token
 	) {
-		const account = new Account;
-		const google_name =
-			googleAccount.lastName + googleAccount.firstName;
-		account.name = google_name;
-		account.email = googleAccount.email;
-		account.refresh_token = refresh_token;
+		const target = await this.account_repo.findOne({
+			where: {
+				email: googleAccount.email,
+			}
+		});
+		console.log("target : ", target)
+		if ( target ) {
+			target.refresh_token = refresh_token
+			return await this.account_repo.save(target);
+		}
+		else {
+			const account = new Account;
+			const google_name =
+				googleAccount.lastName + googleAccount.firstName;
+			account.name = google_name;
+			account.email = googleAccount.email;
+			account.refresh_token = refresh_token;
 
-		return await this.account_repo.save(account);
+			return await this.account_repo.save(account);
+		}
 	}
 
 	// public async SaveRefreshToken_pk(

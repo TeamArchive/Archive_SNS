@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, Session, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ImageDTO } from '../image/image.dto';
-import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
+import { GoogleStrategy, JwtAuthGuard, LocalAuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { PostDTO } from './dtos/post.dto';
@@ -37,7 +37,6 @@ export class PostController {
         @Req() req, // req.user = pk, email
         @UploadedFiles() files: File[] | undefined
     ) {
-
         const img_dto = [];
 
         if (files) {

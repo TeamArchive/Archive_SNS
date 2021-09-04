@@ -69,16 +69,23 @@ export class AuthController {
     ) {
         console.log("google account:", req.user);
         const google_name = req.user.lastName + req.user.firstName
+
         const refresh_token = await this.authService.RefreshTokenGenerator(google_name);
         if (!refresh_token) throw new UnauthorizedException();
 
-        await this.authService.googleSaveRefreshToken(req.user, refresh_token)
+        const result = await this.authService.googleSaveRefreshToken(req.user, refresh_token)
+        const account = {
+            pk: result.pk,
+            name: google_name
+        }
+        const access_token = await this.authService.AccessTokenGenerator(account);
+        console.log("google_access_token :", access_token);
 
         return {
             data: {
                 access_token: req.user.accessToken,
                 refresh_token: refresh_token,
-                account_pk: req.user.pk
+                account_pk: result.pk
             }
         }
     }
