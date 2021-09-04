@@ -119,7 +119,6 @@ export class AuthService {
 				email: googleAccount.email,
 			}
 		});
-		console.log("target : ", target)
 		if ( target ) {
 			target.refresh_token = refresh_token
 			return await this.account_repo.save(target);

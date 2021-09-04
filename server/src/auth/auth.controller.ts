@@ -79,7 +79,9 @@ export class AuthController {
             name: google_name
         }
         const access_token = await this.authService.AccessTokenGenerator(account);
+        console.log("===============================================================");
         console.log("google_access_token :", access_token);
+        console.log("===============================================================");
 
         return {
             data: {

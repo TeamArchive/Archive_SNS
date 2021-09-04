@@ -85,7 +85,6 @@ export class PostController {
         for (let i = 0; i < uploadedFiles.length; i++) {
             const temp_img_dto = new ImageDTO;
             temp_img_dto.url = uploadedFiles[i];
-            console.log("testtest : ", temp_img_dto.url)
             ImgDTO.push(temp_img_dto);
         }
 
