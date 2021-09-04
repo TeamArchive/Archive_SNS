@@ -4,6 +4,9 @@ import {
 import { JwtAuthGuard } from '@auth/auth.guard';
 import { CommentLikeService, PostLikeService } from './like.service';
 
+/**
+ * 게시물 좋아요 관련 API
+ */
 @Controller('/postlike')
 export class PostLikeControl {
 
@@ -80,11 +83,19 @@ export class PostLikeControl {
     }
 }
 
+/**
+ * 댓글 좋아요 관련 API
+ */
 @Controller('/commentlike')
 export class CommentLikeControl {
 
     constructor(private comment_like_service: CommentLikeService) { }
 
+    /**
+     * 좋아요 수를 조회한다.
+     * @param comment_pk 
+     * @returns 
+     */
     @Get("/count/:comment_pk")
     async CountLike(
         @Param("comment_pk") comment_pk: string,
@@ -94,6 +105,12 @@ export class CommentLikeControl {
         return { data: CountLike_Result };
     }
 
+    /**
+     * 좋아요 누른 유저 목록을 조회한다.
+     * @param comment_pk 
+     * @param limit 
+     * @returns 
+     */
     @Get('/who/:comment_pk/:limit')
     public async WhoLike(
         @Param("comment_pk") comment_pk: string, 
@@ -106,6 +123,12 @@ export class CommentLikeControl {
         return { data: Who_Like };
     }
 
+    /**
+     * 좋아요를 Toggle 한다.
+     * @param comment_pk 
+     * @param req 
+     * @returns 
+     */
     @Post('/toggle/:comment_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(

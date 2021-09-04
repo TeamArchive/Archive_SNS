@@ -21,6 +21,12 @@ abstract class CommonLikeService<
 		this.target_repo = target_repo;
 	}
 
+	/**
+	 * 좋아요가 눌렸는가 조회한다.
+	 * @param giver_pk 
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async IsLike(
 		giver_pk : string,
 		target_pk : string
@@ -29,12 +35,23 @@ abstract class CommonLikeService<
 		return old_like ? true : false;
 	}
 
+	/**
+	 * 좋아요 갯수 조회한다.
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async CountLike(
 		target_pk : string
 	) : Promise<number> {
 		return this.like_repo.GetCount(target_pk);
 	}
 
+	/**
+	 * 좋아요 누른 유저 목록을 조회한다.
+	 * @param target_pk 
+	 * @param limit 
+	 * @returns 
+	 */
 	public async WhoLike(
 		target_pk : string,
 		limit : number
@@ -42,6 +59,12 @@ abstract class CommonLikeService<
 		return this.like_repo.GetWho(target_pk, limit);
 	}
 
+	/**
+	 * 좋아요를 Toggle한다.
+	 * @param giver_pk 
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async ToggleLike(
 		giver_pk : string,
 		target_pk : string
