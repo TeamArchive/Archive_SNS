@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from "prop-types";
+
 import './styles.css';
 import SignIn from "../SignIn";
 import SignUp from "../SignUp";
@@ -14,8 +14,9 @@ const Auth = (props) => (
                     <h1 className="Auth-title-banner"> ARCHIVE SNS </h1>
                 </div>
                 <SignIn /><br/>
+                <br/>
                 <button 
-                    className="Auth-guide-form" 
+                    className="guide-text" 
                     onClick={ props.openModal }>
                         처음이신가요? <br/>
                         그럼 저를 클릭하셔서 회원가입을 완료해보세요!
@@ -32,10 +33,5 @@ const Auth = (props) => (
             <img className="Auth-body-banner" alt="logo" src="img/software-developer.jpg" />                    
     </div>
 );  
-
-Auth.propTypes = {
-	modalOpen   	: PropTypes.func.isRequired,
-    openModal		: PropTypes.func.isRequired,
-};
 
 export default Auth;

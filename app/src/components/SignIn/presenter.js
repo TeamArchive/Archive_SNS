@@ -30,15 +30,21 @@ const SignIn = (props) => (
                 type = 'submit'
                 value = 'Login'/>
         </form>     
+        <br/>
+        <button 
+            className="guide-text"
+            onClick={props.google_Login_handler}>
+            <img className="google_login_btn" src="google_login_btn.svg" />
+        </button>
     </div>
 );  
 
 SignIn.propTypes = {
-	input_hander 	: PropTypes.func.isRequired,
-	submit_handler 	: PropTypes.func.isRequired,
-	
-	account_email 	: PropTypes.string.isRequired,
-	account_pw 		: PropTypes.string.isRequired
+	input_hander 	        : PropTypes.func.isRequired,
+	submit_handler 	        : PropTypes.func.isRequired,
+	google_Login_handler    :PropTypes.func.isRequired,
+	account_email 	        : PropTypes.string.isRequired,
+	account_pw 		        : PropTypes.string.isRequired
 };
 
 

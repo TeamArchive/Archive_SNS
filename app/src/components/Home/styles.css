@@ -1,21 +1,7 @@
 /* Top-bar-form */
 .Home_form{
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    background-color: rgb(245, 245, 245);
-}
-
-.Top-bar{
-    position: fixed;
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    align-items: center;
-    background-color: white;
-    width: 100%;
-    margin-bottom: 1vw;
-    box-shadow: 0px 1px 5px 1px rgba(212, 212, 212, 0.521);
+    height: 100%;
 }
 
 .logo{
@@ -34,50 +20,15 @@
     border-radius: 1vw;
 }
 
-.user_action_form{
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    
-}
-
-.action_form{
-    width: 61.9vw;
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-}
-
 .right_content_form{
     position: fixed;
     padding: 1rem;
-    height: 80%;
-    top: 12%;
+    height: 100%;
+    top: 0;
     left: 80%;
-    background-color: white;
-    box-shadow: 0px 10px 10px 1px rgba(212, 212, 212, 0.521);
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.212);
 }
 
-.action_btn, .action_btn:link {
-    width: 15vw;
-    border: none;
-    background: none;
-    text-decoration:none; color:#555;
-}
-    
-.action_btn:hover { animation: rainbow 0.8s infinite linear; }
-
-@keyframes rainbow {
-    0%   {color: red; }
-    10%   {color: orange; }
-    23%  {color: yellow; }
-    36%  {color: yellowgreen; }
-    49%  {color: green; }
-    62%   {color: blue; }
-    74%  {color: indigo; }
-    86%   {color: purple; }
-    100% {color: red; }
-}
 /* Profile-form */
 .Profile-form{
     position: fixed;
@@ -96,3 +47,35 @@
     margin-left: 25%;
     margin-right: 25%;
 }
+
+@media screen and (max-width: 765px) { 
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 3;
+            transform: none;
+        }
+    }
+
+    .letf_content_form{
+        animation: fadeIn 1s ease-in-out;
+        display: none;
+    }
+
+    .center-form{
+        width: 80%;
+        height: 100%;
+        margin-left: 10%;
+        margin-right: 10%;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .right_content_form{
+        animation: fadeIn 1s ease-in-out;
+        display: none;
+    }
+}
+

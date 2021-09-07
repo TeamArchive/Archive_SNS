@@ -5,7 +5,15 @@ import { actionCreators as commentAct } from "../../redux/modules/comment";
 const mapStateToProps = (state, props) => {
 	const { comment: { comment_list } } = state;
 
-	return { comment_list : comment_list.find(elem => { if(elem.post_pk === props.post_pk) return elem; } ) };
+	return { 
+        comment_list: 
+        comment_list.find(
+                elem => { 
+                    if(elem.post_pk === props.post_pk) 
+                    return elem 
+                }
+            )
+        };
 };
 
 const mapDispatchToProps = (dispatch, props) => {

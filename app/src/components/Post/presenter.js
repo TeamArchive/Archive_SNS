@@ -8,16 +8,15 @@ const Post = (props) => (
 <React.Fragment>
     <form
         className='Post-form'
-        onSubmit={props.submit_handler}
-        >
+        onSubmit={props.submit_handler}>
+            
         <input
             className='input-form'
             type="text"
             name="title"
             value={props.post_info.title}
             onChange={props.text_input_handler}
-            placeholder="title"
-            />
+            placeholder="title"/>
 
         <input
             className='input-form'
@@ -25,8 +24,7 @@ const Post = (props) => (
             name="text_content"
             value={props.post_info.text_content}
             onChange={props.text_input_handler}
-            placeholder="content"
-            />
+            placeholder="content"/>
 
         <ImageUploader 
             upload = {props.upload}
@@ -35,10 +33,10 @@ const Post = (props) => (
             />
 
         <input
+            style={{display: 'none'}}
             className='post_submit-btn'
             type="submit"
-            value="submit"
-            />
+            value="Feed"/>
     </form>
     
     <center>
@@ -47,8 +45,7 @@ const Post = (props) => (
         </div>
         <hr style={{backgroundColor: 'red'}}/>
     </center>
-    <br/>
-    
+    <br/>  
 </React.Fragment>
 );  
 

@@ -5,7 +5,8 @@ import './styles.css'
 export const CommentView = props => (
     <React.Fragment>
         작성자 : {props.comment.writer.name} <br/>
-        {props.comment.content}
+        {props.comment.content} <br/>
+        {props.comment.createdAt}
             <button
                 onClick = {props.delete_handler}
                 type = "submit">

@@ -12,9 +12,9 @@ const Home = (props) => (
     <div className="Home_form">
         <div className='letf_content_form'>
             <div className='Profile-form'>
-                <div className='Profile-user-img-form'>
+                {/* <div className='Profile-user-img-form'>
                     프로필 이미지 자리
-                </div>
+                </div> */}
 
                 <div className='Profile-action-btns'>
                 </div>
@@ -22,6 +22,8 @@ const Home = (props) => (
         </div>
         
         <div className='center-form'>
+            <br/>
+            <br/><h3>News Feed</h3><br/>
             <Post />
             <PostList />
         </div>

@@ -1,15 +1,14 @@
 import React from 'react';
+import './styles.css';
 
 const Navigation = (props, context) => (
     <>
-        
         <div className='Top-bar'>
                 <img className='logo' src="logo.svg" alt='logo'/>
 
                 <input 
                     className='search-input'
-                    placeholder='Search'
-                    />
+                    placeholder='Search'/>
 
                 <div className='action_form'>
                     <button className='action_btn'>Home</button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState }  from "react";
 import GroupHome from "./presenter";
 
 const Container = (props, content) => {

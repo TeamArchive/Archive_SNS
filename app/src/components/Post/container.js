@@ -15,13 +15,13 @@ function Container(props, content) {
 
 	useEffect(() => {
 
-		if(upload == props.new_post_count) {
+		if(upload === props.new_post_count) {
 			setUpload(-1);
 
 			setPostInfo(PostInfoInit);
 		}
 		
-	}, [props.new_post_count])
+	}, [props])
 	
 	const __text_input_handler__ = event => {
 		const { value, name } = event.target;
@@ -32,7 +32,7 @@ function Container(props, content) {
     };
 
 	const __submit_handler__ = event => {
-		event.preventDefault(); 
+		
 		setUpload(props.new_post_count + 1);
 	};
 

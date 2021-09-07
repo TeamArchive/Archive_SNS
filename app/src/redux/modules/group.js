@@ -28,7 +28,7 @@ function groupCreate(Group_title, User_Pk) {
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
-		fetch("/post_group/create", {
+		fetch("/postgroup/create", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -59,7 +59,7 @@ function groupInvite(group_pk) {
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
-		fetch("/post_group/invite" + group_pk, {
+		fetch("/postgroup/invite" + group_pk, {
 			method: "POST",
 			headers: {
 			Authorization: `${AccessToken}`
@@ -80,7 +80,7 @@ function getGroupList() {
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
-		fetch("/post_group", {
+		fetch("/postgroup", {
 			method: "GET",
 			headers: {
 			Authorization: `${AccessToken}`

@@ -24,13 +24,20 @@ const Container = (props, context) => {
 		props.defaultLogin(email, password);
 	};
 
+	const __google_Login_handler__ = event => {
+		event.preventDefault();
+		alert('log창을 열어서 오류를 확인해주세요.')
+		props.googleLogin();
+		console.log('googleLogin Click!');
+	};
+
 	return (
 		<Auth
-			input_hander	= {__input_handler__}
-			submit_handler	= {__submit_handler__}
-			
-			account_email	= {email}
-			account_pw		= {password}
+			input_hander			= {__input_handler__}
+			submit_handler			= {__submit_handler__}
+			google_Login_handler	= {__google_Login_handler__}
+			account_email			= {email}
+			account_pw				= {password}
 		/>
 	);
 

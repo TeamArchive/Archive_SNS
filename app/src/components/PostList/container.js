@@ -2,7 +2,6 @@ import React, { useState, useEffect }  from "react";
 import PropTypes from "prop-types";
 
 import PostList from "./presenter"
-import Modal from "../Modals/modal";
 
 const Container = (props, context) => {
 
@@ -20,7 +19,7 @@ const Container = (props, context) => {
 	});
 
 	useEffect(() => {
-		if(props.post_list != undefined) {
+		if(props.post_list !== undefined) {
 			setState({
 				loading: false,
 			});
@@ -28,7 +27,7 @@ const Container = (props, context) => {
 		else {
 			props.postList(0, 99, 0);
 		}
-	}, [props.post_list]);
+	}, [props]);
 
 	const {loading} = state;
 

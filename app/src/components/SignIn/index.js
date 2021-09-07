@@ -6,6 +6,10 @@ const mapDispatchToProps = (dispatch, props) => {
 	return {
 		defaultLogin: (email, password) => {
 			dispatch(accountAct.defaultLogin(email, password));
+		},
+
+		googleLogin: (data) => {
+			dispatch(accountAct.googleLogin(data));
 		}
 	};
 };

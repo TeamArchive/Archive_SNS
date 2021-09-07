@@ -1,0 +1,9 @@
+.ImgPreview{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 25rem;
+    height: 25rem;
+    border: solid 0.5px rgb(232, 232, 232);
+}
+

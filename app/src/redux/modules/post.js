@@ -1,3 +1,6 @@
+import { NavItem } from "react-bootstrap";
+import NavbarToggle from "react-bootstrap/esm/NavbarToggle";
+
 const SAVE_NEW_POST = "SAVE_NEW_POST";
 const DELETE_POST   = "DELETE_POST";
 const GET_POST_LIST = "GET_POST_LIST";
@@ -25,7 +28,6 @@ function getPostList(data) {
 }
 
 function createPost(data) {
-
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
@@ -53,7 +55,7 @@ function deletePost( post_pk ) {
 
     return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
-		
+
 		fetch("/post/" + post_pk, {
 			method: "delete",
 			headers: {
@@ -62,7 +64,7 @@ function deletePost( post_pk ) {
 			}
 		})
 		.then(res => {
-			if(res.status == 200) {
+			if(res.status === 200) {
 				dispatch(deletePostFromList(post_pk));
 			}
 		})
@@ -135,7 +137,7 @@ function applyDeletePost(state, action) {
 	const { pk } = action;
 	const { post_list } = state;
 
-	post_list.splice(post_list.filter((elem) => elem.pk == pk), 1)
+	post_list.splice(post_list.filter((elem) => elem.pk === pk), 1)
 
 	return {
 		...state,

@@ -8,11 +8,9 @@ const Container = (props, context) => {
 	const [imgVal, setImgVal] = useState("");
 
 	useEffect(() => {
-
 		if(props.upload >= 0) {
 			props.uploader(imgFile);
-		}
-		else {
+		} else {
 			setBase64([]);
 			setImgFile([]);
 		}
@@ -25,7 +23,6 @@ const Container = (props, context) => {
 		const file = event.target.files[0];
 		
 		reader.onloadend = () => {
-
 			if (file && reader.result) {
 				setBase64([
 					...base64,

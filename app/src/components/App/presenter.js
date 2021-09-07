@@ -6,6 +6,7 @@ import Navigation from "../Navigation";
 
 import Auth from '../Auth';
 import Home from '../Home';
+import './styles.css';
 
 const App = props => [
     props.isLoggedIn ? <PrivateRoutes key={1} /> : <PublicRoutes key={1} />,
@@ -19,10 +20,12 @@ App.propTypes = {
 const PrivateRoutes = props => (
 
 <Route>
-    <Navigation />
-    <Switch>
-        <Route exact path="/" component={Home} />
-    </Switch>
+    <div className="App">
+        <Navigation />
+        <Switch>
+            <Route exact path="/" component={Home} />
+        </Switch>
+    </div>
 </Route>
 );
 

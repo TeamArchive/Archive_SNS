@@ -54,12 +54,14 @@ function createComment(post_pk, comment) {
 				dispatch(saveNewComment([{
 					...json.data,
 					writer: {
-						pk : account.pk,
+						pk : account.PK,
+						name : account.name,
 						...account.info
 					}
 				}], true));
 			}
 		})
+		.then(console.log('사용자 PK: ', account.PK))
 		.catch(err => console.log(err));
     };
     
@@ -77,7 +79,7 @@ function deleteComment( comment_pk ) {
 			}
 		})
 		.then(res => {
-			if(res.status == 200) {
+			if(res.status === 200) {
 				dispatch(deleteCommentFromList(comment_pk));
 				console.log(comment_pk);
 			}
@@ -92,7 +94,7 @@ function commentList(post_pk, offset, limit, order_by) {
 	return (dispatch, getState) => {
 		const { account : { AccessToken }} = getState();
 		
-		fetch("/comment" + post_pk, {
+		fetch("/comment/" + post_pk, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -192,7 +194,7 @@ function applyDeleteComment(state, action) {
 	const { pk } = action;
 	const { comment_list } = state;
 
-	comment_list.splice(comment_list.filter((elem) => elem.pk == pk), 1)
+	comment_list.splice(comment_list.filter((elem) => elem.pk === pk), 1)
 
 	return {
 		...state,

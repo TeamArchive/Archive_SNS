@@ -39,9 +39,7 @@ function defaultLogin(email, password) {
 
 		fetch("/auth/login", {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
+			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				"email" 	: email,
 				"password"	: password
@@ -58,11 +56,29 @@ function defaultLogin(email, password) {
 	};
 }
 
+function googleLogin(data){
+	return (dispatch, getState) => {
+		fetch("/auth/google", {
+			method: "GET",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+		.then(json => {
+			if (json.data) {
+				dispatch( socketAct.setToken(json.data.access_token) );
+				dispatch( saveToken(json.data) );
+			}
+		})
+		.catch(err => console.log(err));
+	}
+}
+
 function createAccount(data) {
 
 	return dispatch => {
 
-		fetch("/account/signup", {
+		fetch("/account", {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data)
@@ -75,6 +91,10 @@ function createAccount(data) {
 		})
 		.catch(err => console.log(err));
 	};
+}
+
+function getAccountData(){
+
 }
 
 // < Initial State >
@@ -153,10 +173,10 @@ function applyGetData(state, action) {
 
 const actionCreators = {
 	defaultLogin,
+	googleLogin,
 	createAccount,
 	logout,
 	passData
-	
 };
 
 export { actionCreators };

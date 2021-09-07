@@ -56,22 +56,20 @@ const SignUp = (props) => (
                     value = {props.account_alias}
                     onChange = {props.String_input_handler}/>
 
-                <div className="ImgUploaderFrom">
-                    <div className="ImgPreview">
-                        <img src={props.account_img_preview} />
-                    </div>
                     <span>프로필 이미지 선택</span>
-                    <div class="file_box"> 
-                        <input
-                            className="file_upload-btn"
-                            type="file"
-                            accept='image/jpg, impge/png, image/jpeg, image/gif'
-                            name="img" 
-                            value={props.account_img}
-                            onChange={props.img_input_handler} />
+                    <span style={{fontSize:"0.8rem"}} className="guide-text">(최적화 된 이미지는 1:1비율 입니다.)</span>
+                    <div className="ImgPreview">
+                        <img className="ImgPreview2" src={props.account_img_preview} />
                     </div>
-				</div>
-
+                     
+                    <input
+                        className="file_upload-btn"
+                        type="file"
+                        accept='image/jpg, impge/png, image/jpeg, image/gif'
+                        name="img" 
+                        value={props.account_img}
+                        onChange={props.img_input_handler} />
+	
                 <button
                     type='button'
                     className="submit-btn"
@@ -91,11 +89,7 @@ const SignUp = (props) => (
 );  
 
 SignUp.propTypes = {
-	account_email		    : PropTypes.string.isRequired,
-	account_pw			    : PropTypes.string.isRequired,
-	account_confirm_pw	    : PropTypes.string.isRequired,
-	account_alias		    : PropTypes.string.isRequired,
-    account_img             : PropTypes.string.isRequired,
+
 
     current_stage	        : PropTypes.number.isRequired,
 	next_stage			    : PropTypes.func.isRequired,

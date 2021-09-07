@@ -1,0 +1,66 @@
+/* .Top-bar{
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    margin-bottom: 1vw;
+    box-shadow: 0px 1px 5px 1px rgba(212, 212, 212, 0.521);
+} */
+
+.Top-bar{
+    position: fixed;
+    height: 100%;
+    width: 20%;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    
+    margin-bottom: 1vw;
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.212);
+}
+
+.user_action_form{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    bottom: 0;
+}
+
+.action_form{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    row-gap: 10px;
+}
+
+.action_btn:hover, .action_btn:focus{
+    background-color: royalblue;
+    color: white;
+}
+
+.action_btn, .action_btn:link {
+    height: 5vw;
+    width: 100%;
+    border: none;
+    background: none;
+    text-decoration:none; color:#555;
+}
+    
+.action_btn:hover { animation: rainbow 0.8s infinite linear; }
+
+@keyframes rainbow {
+    0%   {color: red; }
+    10%   {color: orange; }
+    23%  {color: yellow; }
+    36%  {color: yellowgreen; }
+    49%  {color: green; }
+    62%   {color: blue; }
+    74%  {color: indigo; }
+    86%   {color: purple; }
+    100% {color: red; }
+}
