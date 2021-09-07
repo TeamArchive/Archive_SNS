@@ -34,11 +34,12 @@ export class ChatService {
 		/**
 		 * < Check is it exist >
 		 */
-		const particiapnt = await this.chat_group_service.isParticipant({
+		const participant = {
 			participant_pk: writer_pk,
 			group_pk: dto.group_pk
-		} as GroupParticipantDTO);
-		if (!particiapnt)
+		} as GroupParticipantDTO;
+
+		if (!await this.chat_group_service.isParticipant(participant))
 			return undefined;
 
 		const ent = await ChatDTO.toEntity(dto);

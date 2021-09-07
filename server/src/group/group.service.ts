@@ -248,6 +248,18 @@ abstract class GroupServiceImpl<
 	}
 
 	/**
+	 * Get Participant List In Group
+	 * 그룹 내 참가자 목록 불러오기
+	 * 
+	 * @param group_pk
+	 * @returns Participant List
+	 */
+	public async getParticipant(group_pk: string): Promise<GroupParticipant[]> {
+
+		return this.group_participant_repo.find({ where: { group_pk: group_pk } });
+	}
+
+	/**
 	 * Group Search
 	 * 그룹 검색
 	 * 

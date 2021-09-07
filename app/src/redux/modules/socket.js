@@ -13,13 +13,15 @@ function setToken( token ) {
 
 	return (dispatch, getState) => {
 
-		const { socket : { chatSocket } } = getState();
+		const { socket : { manager, chatSocket } } = getState();
 	
 		chatSocket.disconnect();
 
 		chatSocket.auth = {token: `jwt ${token}`};
 
 		chatSocket.connect();
+
+		chatSocket.emit('init');
 	};
 }
 
@@ -30,14 +32,18 @@ function setToken( token ) {
 const socketManager = new Manager(`ws://${window.location.hostname}:3000`, {
 	transports: ['websocket'],
 	jsonp: false
-})
+});
+
 const accessTokenOnCookie = localStorage.getItem("AccessToken");
+
+const chatSocket = socketManager.socket('/chat', {
+	auth: { token: `jwt ${accessTokenOnCookie ? accessTokenOnCookie : ''}` }
+});
+chatSocket.emit('init');
 
 const initialState = {
 	manager: socketManager,
-	chatSocket: socketManager.socket('/chat', {
-		auth: { token: `jwt ${accessTokenOnCookie ? accessTokenOnCookie : ''}` }
-	}),
+	chatSocket: chatSocket,
 };
 
 // < Reducer >

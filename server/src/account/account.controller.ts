@@ -37,7 +37,6 @@ export class AccountController {
         @UploadedFiles() files: File[] | null
     ) {
         let uploadedFiles = null
-
         if (files) {
             uploadedFiles = this.uploadService.uploadFiles(files);
         }
@@ -64,7 +63,11 @@ export class AccountController {
         @Body() dto: UpdateAccountDTO,
         @UploadedFiles() files: File[] | null
     ) {
-        const uploadedFiles: string[] = this.uploadService.uploadFiles(files);
+        let uploadedFiles = null
+        if (files) {
+            uploadedFiles = this.uploadService.uploadFiles(files);
+        }
+
         const result: Account = await this.account_service.UpdateAccount(
             req.user.pk,
             dto,
