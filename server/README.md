@@ -32,6 +32,40 @@
 $ npm install
 ```
 
+## Set Confing
+
+```
+location => Archive_SNS/server
+
+> create file 'ormconfig.json', 'secret-key.json'
+```
+
+### ormconfig.json
+
+```
+{
+    "type": "mysql",
+    "host": "DB HOST",
+    "port": DB PORT,
+    "username": "DB USER NAME",
+    "password": "DB PASSWORD",
+    "database": "DB NAME",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "logging": true,
+    "synchronize": true
+}
+```
+
+### secret-key.json
+
+```
+{
+	"jwt": {
+		"secretKey" : "type your secret key here"
+	}
+}
+```
+
 ## Running the app
 
 ```bash
