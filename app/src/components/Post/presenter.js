@@ -35,7 +35,7 @@ const Post = (props) => (
             />
 
         <input
-            className='submit-btn'
+            className='post_submit-btn'
             type="submit"
             value="submit"
             />

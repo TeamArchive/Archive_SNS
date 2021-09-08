@@ -16,7 +16,17 @@ import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '1234',
+      database: 'archive_sns_db',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      logging: true,
+      synchronize: true,
+    }),
     AccountModule,
     ChatModule,
     CommentModule,

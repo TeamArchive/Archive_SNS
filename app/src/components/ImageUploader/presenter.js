@@ -12,7 +12,7 @@ const ImageUploader = (props, context) => (
 		</div>
 
 		<input
-			className = "img_btn"
+			className = "file_upload-btn"
 			type="file"
 			// accept='image/jpg, impge/png, image/jpeg, image/gif'
 			name="img" 

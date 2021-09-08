@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import './styles.css';
 
 const SignIn = (props) => (
-
-    <div className="SignIn-entirety">
+    <div>
         <form
-            className="box-form"
+            className="SignIn-entirety"
             method="POST"
             onSubmit={props.submit_handler}>
 
@@ -14,7 +13,7 @@ const SignIn = (props) => (
                 className="Auth-input-form"
                 type = 'email'
                 name = 'email'
-                placeholder = 'Email@archive.com'
+                placeholder = 'archive_sns@archive.com'
                 value = {props.account_email}
                 onChange = {props.input_hander}/>
 

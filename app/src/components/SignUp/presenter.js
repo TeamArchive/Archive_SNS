@@ -6,16 +6,12 @@ const MAX_SIGNUP_STAGE = 2
 
 const SignUp = (props) => (
     <React.Fragment>
-        <h3> SignUp </h3>
-
         <form
-            className='signIn-form'
+            className='SignIn-entirety'
             onSubmit={props.submit_handler}>
 
         { props.current_stage === 1 && (
             <React.Fragment>
-                <h5> User form (1/2) </h5>
-
                 <input 
                     className="Auth-input-form"
                     type = 'email'
@@ -52,40 +48,40 @@ const SignUp = (props) => (
 
         { props.current_stage === 2 && (
             <React.Fragment>
-                <h5> User form (2/2) </h5>
-
                 <input
-                    className="input-form" 
+                    className="Auth-input-form" 
                     type = 'text'
                     name = 'name'
                     placeholder = 'alias'    
                     value = {props.account_alias}
                     onChange = {props.String_input_handler}/>
 
-                <div
-                    className="ImgUploaderFrom">
-
+                <div className="ImgUploaderFrom">
                     <div className="ImgPreview">
-                        test:
-                        <img src={props.account_img_preview} alt='preview_img' />
+                        <img src={props.account_img_preview} />
                     </div>
-
-                    <input
-                        type="file"
-                        accept='image/jpg, impge/png, image/jpeg, image/gif'
-                        name="img" 
-                        value={props.account_img}
-                        onChange={props.img_input_handler} />
+                    <span>프로필 이미지 선택</span>
+                    <div class="file_box"> 
+                        <input
+                            className="file_upload-btn"
+                            type="file"
+                            accept='image/jpg, impge/png, image/jpeg, image/gif'
+                            name="img" 
+                            value={props.account_img}
+                            onChange={props.img_input_handler} />
+                    </div>
 				</div>
 
                 <button
                     type='button'
+                    className="submit-btn"
                     value='back'
                     onClick={props.back_stage}>
                         go back		
                 </button>
 
                 <input
+                    className="submit-btn"
                     type='submit'
                     value='Sign up'/>
             </React.Fragment>

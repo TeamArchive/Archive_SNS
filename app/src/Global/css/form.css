@@ -1,9 +1,11 @@
 .box-form{
     height: 100%;
-    width: 20rem;
+    width: 100%;
+    row-gap: 3rem;
     text-align: center;
     align-items: center;
-    display: flex;
-    row-gap: 15px;
-    flex-direction: column;
+}
+
+.file_box{
+    float: left;
 }
