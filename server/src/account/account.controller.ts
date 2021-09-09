@@ -109,7 +109,7 @@ export class AccountController {
      * @param name 
      * @returns 
      */
-    @Get('/:name')
+    @Get('/name/:name')
     async GetAccountByName(
         @Param('name') name: string
     ) {
