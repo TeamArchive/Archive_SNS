@@ -39,7 +39,7 @@ function Container(props, content) {
 	const __uploader__ = (img) => {
 		const data = new FormData();
 		
-		img.map(elem => data.append('image', elem));
+		img.map(elem => data.append('images', elem));
 
 		Object.keys(PostInfo).map( elem => {
 			data.append( elem, PostInfo[elem] );

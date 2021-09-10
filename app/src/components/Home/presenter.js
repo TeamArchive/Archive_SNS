@@ -20,7 +20,6 @@ const Home = (props) => (
                 </div>
             </div>
         </div>
-        
         <div className='center-form'>
             <br/>
             <br/><h3>News Feed</h3><br/>

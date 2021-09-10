@@ -6,6 +6,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 //redux modules import
 import account from './modules/account' 
+import profile from './modules/profile'
 import post from "./modules/post"
 import group from "./modules/group"
 import comment from "./modules/comment"
@@ -24,6 +25,7 @@ if (env === "development") {
 const reducer = combineReducers({
     socket,
     account,
+    profile,
     post,
     group,
     comment,

@@ -9,7 +9,7 @@ const Post = (props) => (
     <form
         className='Post-form'
         onSubmit={props.submit_handler}>
-            
+
         <input
             className='input-form'
             type="text"

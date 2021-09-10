@@ -61,12 +61,12 @@ const SignUp = (props) => (
                     <div className="ImgPreview">
                         <img className="ImgPreview2" src={props.account_img_preview} />
                     </div>
-                     
+
                     <input
                         className="file_upload-btn"
                         type="file"
                         accept='image/jpg, impge/png, image/jpeg, image/gif'
-                        name="img" 
+                        name="images" 
                         value={props.account_img}
                         onChange={props.img_input_handler} />
 	

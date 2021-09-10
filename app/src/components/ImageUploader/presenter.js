@@ -14,7 +14,7 @@ const ImageUploader = (props, context) => (
 			className = "file_upload-btn"
 			type="file"
 			accept='image/jpg, impge/png, image/jpeg, image/gif'
-			name="img" 
+			name="images" 
 			value={props.img_value}
 			onChange={props.img_change_handler} />
 	</div>
