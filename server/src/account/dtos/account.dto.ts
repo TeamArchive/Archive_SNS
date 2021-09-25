@@ -1,9 +1,9 @@
 import { 
     IsNotEmpty, Length, IsEmail, IsString, IsOptional 
 } from "class-validator";
-import { Image } from "../image/image.entity";
+import { Image } from "../../image/image.entity";
 import sanitizeHtml from 'sanitize-html';
-import { Account } from "./account.entity";
+import { Account } from "../account.entity";
 import { ApiProperty } from "@nestjs/swagger";
 
 /**
@@ -48,9 +48,6 @@ export class AccountDTO {
 	public profile_image: Image | null;
 
 	@ApiProperty()
-	public profile_img_url: string | null;
-
-	@ApiProperty()
 	@IsOptional()
 	@IsString()
 	public status_msg: string | null;
@@ -61,7 +58,6 @@ export class AccountDTO {
 			password, 
 			name, 
 			profile_image,
-			profile_img_url, 
 			status_msg
 		} = accountDTO;
 
@@ -70,7 +66,6 @@ export class AccountDTO {
 		new_account.name = sanitizeHtml(name);
 		new_account.password = sanitizeHtml(password);
 		new_account.profile_image = profile_image;
-		new_account.profile_img_url = profile_img_url
 		new_account.status_msg = sanitizeHtml(status_msg);
 
 		return new_account;

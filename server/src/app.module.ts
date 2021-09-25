@@ -12,20 +12,11 @@ import { ImageModule } from './image/image.module';
 import { GroupModule } from './group/group.module';
 import { LikeModule } from './like/like.module';
 import { AuthModule } from './auth/auth.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'sk362712',
-      database: 'archive_sns_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      logging: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(),
     AccountModule,
     ChatModule,
     CommentModule,
@@ -37,6 +28,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
-export class AppModule {}
+export class AppModule { }

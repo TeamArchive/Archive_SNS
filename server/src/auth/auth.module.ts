@@ -7,7 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategy/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { jwtConstants } from './constants'
+import secretKey from '@root/secret-key.json';
 
 import { AccountModule } from '@account/account.module';
 import { AccountRepo } from '@account/account.repo';
@@ -18,15 +18,21 @@ import { GoogleStrategy } from './strategy/google.strategy';
 		PassportModule,
 		forwardRef(() => AccountModule),
 		JwtModule.register({
-			secret: jwtConstants.secret,
+			secret: secretKey.jwt.secretKey,
 			signOptions: {
 				expiresIn: 3600
 			}
 		})
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy, AccountRepo],
+	providers: [
+		AuthService, 
+		LocalStrategy, 
+		JwtStrategy, 
+		GoogleStrategy, 
+		AccountRepo
+	],
 	exports: [AuthService, JwtModule],
 })
 
-export class AuthModule {}
+export class AuthModule { }

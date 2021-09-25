@@ -21,20 +21,37 @@ abstract class CommonLikeService<
 		this.target_repo = target_repo;
 	}
 
+	/**
+	 * 좋아요가 눌렸는가 조회한다.
+	 * @param giver_pk 
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async IsLike(
 		giver_pk : string,
 		target_pk : string
 	) : Promise<boolean> {
-		const old_like = this.like_repo.GetLike(giver_pk, target_pk);
+		const old_like = await this.like_repo.GetLike(giver_pk, target_pk);
 		return old_like ? true : false;
 	}
 
+	/**
+	 * 좋아요 갯수 조회한다.
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async CountLike(
 		target_pk : string
 	) : Promise<number> {
 		return this.like_repo.GetCount(target_pk);
 	}
 
+	/**
+	 * 좋아요 누른 유저 목록을 조회한다.
+	 * @param target_pk 
+	 * @param limit 
+	 * @returns 
+	 */
 	public async WhoLike(
 		target_pk : string,
 		limit : number
@@ -42,6 +59,12 @@ abstract class CommonLikeService<
 		return this.like_repo.GetWho(target_pk, limit);
 	}
 
+	/**
+	 * 좋아요를 Toggle한다.
+	 * @param giver_pk 
+	 * @param target_pk 
+	 * @returns 
+	 */
 	public async ToggleLike(
 		giver_pk : string,
 		target_pk : string
@@ -53,11 +76,11 @@ abstract class CommonLikeService<
 			return undefined;
 
 		// Find like row which satisfying condition
-		const old_like = this.like_repo.GetLike(giver_pk, target_pk);
+		const old_like = await this.like_repo.GetLike(giver_pk, target_pk);
 
 		// ( OFF ) If exist row => Delete it 
 		if(old_like) 
-			this.like_repo.delete({ pk: old_like.pk});
+			await this.like_repo.delete({ pk: old_like.pk});		
 
 		// ( ON ) If not exist => Make new one
 		else 
@@ -65,6 +88,7 @@ abstract class CommonLikeService<
 
 		// Save n_like at Target
 		target.n_like = await this.like_repo.GetCount(target_pk);
+
 		return await this.target_repo.save(target)
 	}
 }
@@ -73,7 +97,7 @@ abstract class CommonLikeService<
 export class PostLikeService extends CommonLikeService<PostLikeRepo, PostLike>{
 
 	constructor(
-		@InjectRepository(PostLike) like_repo : PostLikeRepo,
+		like_repo : PostLikeRepo,
 		private post_repo : PostRepo
 	) {
 		super( like_repo, post_repo );
@@ -85,7 +109,7 @@ export class PostLikeService extends CommonLikeService<PostLikeRepo, PostLike>{
 export class CommentLikeService extends CommonLikeService<CommentLikeRepo, CommentLike>{
 
 	constructor(
-		@InjectRepository(CommentLike) like_repo : CommentLikeRepo,
+		like_repo : CommentLikeRepo,
 		private post_repo : PostRepo
 	) {
 		super( like_repo, post_repo );

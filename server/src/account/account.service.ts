@@ -3,10 +3,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { ImageDTO } from "./../image/image.dto";
 import { ProfileImage } from "./../image/image.entity";
 import { ProfileImageRepo } from "./../image/image.repo";
-import { AccountDTO } from "./account.dto";
+import { AccountDTO } from "./dtos/account.dto";
 import { Account } from "./account.entity";
 import { AccountRepo } from "./account.repo";
-import { UpdateAccountDTO } from "./updateAccount.dto";
+import { UpdateAccountDTO } from "./dtos/updateAccount.dto";
+import { CreateAccountDTO } from "./dtos/createAccount.dto";
 
 @Injectable()
 export class AccountService {
@@ -16,45 +17,61 @@ export class AccountService {
 		private profile_img_repo: ProfileImageRepo
 	) {}
 
+	/**
+	 * 계정을 생성한다.
+	 * @param account_dto 
+	 * @param uploadedFile 
+	 * @returns 
+	 */
 	public async CreateAccount(
-		account_dto: AccountDTO,
+		account_dto: CreateAccountDTO,
+		uploadedFiles: string[]
 	): Promise<Account> 
 	{
-		const account_entity = AccountDTO.toEntity(account_dto);
+		const account_entity = CreateAccountDTO.toEntity(account_dto);
 
-        if( account_dto.profile_img_url ) {
+        if( uploadedFiles ) {
             const imageDTO = new ImageDTO();
-            imageDTO.url = account_dto.profile_img_url;
+            imageDTO.url = uploadedFiles[0];
 
 			const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
+			profileImg_entity.uploader_pk = null;
 
-			account_entity.profile_image_pk = 
-				(await this.profile_img_repo.UploadNewImage(profileImg_entity)).pk;
-        }
+			const uploadImage_result = await this.profile_img_repo.save(
+				profileImg_entity
+			);
 
-		return await this.account_repo.save(account_entity);
+			account_entity.profile_image_pk = uploadImage_result.pk;
+		}
+		const account_image_result = await this.account_repo.save(account_entity);
+		console.log("Create Account Image Result : ", account_image_result);
+		return account_image_result;
 	}
 
+	/**
+	 * 계정을 수정한다.
+	 * @param account_pk 
+	 * @param account_dto 
+	 * @param uploadedFile 
+	 * @returns 
+	 */
 	public async UpdateAccount(
 		account_pk: string,
 		account_dto: UpdateAccountDTO,
+		uploadedFiles: string[]
 	): Promise<Account> 
 	{
-		console.log('account_pk :', account_pk);
-		console.log('account_dto :', account_dto);
-
 		const target = { 
 			entity : await this.account_repo.findOne({ where: { pk: account_pk } })
 		}
 
-		console.log('target :', target);
-
 		if (target.entity?.pk === account_pk) {
 			UpdateAccountDTO.updateEntity(target, account_dto);
+			console.log("updateAccount-result : ", target);
 
-			if(account_dto.profile_img_url) {
+			if(uploadedFiles) {
 				const imageDTO = new ImageDTO();
-				imageDTO.url = account_dto.profile_img_url;
+				imageDTO.url = uploadedFiles[0];
 
 				const profileImg_entity = await imageDTO.toEntity() as ProfileImage;
 				
@@ -63,7 +80,7 @@ export class AccountService {
 			}
 
 			const result = await this.account_repo.save(target.entity);
-			console.log('result : ', result);
+			console.log('updateAccount(image)-result : ', result);
 			return result;
 		}
 		

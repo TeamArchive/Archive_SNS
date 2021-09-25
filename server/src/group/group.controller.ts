@@ -11,47 +11,47 @@ type ST = (ChatGroupService | PostGroupService)
 
 @ApiBearerAuth('access-token')
 abstract class GroupController<T extends ST> {
-	
+
 	protected group_service: T;
 
-	constructor (group_service: T) {
+	constructor(group_service: T) {
 		this.group_service = group_service;
 	}
 
 	@Get()
 	@UseGuards(JwtAuthGuard)
-	public async search ( 
-		@Query('q') query: string, 
+	public async search(
+		@Query('q') query: string,
 		@Req() req
 	) {
-		const account 	= req.user;
-		const result	= this.group_service.search(query);
+		const account = req.user;
+		const result = this.group_service.search(query);
 
 		// @TODO : Own Group Search
 
 		return { data: result };
 	}
 
-	@Post('/create')
+	@Post()
 	@UseGuards(JwtAuthGuard)
-	public async create( 
+	public async create(
 		@Body() group_dto: GroupDTO,
-		@Req() req, 
+		@Req() req,
 	) {
-		const account 	= req.user;
-		const result 	= await this.group_service.create( account.pk, group_dto );
+		const account = req.user;
+		const result = await this.group_service.create(account.pk, group_dto);
 
 		return { data: result };
 	}
 
-	@Put('/update')
+	@Put()
 	@UseGuards(JwtAuthGuard)
 	public async update(
 		@Body() dto: GroupDTO,
 		@Req() req,
 	) {
-		const account 	= req.user;
-		const result	= await this.group_service.update( account.pk, dto );
+		const account = req.user;
+		const result = await this.group_service.update(account.pk, dto);
 
 		return { data: result };
 	}
@@ -60,25 +60,25 @@ abstract class GroupController<T extends ST> {
 	@UseGuards(JwtAuthGuard)
 	public async invite(
 		@Body() group_dto: GroupDTO,
-        @Req() req,
-    ){
-        const account 	= req.user;
-        const result 	= await this.group_service.invite( account.pk, group_dto );
-        
-		return { data: result };
-    }
+		@Req() req,
+	) {
+		const account = req.user;
+		const result = await this.group_service.invite(account.pk, group_dto);
 
-	@Delete('/exit/:group_pk')
+		return { data: result };
+	}
+
+	@Delete('/:group_pk')
 	@UseGuards(JwtAuthGuard)
 	public async exit(
 		@Param("group_pk") group_pk: string,
 		@Req() req,
 	) {
 		const account = req.user;
-		const result = await this.group_service.exit( {
+		const result = await this.group_service.exit({
 			group_pk: group_pk,
 			participant_pk: account.pk,
-		} as GroupParticipantDTO );
+		} as GroupParticipantDTO);
 
 		return { data: result };
 	}
@@ -89,8 +89,17 @@ abstract class GroupController<T extends ST> {
 		@Body() dto: GroupParticipantDTO,
 		@Req() req,
 	) {
-		const account	= req.user;
-		const result 	= this.group_service.updateRank(account.pk, dto);
+		const account = req.user;
+		const result = this.group_service.updateRank(account.pk, dto);
+
+		return { data: result };
+	}
+
+	@Get('/:group_pk/participant')
+	public async getParticipant(
+		@Param("group_pk") group_pk: string,
+	) {
+		const result = await this.group_service.getParticipant(group_pk);
 
 		return { data: result };
 	}
@@ -100,31 +109,31 @@ abstract class GroupController<T extends ST> {
 @Controller('post_group')
 export class PostGroupControlller extends GroupController<PostGroupService> {
 
-	constructor(group_service : PostGroupService) {
+	constructor(group_service: PostGroupService) {
 		super(group_service);
 	}
 
 	@Delete()
 	@UseGuards(JwtAuthGuard)
-    async delete(
+	async delete(
 		@Param("group_pk") group_pk: string,
-        @Req() req,
-    ){
-        const account 	= req.user;
-        const result 	= await this.group_service.delete({
-			participant_pk: account.pk, 
-			group_pk: group_pk 
+		@Req() req,
+	) {
+		const account = req.user;
+		const result = await this.group_service.delete({
+			participant_pk: account.pk,
+			group_pk: group_pk
 		} as GroupParticipantDTO);
-        
+
 		return { data: result };
-    }
+	}
 
 }
 
 @Controller('chat_group')
 export class ChatGroupControlller extends GroupController<ChatGroupService> {
 
-	constructor(group_service : ChatGroupService) {
+	constructor(group_service: ChatGroupService) {
 		super(group_service);
 	}
 

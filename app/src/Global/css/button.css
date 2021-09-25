@@ -1,0 +1,21 @@
+.submit-btn{
+    width: 100%;
+    padding: 4.7%;
+    
+    border: 0;
+
+    color: white;
+    background-color: royalblue;
+}
+
+.btn{
+    width: 4rem;
+    height: 2rem;
+    border: none;
+    background: none;
+}
+
+.file_upload-btn{
+    border: 0;
+    background: none;
+}

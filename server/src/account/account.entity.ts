@@ -38,12 +38,17 @@ export class Account {
 	@Column({ name: "profile_image", length: 36, nullable: true })
 	profile_image_pk: string | null;
 
-	@OneToOne( (type) => Image, { nullable: true } )
+	@OneToOne((type) => Image, { 
+		nullable: true, 
+		cascade: true,
+		onDelete: "CASCADE"
+	})
 	@JoinColumn({ name: "profile_image" })
 	profile_image: Image | null;
 
-	@Column({ name: "profile_img_url", nullable: true })
-	profile_img_url: string | null;
+	// @Column({ name: "profile_img_url", nullable: true })
+	// profile_img_url: string | null;
+
 	// @OneToMany(
 	// 	type => GroupParticipant, 
 	// 	group_participant => group_participant.participant,

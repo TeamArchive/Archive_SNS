@@ -1,0 +1,34 @@
+.Auth-entirety{
+    display: flex;
+    flex-direction: row;
+}
+
+.Auth-Logo-form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.Auth-guide-form{
+    border: none;
+    text-align: center;
+    background: none;
+    color: rgb(158, 158, 158);
+}
+
+.Auth-left{
+    padding-top: 15vw;
+    width: 25%;
+    margin: 2vw;
+}
+
+.Auth-body-banner{
+    height: 100vh;
+    width: 75%;
+}
+
+.Auth-title-banner{
+    padding: 0;
+}
+

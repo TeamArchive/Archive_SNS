@@ -1,23 +1,37 @@
-import { 
+import {
     Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UnauthorizedException, UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@root/auth/auth.guard';
+import { JwtAuthGuard } from '@auth/auth.guard';
 import { CommentLikeService, PostLikeService } from './like.service';
 
+/**
+ * 게시물 좋아요 관련 API
+ */
 @Controller('/postlike')
 export class PostLikeControl {
 
-    constructor(private post_like_service: PostLikeService) {}
+    constructor( private post_like_service: PostLikeService ) { }
 
+    /**
+     * 좋아요 수를 조회한다.
+     * @param post_pk 
+     * @returns 
+     */
     @Get('/count/:post_pk')
     public async CountLike(
         @Param('post_pk') post_pk: string,
     ) {
-        const CountLike_Result = 
-            await this.post_like_service.CountLike( post_pk );
-        return { data : CountLike_Result };
+        const CountLike_Result =
+            await this.post_like_service.CountLike(post_pk);
+        return { data: CountLike_Result };
     }
 
+    /**
+     * 좋아요 누른 유저 목록을 조회한다.
+     * @param post_pk 
+     * @param limit 
+     * @returns 
+     */
     @Get('/who/:post_pk/:limit')
     public async WhoLike(
         @Param('post_pk') post_pk: string,
@@ -27,9 +41,15 @@ export class PostLikeControl {
             post_pk,
             limit
         );
-        return { data : WhoLike_Result };
+        return { data: WhoLike_Result };
     }
 
+    /**
+     * 본인이 좋아요를 눌렀는가 조회한다.
+     * @param post_pk 
+     * @param req 
+     * @returns 
+     */
     @Get('/islike/:post_pk')
     @UseGuards(JwtAuthGuard)
     public async IsLike(
@@ -40,9 +60,15 @@ export class PostLikeControl {
             req.user.pk,
             post_pk
         );
-        return { data : IsLike_Result };
+        return { data: IsLike_Result };
     }
 
+    /**
+     * 좋아요를 Toggle한다.
+     * @param post_pk 
+     * @param req 
+     * @returns 
+     */
     @Post('/toggle/:post_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(
@@ -53,24 +79,38 @@ export class PostLikeControl {
             req.user.pk,
             post_pk
         );
-        return { data : ToggleLike_Result };
+        return { data: ToggleLike_Result };
     }
 }
 
+/**
+ * 댓글 좋아요 관련 API
+ */
 @Controller('/commentlike')
 export class CommentLikeControl {
 
-    constructor( private comment_like_service: CommentLikeService ) {}
+    constructor(private comment_like_service: CommentLikeService) { }
 
+    /**
+     * 좋아요 수를 조회한다.
+     * @param comment_pk 
+     * @returns 
+     */
     @Get("/count/:comment_pk")
     async CountLike(
-        @Param("comment_pk") comment_pk: string, 
+        @Param("comment_pk") comment_pk: string,
     ) {
-        const CountLike_Result = 
+        const CountLike_Result =
             await this.comment_like_service.CountLike(comment_pk);
-        return { data : CountLike_Result };
+        return { data: CountLike_Result };
     }
 
+    /**
+     * 좋아요 누른 유저 목록을 조회한다.
+     * @param comment_pk 
+     * @param limit 
+     * @returns 
+     */
     @Get('/who/:comment_pk/:limit')
     public async WhoLike(
         @Param("comment_pk") comment_pk: string, 
@@ -80,9 +120,15 @@ export class CommentLikeControl {
             comment_pk,
             limit
         );
-        return { data : Who_Like };
+        return { data: Who_Like };
     }
 
+    /**
+     * 좋아요를 Toggle 한다.
+     * @param comment_pk 
+     * @param req 
+     * @returns 
+     */
     @Post('/toggle/:comment_pk')
     @UseGuards(JwtAuthGuard)
     public async ToggleLike(
@@ -93,6 +139,6 @@ export class CommentLikeControl {
             req.user.pk,
             comment_pk
         );
-        return { data : Who_Like };
+        return { data: Who_Like };
     }
 }

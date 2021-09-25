@@ -1,0 +1,10 @@
+.SignIn-entirety{
+    display: grid;
+    flex-direction: column;
+    row-gap: 15px;
+    width: 100%;
+}
+
+
+
+

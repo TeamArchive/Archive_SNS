@@ -1,6 +1,7 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Inject, Injectable, forwardRef } from "@nestjs/common";
+import { Inject, Injectable, forwardRef, HttpException } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt'
+import secretKey from '@root/secret-key.json';
 
 import { Account } from "src/account/account.entity";
 import { AccountRepo } from "src/account/account.repo";
@@ -10,29 +11,53 @@ import { AccountService } from '@account/account.service';
 export class AuthService {
 	constructor(
 		@Inject(forwardRef(() => AccountService))
-		private readonly account_repo: AccountService,
+		private readonly account_repo: AccountRepo,
 		private jwt_service: JwtService
-	) {}
+	) { }
+
+	async ValidateAccessToken(
+		access_token: string
+	) {
+
+		try {
+			const verify = this.jwt_service.verify(access_token, { secret: secretKey.jwt.secretKey });
+			return verify;
+		} catch (e) {
+			switch (e.message) {
+
+				case 'INVALID_TOKEN':
+				case 'TOKEN_IS_ARRAY':
+				case 'NO_USER':
+					throw new HttpException('Not valid token', 401);
+
+				case 'EXPIRED_TOKEN':
+					throw new HttpException('The token has expired', 410);
+
+				default:
+					throw new HttpException('Internal Server error', 500);
+			}
+		}
+
+	}
 
 	async ValidateAccount(
-		email: string, 
+		email: string,
 		password: string,
-	): Promise<Account> 
-	{
+	): Promise<Account> {
 		const account = await this.account_repo.findOne({
 			where: { email: email }
 		});
 		console.log('validateAccount - account : ', account);
 
-		if ( account ) {
+		if (account) {
 			const is_pw_match = await account.checkPassword(password);
 			if (is_pw_match) return account;
-		} 
+		}
 
 		return null;
 	}
 
-	async AccessTokenGenerator( account ){
+	async AccessTokenGenerator(account) {
 		const payload = {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
@@ -40,7 +65,7 @@ export class AuthService {
 		return this.jwt_service.sign(payload);
 	}
 
-	async RefreshTokenGenerator( account ){
+	async RefreshTokenGenerator(account) {
 		const payload = {
 			name: account.name,
 			sub: account.pk	// 토큰 제목
@@ -49,30 +74,30 @@ export class AuthService {
 	}
 
 	public async SaveRefreshTokenDirectly(
-		account : Account,
-		refresh_token : any
+		account: Account,
+		refresh_token: any
 	) {
 		const refresh_account = new Account;
 		refresh_account.pk = account.pk;
 		refresh_account.refresh_token = refresh_token;
-		return await this.account_repo.save( refresh_account );
+		return await this.account_repo.save(refresh_account);
 	}
 
 	async removeRefreshToken(
-		account_pk : string,
+		account_pk: string,
 	) {
-		const account = await this.account_repo.findOne({where: {pk: account_pk}});
+		const account = await this.account_repo.findOne({ where: { pk: account_pk } });
 
-		if(account) {
+		if (account) {
 			account.refresh_token = null;
 		}
 
-		return this.account_repo.save( account );
+		return this.account_repo.save(account);
 	}
 
-	async ValidateRefreshToken (
-		account_pk : string,
-		refresh_token : string
+	async ValidateRefreshToken(
+		account_pk: string,
+		refresh_token: string
 	) {
 		const result = await this.account_repo.findOne({
 			select: ["pk", "email", "name"],
@@ -81,22 +106,33 @@ export class AuthService {
 				refresh_token: refresh_token,
 			}
 		});
-		
+
 		return result ? result : undefined;
 	}
-	
+
 	async googleSaveRefreshToken(
 		googleAccount,
 		refresh_token
-	){
-		const account = new Account;
-		const google_name =
-			googleAccount.lastName + googleAccount.firstName;
-		account.name = google_name;
-		account.email = googleAccount.email;
-		account.refresh_token = refresh_token;
+	) {
+		const target = await this.account_repo.findOne({
+			where: {
+				email: googleAccount.email,
+			}
+		});
+		if ( target ) {
+			target.refresh_token = refresh_token
+			return await this.account_repo.save(target);
+		}
+		else {
+			const account = new Account;
+			const google_name =
+				googleAccount.lastName + googleAccount.firstName;
+			account.name = google_name;
+			account.email = googleAccount.email;
+			account.refresh_token = refresh_token;
 
-		return await this.account_repo.save(account);
+			return await this.account_repo.save(account);
+		}
 	}
 
 	// public async SaveRefreshToken_pk(
@@ -109,7 +145,7 @@ export class AuthService {
 	// 		account.refresh_token = refresh_token;
 	// 		return await this.account_repo.save(account);
 	// 	}
-		
+
 	// 	return undefined;
 	// }
 }

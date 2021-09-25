@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# data
+/public
+
 # Logs
 logs
 *.log
@@ -35,3 +38,4 @@ lerna-debug.log*
 
 # Project Config file 
 ormconfig.json
+secret-key.json
