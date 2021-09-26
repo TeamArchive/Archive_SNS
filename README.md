@@ -1,7 +1,7 @@
-<center>
+<div align="center">
 	<img src="./images/archive_sns_logo.png" width="40%" alter="archive sns logo" />
 	<h1> Archive SNS </h1>
-</center>
+</div>
 
 # 소개
 
@@ -56,6 +56,9 @@ Frontend
 <br/>
 
 ## ERD
+<div align="center">
+<img src="./images/db_erd.svg" width="75%" alter="archive sns logo" />
+</div>
 
 <br/>
 
