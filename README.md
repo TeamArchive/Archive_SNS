@@ -63,80 +63,63 @@ Frontend
 <br/>
 
 ## 실행 화면
-<div style="margin-left:25px;">
-<h3><strong>Swagger - REST API</strong></h3>
-<div style="margin-left:15px;">
+	
 <details markdown="1">
-<summary>Account</summary>
+<summary markdown="span"> <b>Swagger - REST API</b> </summary><blockquote>
 
-![account](https://user-images.githubusercontent.com/76906458/134766959-6f6d24f1-7811-4e4c-98d4-1b41d21be583.JPG)
-
-</details>
-
+<br/>
+	
 <details markdown="1">
-<summary>Auth</summary>
-
-![auth](https://user-images.githubusercontent.com/76906458/134766960-7200f275-1327-468c-937f-942c25d709ab.JPG)
-
-</details>
+<summary>Account</summary><blockquote>
+<img alter="account" src="https://user-images.githubusercontent.com/76906458/134766959-6f6d24f1-7811-4e4c-98d4-1b41d21be583.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>Post</summary>
-
-![post](https://user-images.githubusercontent.com/76906458/134766967-0b25e2a9-966b-4190-baad-d62b36e94eca.JPG)
-
-</details>
+<summary>Auth</summary><blockquote>
+<img alter="auth" src="https://user-images.githubusercontent.com/76906458/134766960-7200f275-1327-468c-937f-942c25d709ab.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>PostLike</summary>
-
-![postlike](https://user-images.githubusercontent.com/76906458/134766958-dcd8769a-a043-4b60-afeb-69f91ba2b010.JPG)
-
-</details>
+<summary>Post</summary><blockquote>
+<img alter="post" src="https://user-images.githubusercontent.com/76906458/134766967-0b25e2a9-966b-4190-baad-d62b36e94eca.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>PostGroup</summary>
-
-![post_group](https://user-images.githubusercontent.com/76906458/134766968-6e182e37-8cc2-4aad-ac67-4cab3737a177.JPG)
-
-</details>
+<summary>PostLike</summary><blockquote>
+<img alter="postlike" src="https://user-images.githubusercontent.com/76906458/134766958-dcd8769a-a043-4b60-afeb-69f91ba2b010.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>Comment</summary>
-
-![comment](https://user-images.githubusercontent.com/76906458/134766963-43cebfc2-51ef-4c0c-a57e-490e98b671e7.JPG)
-
-</details>
+<summary>PostGroup</summary><blockquote>
+<img alter="post_group" src="https://user-images.githubusercontent.com/76906458/134766968-6e182e37-8cc2-4aad-ac67-4cab3737a177.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>CommentLike</summary>
-
-![commentlike](https://user-images.githubusercontent.com/76906458/134766965-62523296-9b00-4c9e-bb53-2c5e3450943e.JPG)
-
-</details>
+<summary>Comment</summary><blockquote>
+<img alter="comment" src="https://user-images.githubusercontent.com/76906458/134766963-43cebfc2-51ef-4c0c-a57e-490e98b671e7.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>Friend</summary>
-
-![friend](https://user-images.githubusercontent.com/76906458/134766966-871515d9-6203-4bb3-adf7-b372722fe91f.JPG)
-
-</details>
+<summary>CommentLike</summary><blockquote>
+<img alter="commentlike" src="https://user-images.githubusercontent.com/76906458/134766965-62523296-9b00-4c9e-bb53-2c5e3450943e.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>Chat</summary>
-
-![chat](https://user-images.githubusercontent.com/76906458/134766961-b2f2936c-de9f-42d6-8850-9d91b15790fe.JPG)
-
-</details>
+<summary>Friend</summary><blockquote>
+<img alter="friend" src="https://user-images.githubusercontent.com/76906458/134766966-871515d9-6203-4bb3-adf7-b372722fe91f.JPG" />
+</blockquote></details>
 
 <details markdown="1">
-<summary>ChatGroup</summary>
+<summary>Chat</summary><blockquote>
+<img alter="chat" src="https://user-images.githubusercontent.com/76906458/134766961-b2f2936c-de9f-42d6-8850-9d91b15790fe.JPG" />
+</blockquote></details>
 
-![chat-group](https://user-images.githubusercontent.com/76906458/134766962-9ad01c16-7853-45c4-9cb3-8ade64d6c1d5.JPG)
+<details markdown="1">
+<summary>ChatGroup</summary><blockquote>
+<img alter="chat-group" src="https://user-images.githubusercontent.com/76906458/134766962-9ad01c16-7853-45c4-9cb3-8ade64d6c1d5.JPG" />
+</blockquote></details>
+</blockquote></details>
 
-</details>
-</div>
-</div>
 <br/>
 
 -----
